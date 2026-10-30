@@ -1,0 +1,56 @@
+Tasks ve Strategy Pattern
+
+## Görev alanı
+
+Görev kütüphanesi, çalışma sırasında kısa bir mola veya dikkat molası önerileri sunar. Görevler beş kategoride tutulur:
+
+| Kategori | Görev sayısı | Ne içerir? |
+| --- | ---: | --- |
+| Physical Reset | 5 | Esneme, kısa yürüyüş ve hareket molaları |
+| Mindfulness & Relaxation | 4 | Nefes, farkındalık ve zihinsel rahatlama |
+| Sensory Reset | 6 | Çevreyi ve duyuları fark etme molaları |
+| Creative Breaks | 4 | Karalama, hayal kurma, boyama ve müzik |
+| Cognitive Mini-Games | 8 | Dikkat, hafıza ve kısa bulmaca görevleri |
+
+Her görevde bir kimlik, başlık, kategori, süre, XP değeri ve açıklama bulunur. Görevlerin temel verileri `task_library.py` dosyasındadır. `/tasks` sayfası bu verileri kategorilere göre listeler.
+
+## Strategy Pattern ne yapıyor?
+
+Strategy Pattern, aynı işi farklı yöntemlerle yapmaya yarayan bir tasarım kalıbıdır. Bu uygulamadaki ortak iş, **kullanıcının seçtiği duruma uygun bir görev önermektir**. Kullanıcı durumunu seçince sistem ona uygun bir görev seçme stratejisi kullanır.
+
+Örneğin kullanıcı “I need movement” seçerse Physical Reset stratejisi çalışır ve o kategoriden bir görev önerir. “Distracted” seçilirse Sensory Reset stratejisi çalışır.
+
+## Öneri akışı
+
+1. Kullanıcı **I lost concentration** düğmesine basar.
+2. Nasıl hissettiğini ve molaya ne kadar zaman ayırabileceğini seçer.
+3. Arayüz seçimini `/api/tasks/recommend` adresine gönderir.
+4. `TaskRecommendationContext`, seçilen duruma karşılık gelen stratejiyi bulur.
+5. Strateji kendi kategorisindeki görevlerden seçilen süreye uygun olanları bulup birini döndürür.
+6. Arayüz görev adını, açıklamasını, süresini ve XP değerini gösterir.
+
+| Kullanıcı seçimi | Kullanılan strateji | Görev kategorisi |
+| --- | --- | --- |
+| Mentally tired | `MindfulnessStrategy` | Mindfulness & Relaxation |
+| Anxious or overwhelmed | `MindfulnessStrategy` | Mindfulness & Relaxation |
+| Distracted | `SensoryResetStrategy` | Sensory Reset |
+| Need movement | `PhysicalResetStrategy` | Physical Reset |
+| Creative break | `CreativeBreakStrategy` | Creative Breaks |
+| Brain game | `CognitiveGameStrategy` | Cognitive Mini-Games |
+
+## Kodda pattern’in parçaları
+
+- **`TaskRecommendationStrategy`** öneri stratejilerinin uyması gereken ortak sözleşmeyi, yani `recommend()` metodunu tanımlar.
+- **`CategoryStrategy`** görevleri kategoriye ve süreye göre filtreleyen ortak seçme işlemini uygular.
+- **Somut stratejiler** (`PhysicalResetStrategy`, `SensoryResetStrategy` ve diğerleri) hangi kategori havuzunun kullanılacağını belirler.
+- **`TaskRecommendationContext`** kullanıcının seçimini uygun somut stratejiye bağlar ve öneriyi o stratejiye yaptırır.
+
+Böylece arayüz, görev seçme ayrıntılarını bilmek zorunda kalmaz. Seçimi sunucu tarafındaki strateji yapar; arayüz sadece sonucu gösterir.
+
+## Tamamlama ve XP
+
+Kullanıcı görevi tamamladığında `/api/tasks/complete` adresine görev kimliği gönderilir. Sunucu görevin kayıtlı XP değerini bulur, tamamlanmayı SQLite veritabanına kaydeder ve XP’yi kullanıcının puan toplamına ekler. Bu kayıt adımı Strategy Pattern’in parçası değildir; o, öneri algoritmasında kullanılır.
+
+## Önemli kapsam notu
+
+Mini Sudoku, eşleşen kartlar, farkı bul ve benzeri oyunlar şimdilik açıklama/yer tutucu olarak gösterilir. Bu görevlerin oynanabilir oyun mantığı bu kapsamda eklenmemiştir. Bir kategoride seçilen mola süresine uygun görev bulunmazsa kullanıcıdan daha uzun bir süre seçmesi istenir.

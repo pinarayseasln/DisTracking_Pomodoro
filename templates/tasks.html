@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks · DisTracking</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="navbar">
+    <h1>DisTracking</h1>
+    <nav><a href="{{ url_for('ana_sayfa') }}">My Day</a><a href="{{ url_for('tasks_page') }}" aria-current="page">Tasks</a></nav>
+</header>
+<main class="tasks-page">
+    <p class="tasks-eyebrow">TASK LIBRARY</p>
+    <h2>Tasks for a clearer next step.</h2>
+    <p class="tasks-intro">Browse all 27 short resets and mini-games. Choose “I lost concentration” on My Day for a strategy-based suggestion.</p>
+    <div class="task-library-stats"><span>27 tasks</span><span>5 categories</span><span>1–5 min</span><span>10–20 XP</span></div>
+    {% for category in categories %}
+    <section class="task-category-section" aria-labelledby="category-{{ category.id }}">
+        <div class="task-category-heading">
+            <div><p class="tasks-eyebrow">{{ "%02d"|format(loop.index) }}</p><h3 id="category-{{ category.id }}">{{ category.name }}</h3><p>{{ category.description }}</p></div>
+            <span>{{ category.tasks|length }} tasks</span>
+        </div>
+        <div class="task-library-grid">
+            {% for task in category.tasks %}
+            <article class="task-library-card">
+                <div class="task-library-card-top"><span>{{ task.id }}</span><span>{{ task.duration }} min · {{ task.xp }} XP</span></div>
+                <h4>{{ task.title }}</h4>
+                <p>{{ task.description }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endfor %}
+    <a class="focus-reset-return tasks-back-link" href="{{ url_for('ana_sayfa') }}">Back to My Day <span aria-hidden="true">→</span></a>
+</main>
+<footer>Every minute you focus today builds the person you'll be tomorrow.</footer>
+</body>
+</html>

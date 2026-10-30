@@ -19,6 +19,7 @@ Instead of simply tracking study time, the application aims to motivate users by
 - [x] Main dashboard interface
 - [x] Study room and marketplace interface
 - [x] Random question API for mini challenges
+- [x] Focus reset task library with category-based Strategy recommendations
 
 ### Planned Features
 - [ ] Earn points by completing Pomodoro sessions
@@ -42,3 +43,7 @@ Instead of simply tracking study time, the application aims to motivate users by
 | CSS | Interface design |
 | JavaScript | Timer functionality and interactions |
 | SQLite | Data storage (
+
+### Focus reset tasks
+
+The `/tasks` page contains five task categories and all 27 catalog entries. The `I lost concentration` flow maps the selected need to a recommendation strategy in `task_strategies.py`; each strategy recommends tasks from its own category. Mini-game interactions are placeholders until their game logic is implemented. Completing a task records it in SQLite and adds its XP to the existing points balance.
