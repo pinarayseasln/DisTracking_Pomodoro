@@ -16,11 +16,12 @@
     <nav>
         <a href="#">My Day</a>
         <a href="#">Collection</a>
+        <a href="{{ url_for('tasks_page') }}">Tasks</a>
     </nav>
 
     <div class="user-info">
         <span>4 days in a row</span>
-        <span>450 points</span>
+        <span id="headerPoints">{{ points }} points</span>
         <span class="avatar">B</span>
     </div>
 </header>
@@ -118,7 +119,7 @@
         <section class="card">
             <div class="card-heading">
                 <h3>Market</h3>
-                <strong>450 points</strong>
+                <strong id="marketPoints">{{ points }} points</strong>
             </div>
 
             <p>Every pomodoro +10 points.</p>
@@ -146,37 +147,46 @@
 <dialog class="focus-reset-screen" id="focusResetScreen" aria-labelledby="focusResetTitle">
     <div class="focus-reset-card">
         <div class="focus-reset-header">
-            <p class="focus-reset-eyebrow">FOCUS RESET</p>
+            <p class="focus-reset-eyebrow">TASKS · FOCUS RESET</p>
             <div class="focus-reset-header-actions">
                 <span class="focus-reset-badge">Break mode</span>
                 <button class="focus-reset-close" id="closeFocusReset" type="button" aria-label="Close">&times;</button>
             </div>
         </div>
-        <h2 class="focus-reset-title" id="focusResetTitle">Let's take a short break.</h2>
-        <p class="focus-reset-subtitle">How are you feeling right now?</p>
-        <div class="focus-reset-feelings" role="group" aria-label="How you are feeling">
-            <button class="feeling-option" type="button" data-feeling aria-pressed="false">
-                <span class="feeling-emoji" aria-hidden="true">😴</span>
-                <span class="feeling-copy"><strong>Mentally tired</strong><small>I need a moment to rest.</small></span>
-            </button>
-            <button class="feeling-option is-selected" type="button" data-feeling aria-pressed="true">
-                <span class="feeling-emoji" aria-hidden="true">😵‍💫</span>
-                <span class="feeling-copy"><strong>Overwhelmed</strong><small>I want to calm down and gather my thoughts.</small></span>
-                <span class="feeling-check" aria-hidden="true">✓</span>
-            </button>
-            <button class="feeling-option" type="button" data-feeling aria-pressed="false">
-                <span class="feeling-emoji" aria-hidden="true">🫠</span>
-                <span class="feeling-copy"><strong>I keep losing focus</strong><small>I want to find my focus again.</small></span>
-            </button>
-        </div>
-        <hr class="focus-reset-divider">
-        <h3 class="focus-reset-duration-title">How much time can you take?</h3>
-        <div class="focus-reset-durations" role="group" aria-label="Break duration">
-            <button type="button" data-reset-duration aria-pressed="false">1 min</button>
-            <button class="is-selected" type="button" data-reset-duration aria-pressed="true">3 min</button>
-            <button type="button" data-reset-duration aria-pressed="false">5 min</button>
-        </div>
-        <button class="focus-reset-return" id="returnToTimer" type="button">Back to timer <span aria-hidden="true">→</span></button>
+        <section id="taskChoiceStep">
+            <h2 class="focus-reset-title" id="focusResetTitle">Let's find a task for you.</h2>
+            <p class="focus-reset-subtitle">What do you need right now?</p>
+            <div class="focus-reset-feelings" role="group" aria-label="Choose why you lost focus">
+                <button class="feeling-option" type="button" data-feeling="mentally_tired" aria-pressed="false"><span class="feeling-emoji" aria-hidden="true">😴</span><span class="feeling-copy"><strong>Mentally tired</strong><small>I need a moment to rest.</small></span><span class="feeling-check" aria-hidden="true">✓</span></button>
+                <button class="feeling-option" type="button" data-feeling="distracted" aria-pressed="false"><span class="feeling-emoji" aria-hidden="true">🌿</span><span class="feeling-copy"><strong>Distracted</strong><small>I want to reconnect with what's around me.</small></span><span class="feeling-check" aria-hidden="true">✓</span></button>
+                <button class="feeling-option" type="button" data-feeling="anxious" aria-pressed="false"><span class="feeling-emoji" aria-hidden="true">🌬️</span><span class="feeling-copy"><strong>Anxious or overwhelmed</strong><small>I want to slow down and gather my thoughts.</small></span><span class="feeling-check" aria-hidden="true">✓</span></button>
+                <button class="feeling-option" type="button" data-feeling="need_movement" aria-pressed="false"><span class="feeling-emoji" aria-hidden="true">🚶</span><span class="feeling-copy"><strong>I need movement</strong><small>I'd like to get out of my chair.</small></span><span class="feeling-check" aria-hidden="true">✓</span></button>
+                <button class="feeling-option" type="button" data-feeling="creative_break" aria-pressed="false"><span class="feeling-emoji" aria-hidden="true">🎨</span><span class="feeling-copy"><strong>I want a creative break</strong><small>Something playful and low pressure.</small></span><span class="feeling-check" aria-hidden="true">✓</span></button>
+                <button class="feeling-option" type="button" data-feeling="brain_game" aria-pressed="false"><span class="feeling-emoji" aria-hidden="true">🧩</span><span class="feeling-copy"><strong>I want a brain game</strong><small>A tiny memory or puzzle challenge.</small></span><span class="feeling-check" aria-hidden="true">✓</span></button>
+            </div>
+            <hr class="focus-reset-divider">
+            <h3 class="focus-reset-duration-title">How much time can you take?</h3>
+            <div class="focus-reset-durations" role="group" aria-label="Break duration">
+                <button type="button" data-reset-duration="1" aria-pressed="false">1 min</button>
+                <button class="is-selected" type="button" data-reset-duration="3" aria-pressed="true">3 min</button>
+                <button type="button" data-reset-duration="5" aria-pressed="false">5 min</button>
+            </div>
+            <p class="task-flow-error" id="taskFlowError" role="alert" hidden></p>
+            <button class="focus-reset-return" id="getTaskBtn" type="button">Suggest a task <span aria-hidden="true">→</span></button>
+        </section>
+        <section class="recommended-task" id="taskResultStep" hidden aria-live="polite">
+            <p class="task-category-label" id="recommendedCategory"></p>
+            <h2 class="focus-reset-title" id="recommendedTitle"></h2>
+            <p class="recommended-description" id="recommendedDescription"></p>
+            <div class="task-reward-row"><span id="recommendedDuration"></span><strong id="recommendedXp"></strong></div>
+            <p class="task-flow-error" id="taskCompleteMessage" role="status" hidden></p>
+            <div class="task-result-actions">
+                <button class="task-complete-button" id="completeTaskBtn" type="button">Complete task</button>
+                <button class="task-try-again" id="tryAnotherTaskBtn" type="button">Try another task</button>
+                <button class="task-choose-again" id="chooseTaskAgainBtn" type="button">Choose another reason</button>
+            </div>
+        </section>
+        <button class="focus-reset-return focus-reset-return-secondary" id="returnToTimer" type="button">Back to timer <span aria-hidden="true">→</span></button>
     </div>
 </dialog>
 <script>
@@ -327,8 +337,27 @@
 
     const focusResetScreen = document.getElementById("focusResetScreen");
     const lostFocusBtn = document.getElementById("lostFocusBtn");
+    const taskChoiceStep = document.getElementById("taskChoiceStep");
+    const taskResultStep = document.getElementById("taskResultStep");
+    const taskFlowError = document.getElementById("taskFlowError");
+    const taskCompleteMessage = document.getElementById("taskCompleteMessage");
+    let selectedNeed = null;
+    let selectedMaxDuration = 3;
+    let currentRecommendedTask = null;
+    let recommendedTaskIds = [];
+
     lostFocusBtn.addEventListener("click", () => {
         if (interval !== null) stopTimer();
+        selectedNeed = null;
+        currentRecommendedTask = null;
+        recommendedTaskIds = [];
+        taskChoiceStep.hidden = false;
+        taskResultStep.hidden = true;
+        taskFlowError.hidden = true;
+        document.querySelectorAll("[data-feeling]").forEach(item => {
+            item.classList.remove("is-selected");
+            item.setAttribute("aria-pressed", "false");
+        });
         focusResetScreen.showModal();
     });
     document.getElementById("closeFocusReset").addEventListener("click", () => focusResetScreen.close());
@@ -336,6 +365,7 @@
 
     document.querySelectorAll("[data-feeling]").forEach(option => {
         option.addEventListener("click", () => {
+            selectedNeed = option.dataset.feeling;
             document.querySelectorAll("[data-feeling]").forEach(item => {
                 item.classList.remove("is-selected");
                 item.setAttribute("aria-pressed", "false");
@@ -347,6 +377,7 @@
 
     document.querySelectorAll("[data-reset-duration]").forEach(option => {
         option.addEventListener("click", () => {
+            selectedMaxDuration = Number(option.dataset.resetDuration);
             document.querySelectorAll("[data-reset-duration]").forEach(item => {
                 item.classList.remove("is-selected");
                 item.setAttribute("aria-pressed", "false");
@@ -354,6 +385,80 @@
             option.classList.add("is-selected");
             option.setAttribute("aria-pressed", "true");
         });
+    });
+
+    async function requestRecommendedTask(excludeCurrent = false) {
+        taskFlowError.hidden = true;
+        taskCompleteMessage.hidden = true;
+        if (!selectedNeed) {
+            taskFlowError.textContent = "Choose what you need first.";
+            taskFlowError.hidden = false;
+            return;
+        }
+        if (excludeCurrent && currentRecommendedTask) recommendedTaskIds.push(currentRecommendedTask.id);
+        const button = document.getElementById("getTaskBtn");
+        button.disabled = true;
+        button.textContent = "Finding a task…";
+        try {
+            const response = await fetch("/api/tasks/recommend", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ need: selectedNeed, max_duration: selectedMaxDuration, exclude_ids: recommendedTaskIds })
+            });
+            const payload = await response.json();
+            if (!response.ok || !payload.success) throw new Error(payload.error || "Could not find a task.");
+            currentRecommendedTask = payload.task;
+            document.getElementById("recommendedCategory").textContent = payload.category_name;
+            document.getElementById("recommendedTitle").textContent = payload.task.title;
+            document.getElementById("recommendedDescription").textContent = payload.task.description;
+            document.getElementById("recommendedDuration").textContent = `${payload.task.duration} min`;
+            document.getElementById("recommendedXp").textContent = `+${payload.task.xp} XP`;
+            document.getElementById("completeTaskBtn").disabled = false;
+            document.getElementById("completeTaskBtn").textContent = "Complete task";
+            taskChoiceStep.hidden = true;
+            taskResultStep.hidden = false;
+        } catch (error) {
+            taskFlowError.textContent = error.message;
+            taskFlowError.hidden = false;
+        } finally {
+            button.disabled = false;
+            button.innerHTML = 'Suggest a task <span aria-hidden="true">→</span>';
+        }
+    }
+
+    document.getElementById("getTaskBtn").addEventListener("click", () => requestRecommendedTask(false));
+    document.getElementById("tryAnotherTaskBtn").addEventListener("click", () => requestRecommendedTask(true));
+    document.getElementById("chooseTaskAgainBtn").addEventListener("click", () => {
+        taskResultStep.hidden = true;
+        taskChoiceStep.hidden = false;
+        taskCompleteMessage.hidden = true;
+    });
+
+    document.getElementById("completeTaskBtn").addEventListener("click", async event => {
+        if (!currentRecommendedTask) return;
+        const button = event.currentTarget;
+        button.disabled = true;
+        button.textContent = "Saving…";
+        taskCompleteMessage.hidden = true;
+        try {
+            const response = await fetch("/api/tasks/complete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ task_id: currentRecommendedTask.id })
+            });
+            const payload = await response.json();
+            if (!response.ok || !payload.success) throw new Error(payload.error || "Could not save this task.");
+            document.getElementById("headerPoints").textContent = `${payload.points} points`;
+            document.getElementById("marketPoints").textContent = `${payload.points} points`;
+            button.textContent = "Completed ✓";
+            taskCompleteMessage.textContent = `You earned ${payload.earned_xp} XP. Nice work!`;
+            taskCompleteMessage.hidden = false;
+        } catch (error) {
+            button.disabled = false;
+            button.textContent = "Complete task";
+            taskCompleteMessage.textContent = error.message;
+            taskCompleteMessage.hidden = false;
+        }
     });
 
     updateDisplay();
