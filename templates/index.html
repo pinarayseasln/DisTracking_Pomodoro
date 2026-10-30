@@ -63,9 +63,19 @@
 
         <div class="timer-modes">
             <button class="selected" data-mode="focus">Focus</button>
-            <button data-mode="shorts">Short Break</button>
+            <button data-mode="short">Short Break</button>
             <button data-mode="long">Long Break</button>
         </div>
+
+        <div class="duration-setting">
+            <label for="focusMinutes">Odak süresi (dakika)</label>
+            <input id="focusMinutes" type="number" min="1" max="180" step="1" value="25">
+        </div>
+
+        <label class="sound-setting" for="completionSound">
+            <input id="completionSound" type="checkbox">
+            <span>Completion sound (off by default)</span>
+        </label>
 
         <div class="timer" id="timer">25:00</div>
 
@@ -76,10 +86,12 @@
             <button class="reset" id="resetBtn">Reset</button>
         </div>
 
-        <button class="distraction">I lost concentration</button>
+        <p class="timer-notice" id="timerNotice" role="status" aria-live="polite" hidden></p>
+
+        <button class="distraction" id="lostFocusBtn">I lost concentration</button>
 
         <p class="motivation">
-            A small break and a random mini challenge are waiting for you.
+            Having a little trouble focusing? Let’s figure it out together.
         </p>
 
     </section>
@@ -131,14 +143,60 @@
     Every minute you focus today builds the person you'll be tomorrow.
 </footer>
 
+<dialog class="focus-reset-screen" id="focusResetScreen" aria-labelledby="focusResetTitle">
+    <div class="focus-reset-card">
+        <div class="focus-reset-header">
+            <p class="focus-reset-eyebrow">FOCUS RESET</p>
+            <div class="focus-reset-header-actions">
+                <span class="focus-reset-badge">Break mode</span>
+                <button class="focus-reset-close" id="closeFocusReset" type="button" aria-label="Close">&times;</button>
+            </div>
+        </div>
+        <h2 class="focus-reset-title" id="focusResetTitle">Let's take a short break.</h2>
+        <p class="focus-reset-subtitle">How are you feeling right now?</p>
+        <div class="focus-reset-feelings" role="group" aria-label="How you are feeling">
+            <button class="feeling-option" type="button" data-feeling aria-pressed="false">
+                <span class="feeling-emoji" aria-hidden="true">😴</span>
+                <span class="feeling-copy"><strong>Mentally tired</strong><small>I need a moment to rest.</small></span>
+            </button>
+            <button class="feeling-option is-selected" type="button" data-feeling aria-pressed="true">
+                <span class="feeling-emoji" aria-hidden="true">😵‍💫</span>
+                <span class="feeling-copy"><strong>Overwhelmed</strong><small>I want to calm down and gather my thoughts.</small></span>
+                <span class="feeling-check" aria-hidden="true">✓</span>
+            </button>
+            <button class="feeling-option" type="button" data-feeling aria-pressed="false">
+                <span class="feeling-emoji" aria-hidden="true">🫠</span>
+                <span class="feeling-copy"><strong>I keep losing focus</strong><small>I want to find my focus again.</small></span>
+            </button>
+        </div>
+        <hr class="focus-reset-divider">
+        <h3 class="focus-reset-duration-title">How much time can you take?</h3>
+        <div class="focus-reset-durations" role="group" aria-label="Break duration">
+            <button type="button" data-reset-duration aria-pressed="false">1 min</button>
+            <button class="is-selected" type="button" data-reset-duration aria-pressed="true">3 min</button>
+            <button type="button" data-reset-duration aria-pressed="false">5 min</button>
+        </div>
+        <button class="focus-reset-return" id="returnToTimer" type="button">Back to timer <span aria-hidden="true">→</span></button>
+    </div>
+</dialog>
 <script>
     const timerDisplay = document.getElementById("timer");
     const startBtn = document.getElementById("startBtn");
     const resetBtn = document.getElementById("resetBtn");
     const modeButtons = document.querySelectorAll("[data-mode]");
+    const focusMinutesInput = document.getElementById("focusMinutes");
+    const completionSoundInput = document.getElementById("completionSound");
+    const timerNotice = document.getElementById("timerNotice");
+
+    let savedFocusMinutes = Number(localStorage.getItem("focusMinutes"));
+    if (!Number.isInteger(savedFocusMinutes) || savedFocusMinutes < 1 || savedFocusMinutes > 180) {
+        savedFocusMinutes = 25;
+    }
+    focusMinutesInput.value = savedFocusMinutes;
+    completionSoundInput.checked = localStorage.getItem("completionSound") === "true";
 
     const durations = {
-        focus: 25 * 60,
+        focus: savedFocusMinutes * 60,
         short: 5 * 60,
         long: 15 * 60
     };
@@ -164,10 +222,61 @@
 
     function resetTimer() {
         stopTimer();
+        timerNotice.hidden = true;
         remainingSeconds = durations[currentMode];
         updateDisplay();
     }
 
+    focusMinutesInput.addEventListener("change", () => {
+        const minutes = Math.max(1, Math.min(180, Math.round(Number(focusMinutesInput.value) || 25)));
+        focusMinutesInput.value = minutes;
+        durations.focus = minutes * 60;
+        localStorage.setItem("focusMinutes", String(minutes));
+        if (currentMode === "focus") resetTimer();
+    });
+
+    completionSoundInput.addEventListener("change", () => {
+        localStorage.setItem("completionSound", String(completionSoundInput.checked));
+        if (completionSoundInput.checked) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (AudioContextClass) {
+                audioContext = audioContext || new AudioContextClass();
+                if (audioContext.state === "suspended") audioContext.resume().catch(() => {});
+            }
+        }
+    });
+
+    let audioContext = null;
+
+    function showCompletionNotice(message) {
+        timerNotice.textContent = message;
+        timerNotice.hidden = false;
+    }
+
+    function playCompletionSound() {
+        if (!completionSoundInput.checked) return;
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        audioContext = audioContext || new AudioContextClass();
+        const playChime = () => {
+            [660, 880].forEach((frequency, index) => {
+                const startAt = audioContext.currentTime + index * 0.25;
+                const oscillator = audioContext.createOscillator();
+                const volume = audioContext.createGain();
+                oscillator.type = "sine";
+                oscillator.frequency.value = frequency;
+                volume.gain.setValueAtTime(0.0001, startAt);
+                volume.gain.exponentialRampToValueAtTime(0.06, startAt + 0.03);
+                volume.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.22);
+                oscillator.connect(volume);
+                volume.connect(audioContext.destination);
+                oscillator.start(startAt);
+                oscillator.stop(startAt + 0.23);
+            });
+        };
+        if (audioContext.state === "running") playChime();
+        else audioContext.resume().then(playChime).catch(() => {});
+    }
     function startTimer() {
         if (interval !== null) {
             stopTimer();
@@ -179,6 +288,9 @@
             updateDisplay();
         }
 
+        if (completionSoundInput.checked && audioContext && audioContext.state === "suspended") {
+            audioContext.resume().catch(() => {});
+        }
         startBtn.textContent = "Pause";
 
         interval = setInterval(() => {
@@ -188,11 +300,11 @@
             if (remainingSeconds <= 0) {
                 stopTimer();
 
-                if (currentMode === "focus") {
-                    alert("Focus session completed! Great job!");
-                } else {
-                    alert("Break is over. Ready to focus again?");
-                }
+                const message = currentMode === "focus"
+                    ? "Focus session completed! Great job!"
+                    : "Break is over. Ready to focus again?";
+                showCompletionNotice(message);
+                playCompletionSound();
             }
         }, 1000);
     }
@@ -213,27 +325,38 @@
     startBtn.addEventListener("click", startTimer);
     resetBtn.addEventListener("click", resetTimer);
 
+    const focusResetScreen = document.getElementById("focusResetScreen");
+    const lostFocusBtn = document.getElementById("lostFocusBtn");
+    lostFocusBtn.addEventListener("click", () => {
+        if (interval !== null) stopTimer();
+        focusResetScreen.showModal();
+    });
+    document.getElementById("closeFocusReset").addEventListener("click", () => focusResetScreen.close());
+    document.getElementById("returnToTimer").addEventListener("click", () => focusResetScreen.close());
+
+    document.querySelectorAll("[data-feeling]").forEach(option => {
+        option.addEventListener("click", () => {
+            document.querySelectorAll("[data-feeling]").forEach(item => {
+                item.classList.remove("is-selected");
+                item.setAttribute("aria-pressed", "false");
+            });
+            option.classList.add("is-selected");
+            option.setAttribute("aria-pressed", "true");
+        });
+    });
+
+    document.querySelectorAll("[data-reset-duration]").forEach(option => {
+        option.addEventListener("click", () => {
+            document.querySelectorAll("[data-reset-duration]").forEach(item => {
+                item.classList.remove("is-selected");
+                item.setAttribute("aria-pressed", "false");
+            });
+            option.classList.add("is-selected");
+            option.setAttribute("aria-pressed", "true");
+        });
+    });
+
     updateDisplay();
 </script>
 </body>
 </html>
-```
-
-## 3. Test edelim
-
-Flask sunucun zaten çalışıyorsa sayfayı tarayıcıda yenile. Çalışmıyorsa VS Code terminalinde `python app.py` komutuyla başlat.
-
-Şu kontrolleri yap:
-
-- [ ] **Start:** Sayaç 25:00 → 24:59 olarak ilerliyor.
-- [ ] **Pause:** Sayaç duruyor, tekrar basınca devam ediyor.
-- [ ] **Reset:** Süre 25:00'a dönüyor.
-- [ ] **Short Break:** Süre 05:00 oluyor.
-- [ ] **Long Break:** Süre 15:00 oluyor.
-
-Şimdilik süre bitince bir uyarı çıkıyor. Puan kazanma ve şehir geliştirme henüz eklenmedi; onları bir sonraki aşamada birbirine bağlayacağız.
-
-**Important:** This timer currently runs in the browser. If you refresh the page, the time will reset. Later, we will add functionality to save work sessions using Python and SQLite.
-
-Try these features; especially let me know if Start, Pause, and break options are working correctly. Then we'll move on to the point-earning system for completed Pomodoros.
-
