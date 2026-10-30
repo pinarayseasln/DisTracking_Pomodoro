@@ -1,0 +1,293 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f3e3c9;
+    color: #49382e;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+}
+
+/* ÜST MENÜ */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 3.5%;
+}
+
+.navbar h1 {
+    font-family: Georgia, serif;
+}
+
+nav, .user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+nav a, .user-info span {
+    text-decoration: none;
+    color: #49382e;
+    background: #fffaf1;
+    border: 1px solid #ead6b9;
+    border-radius: 30px;
+    padding: 12px 18px;
+}
+
+.avatar {
+    background: #c98c6d !important;
+    color: white !important;
+    border-radius: 50% !important;
+    padding: 12px 15px !important;
+}
+
+/* ANA EKRAN */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 320px minmax(300px, 1fr) 320px;
+    gap: 30px;
+    padding: 20px 4%;
+    align-items: start;
+}
+
+.left-panel, .right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.card {
+    background: #fffaf1;
+    padding: 22px;
+    border-radius: 22px;
+    box-shadow: 0 8px 20px #80634418;
+}
+
+.card h3 {
+    font-size: 16px;
+    margin-bottom: 18px;
+}
+
+.card-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-heading span {
+    font-size: 13px;
+    color: #806e5b;
+}
+
+.city {
+    height: 190px;
+    background: #f7dcae;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 10px;
+}
+
+.city span {
+    font-size: 55px;
+}
+
+.city p {
+    font-size: 13px;
+}
+
+.card > p {
+    margin: 12px 0;
+    font-size: 14px;
+}
+
+/* MÜZİK */
+
+.music {
+    padding: 12px;
+    border-radius: 12px;
+    margin: 7px 0;
+    font-size: 14px;
+}
+
+.music.active {
+    background: #e4ebdd;
+}
+
+/* POMODORO */
+
+.timer-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.timer-modes {
+    display: flex;
+    background: #fff8ed;
+    border-radius: 30px;
+    padding: 5px;
+    gap: 5px;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    padding: 13px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+}
+
+.timer-modes button {
+    background: transparent;
+    color: #806e5b;
+}
+
+.timer-modes .selected {
+    background: #49382e;
+    color: white;
+}
+
+.timer {
+    width: 300px;
+    height: 300px;
+    border: 9px solid #789579;
+    border-radius: 50%;
+    background: #fffaf1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 38px;
+    font-family: Georgia, serif;
+    font-size: 72px;
+}
+
+.timer-panel > p {
+    margin: 18px 0;
+    color: #806e5b;
+    font-size: 14px;
+}
+
+.timer-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.start {
+    background: #4d7055;
+    color: white;
+    min-width: 130px;
+}
+
+.reset {
+    background: transparent;
+    border: 1px solid #cbb99d;
+    color: #49382e;
+}
+
+.distraction {
+    background: #b94e2b;
+    color: white;
+    margin-top: 22px;
+    padding: 16px 30px;
+}
+
+.motivation {
+    text-align: center;
+}
+
+/* SAĞ PANEL */
+
+.friend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    font-size: 13px;
+}
+
+.green {
+    background: #83a58a !important;
+}
+
+.invite {
+    background: transparent;
+    border: 1px solid #dfc5a3;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.card h4 {
+    margin: 18px 0 10px;
+}
+
+.market-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 13px;
+}
+
+.background-options {
+    display: flex;
+    gap: 10px;
+}
+
+.background {
+    height: 55px;
+    flex: 1;
+    border-radius: 10px;
+}
+
+.warm { background: #f0ddc0; }
+.rainy { background: #a9bdc1; }
+.night { background: #37344e; }
+
+/* ALT YAZI */
+
+footer {
+    text-align: center;
+    padding: 40px 10px;
+    color: #806e5b;
+}
+
+/* MOBİL UYUMLULUK */
+
+@media (max-width: 950px) {
+    .dashboard {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .timer-panel {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .timer-panel {
+        grid-column: auto;
+        grid-row: auto;
+    }
+
+    .navbar {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+}

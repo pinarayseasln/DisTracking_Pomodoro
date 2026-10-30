@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisTracking</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <h1>DisTracking</h1>
+
+    <nav>
+        <a href="#">My Day</a>
+        <a href="#">Collection</a>
+    </nav>
+
+    <div class="user-info">
+        <span>4 days in a row</span>
+        <span>450 points</span>
+        <span class="avatar">B</span>
+    </div>
+</header>
+
+<main class="dashboard">
+
+    <!-- SOL PANEL -->
+    <aside class="left-panel">
+
+        <section class="card">
+            <div class="card-heading">
+                <h3>My City</h3>
+                <span>Level 1</span>
+            </div>
+
+            <div class="city">
+                <span>🏰</span>
+                <p>Your city will rise here.</p>
+            </div>
+
+            <p>🌳 Starting Village</p>
+            <p>Today +0 structures
+            </p>
+        </section>
+
+        <section class="card">
+            <h3>Müzik ve ambiyans</h3>
+
+            <div class="music active">🌧️ Rain</div>
+            <div class="music">🔥 Fireplace</div>
+            <div class="music">☕ Café</div>
+            <div class="music">🔊 White Noise</div>
+        </section>
+
+    </aside>
+
+
+    <!-- ORTA PANEL -->
+    <section class="timer-panel">
+
+        <div class="timer-modes">
+            <button class="selected" data-mode="focus">Focus</button>
+            <button data-mode="shorts">Short Break</button>
+            <button data-mode="long">Long Break</button>
+        </div>
+
+        <div class="timer" id="timer">25:00</div>
+
+        <p>Session 1 / 4 · Deep Work</p>
+
+        <div class="timer-actions">
+            <button class="start" id="startBtn">Start</button>
+            <button class="reset" id="resetBtn">Reset</button>
+        </div>
+
+        <button class="distraction">I lost concentration</button>
+
+        <p class="motivation">
+            A small break and a random mini challenge are waiting for you.
+        </p>
+
+    </section>
+
+
+    <!-- SAĞ PANEL -->
+    <aside class="right-panel">
+
+        <section class="card">
+            <div class="card-heading">
+                <h3>Workroom</h3>
+                <span>1 person</span>
+            </div>
+
+            <div class="friend">
+                <span class="avatar green">B</span>
+                <span>Me</span>
+                <span>Focus</span>
+            </div>
+
+            <button class="invite">Invite Friend</button>
+        </section>
+
+        <section class="card">
+            <div class="card-heading">
+                <h3>Market</h3>
+                <strong>450 points</strong>
+            </div>
+
+            <p>Every pomodoro +10 points.</p>
+
+            <h4>Sesler</h4>
+            <div class="market-item">🎵 Lofi piano <span>120 points</span></div>
+            <div class="market-item">🌲 forest morning <span>150 points</span></div>
+
+            <h4>Backgrounds</h4>
+            <div class="background-options">
+                <div class="background warm"></div>
+                <div class="background rainy"></div>
+                <div class="background night"></div>
+            </div>
+        </section>
+
+    </aside>
+
+</main>
+
+<footer>
+    Every minute you focus today builds the person you'll be tomorrow.
+</footer>
+
+<script>
+    const timerDisplay = document.getElementById("timer");
+    const startBtn = document.getElementById("startBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const modeButtons = document.querySelectorAll("[data-mode]");
+
+    const durations = {
+        focus: 25 * 60,
+        short: 5 * 60,
+        long: 15 * 60
+    };
+
+    let currentMode = "focus";
+    let remainingSeconds = durations[currentMode];
+    let interval = null;
+
+    function updateDisplay() {
+        const minutes = Math.floor(remainingSeconds / 60);
+        const seconds = remainingSeconds % 60;
+
+        timerDisplay.textContent =
+            String(minutes).padStart(2, "0") + ":" +
+            String(seconds).padStart(2, "0");
+    }
+
+    function stopTimer() {
+        clearInterval(interval);
+        interval = null;
+        startBtn.textContent = "Start";
+    }
+
+    function resetTimer() {
+        stopTimer();
+        remainingSeconds = durations[currentMode];
+        updateDisplay();
+    }
+
+    function startTimer() {
+        if (interval !== null) {
+            stopTimer();
+            return;
+        }
+
+        if (remainingSeconds <= 0) {
+            remainingSeconds = durations[currentMode];
+            updateDisplay();
+        }
+
+        startBtn.textContent = "Pause";
+
+        interval = setInterval(() => {
+            remainingSeconds--;
+            updateDisplay();
+
+            if (remainingSeconds <= 0) {
+                stopTimer();
+
+                if (currentMode === "focus") {
+                    alert("Focus session completed! Great job!");
+                } else {
+                    alert("Break is over. Ready to focus again?");
+                }
+            }
+        }, 1000);
+    }
+
+    modeButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            currentMode = button.dataset.mode;
+
+            modeButtons.forEach(item => {
+                item.classList.remove("selected");
+            });
+
+            button.classList.add("selected");
+            resetTimer();
+        });
+    });
+
+    startBtn.addEventListener("click", startTimer);
+    resetBtn.addEventListener("click", resetTimer);
+
+    updateDisplay();
+</script>
+</body>
+</html>
+```
+
+## 3. Test edelim
+
+Flask sunucun zaten çalışıyorsa sayfayı tarayıcıda yenile. Çalışmıyorsa VS Code terminalinde `python app.py` komutuyla başlat.
+
+Şu kontrolleri yap:
+
+- [ ] **Start:** Sayaç 25:00 → 24:59 olarak ilerliyor.
+- [ ] **Pause:** Sayaç duruyor, tekrar basınca devam ediyor.
+- [ ] **Reset:** Süre 25:00'a dönüyor.
+- [ ] **Short Break:** Süre 05:00 oluyor.
+- [ ] **Long Break:** Süre 15:00 oluyor.
+
+Şimdilik süre bitince bir uyarı çıkıyor. Puan kazanma ve şehir geliştirme henüz eklenmedi; onları bir sonraki aşamada birbirine bağlayacağız.
+
+**Important:** This timer currently runs in the browser. If you refresh the page, the time will reset. Later, we will add functionality to save work sessions using Python and SQLite.
+
+Try these features; especially let me know if Start, Pause, and break options are working correctly. Then we'll move on to the point-earning system for completed Pomodoros.
+
