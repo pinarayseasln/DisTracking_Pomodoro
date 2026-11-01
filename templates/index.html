@@ -10,20 +10,26 @@
 
 <body>
 
+
 <header class="navbar">
-    <h1>DisTracking</h1>
+    <div class="brand">
+    <div class="brand-top">
+        <h1 class="logo">Dis<span>Tracking</span></h1>
 
-    <nav>
-        <a href="#">My Day</a>
-        <a href="#">Collection</a>
-        <a href="{{ url_for('tasks_page') }}">Tasks</a>
-    </nav>
-
-    <div class="user-info">
-        <span>4 days in a row</span>
-        <span id="headerPoints">{{ points }} points</span>
-        <span class="avatar">B</span>
+        <div class="brand-values">
+            <span class="brand-dot"></span>
+            <span>FOCUS</span>
+            <i>·</i>
+            <span>BUILD</span>
+            <i>·</i>
+            <span>GROW</span>
+        </div>
     </div>
+
+    <p class="tagline">
+        <em><b>Your productivity builds your world </b></em>
+    </p>
+</div>
 </header>
 
 <main class="dashboard">
@@ -45,15 +51,155 @@
             <p>🌳 Starting Village</p>
             <p>Today +0 structures
             </p>
+            <div class="city-grid">
+    {% if buildings %}
+        {% for building in buildings %}
+            <div class="city-building">
+                <div class="building-icon">
+                    {% if building["building_type"] == "shelter" %}
+                        🛖
+                    {% else %}
+                        🏠
+                    {% endif %}
+                </div>
+
+                <span>{{ building["name"] }}</span>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="empty-city">
+            Your city waiting for your first building. Go to the market and buy your first building!
+        </p>
+    {% endif %}
+</div>
         </section>
 
         <section class="card">
-            <h3>Müzik ve ambiyans</h3>
+            <h3>Music and ambiance</h3>
 
-            <div class="music active">🌧️ Rain</div>
-            <div class="music">🔥 Fireplace</div>
-            <div class="music">☕ Café</div>
-            <div class="music">🔊 White Noise</div>
+           
+<section class="ambient-panel">
+    <div class="ambient-header">
+        <div class="ambient-heading">
+            <span class="ambient-headphone">♫</span>
+            <h2>Music &amp; Ambience</h2>
+        </div>
+        <span class="ambient-equalizer">▮ ▮ ▮</span>
+    </div>
+
+    <div class="now-playing">
+        <div class="sound-art">🌧️</div>
+
+        <div class="playing-info">
+            <h3 id="currentSoundTitle">Rain</h3>
+            <p id="currentSoundDescription">Calm atmosphere</p>
+            <span class="playing-badge" id="soundStatus">
+                <span class="status-dot"></span>
+                Choose a sound
+            </span>
+        </div>
+
+        <div class="player-controls">
+            <button id="pauseSoundBtn" class="player-button pause-button"
+                    type="button" aria-label="Pause sound">
+                ❚❚
+            </button>
+
+            <button id="stopSoundBtn" class="player-button stop-button"
+                    type="button" aria-label="Stop sound">
+                ■
+            </button>
+        </div>
+    </div>
+
+    <div class="volume-row">
+        <span class="volume-icon">🔊</span>
+        <input
+            type="range"
+            id="soundVolume"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0.6"
+            aria-label="Sound volume"
+        >
+        <span id="volumeValue">60%</span>
+    </div>
+
+    <div class="sound-picker-heading">
+        <h3>Choose your sound</h3>
+        <span>Sounds</span>
+    </div>
+
+      <div class="sound-grid" id="soundGrid">
+
+        <button class="sound-card" type="button"
+        data-sound="cat" data-title="Cat"
+        data-description="Gentle ocean waves">
+        <span class="sound-card-icon">🐈</span>
+        <span class="sound-card-name">Cat</span>
+        </button>
+
+        <button class="sound-card" type="button"
+                data-sound="rain" data-title="Rain"
+                data-description="Calm atmosphere">
+            <span class="sound-card-icon">🌧️</span>
+            <span class="sound-card-name">Rain</span>
+        </button>
+
+        <button class="sound-card" type="button"
+                data-sound="fire" data-title="Fire"
+                data-description="Warm and cozy">
+            <span class="sound-card-icon">🔥</span>
+            <span class="sound-card-name">Fire</span>
+        </button>
+
+        <button class="sound-card" type="button"
+                data-sound="forest" data-title="Forest"
+                data-description="Peaceful nature">
+            <span class="sound-card-icon">🌲</span>
+            <span class="sound-card-name">Forest</span>
+        </button>
+
+        <button class="sound-card" type="button"
+                data-sound="meditation" data-title="Meditation"
+                data-description="Relax and breathe">
+            <span class="sound-card-icon">🧘</span>
+            <span class="sound-card-name">Meditation</span>
+        </button>
+    </div>
+
+    <p class="sound-scroll-hint">⌄ &nbsp; Scroll for more sounds</p>
+</section>
+
+<!-- Ambient audio files -->
+ <audio id="catAudio"
+       src="{{ url_for('static', filename='audio/Cat.mp3') }}"
+       loop></audio>
+
+<audio id="rainAudio"
+       src="{{ url_for('static', filename='audio/Rain.mp3') }}"
+       loop></audio>
+
+<audio id="fireAudio"
+       src="{{ url_for('static', filename='audio/Fire.mp3') }}"
+       loop></audio>
+
+<audio id="forestAudio"
+       src="{{ url_for('static', filename='audio/Forest.mp3') }}"
+       loop></audio>
+
+<audio id="meditationAudio"
+       src="{{ url_for('static', filename='audio/Meditation.mp3') }}"
+       loop></audio>
+
+
+
+<audio id="rainAudio" src="{{ url_for('static', filename='audio/Rain.mp3') }}" loop></audio>
+<audio id="fireAudio" src="{{ url_for('static', filename='audio/Fire.mp3') }}" loop></audio>
+<audio id="forestAudio" src="{{ url_for('static', filename='audio/Forest.mp3') }}" loop></audio>
+<audio id="meditationAudio" src="{{ url_for('static', filename='audio/Meditation.mp3') }}" loop></audio>
+
         </section>
 
     </aside>
@@ -69,7 +215,7 @@
         </div>
 
         <div class="duration-setting">
-            <label for="focusMinutes">Odak süresi (dakika)</label>
+            <label for="focusMinutes">Concentration time (minutes)</label>
             <input id="focusMinutes" type="number" min="1" max="180" step="1" value="25">
         </div>
 
@@ -89,7 +235,7 @@
 
         <p class="timer-notice" id="timerNotice" role="status" aria-live="polite" hidden></p>
 
-        <button class="distraction" id="lostFocusBtn">I lost concentration</button>
+        <button class="distraction" id="lostFocusBtn"> <b>EMERGENCY BUTTON!</b></button>
 
         <p class="motivation">
             Having a little trouble focusing? Let’s figure it out together.
@@ -119,12 +265,12 @@
         <section class="card">
             <div class="card-heading">
                 <h3>Market</h3>
-                <strong id="marketPoints">{{ points }} points</strong>
+                <strong id="marketPoints">{{ points }} puan</strong>
             </div>
 
             <p>Every pomodoro +10 points.</p>
 
-            <h4>Sesler</h4>
+            <h4>Sounds</h4>
             <div class="market-item">🎵 Lofi piano <span>120 points</span></div>
             <div class="market-item">🌲 forest morning <span>150 points</span></div>
 
@@ -134,6 +280,19 @@
                 <div class="background rainy"></div>
                 <div class="background night"></div>
             </div>
+            <div class="market-item" id="shelterCard">
+    <div class="market-item-info">
+        <h3>Shelter</h3>
+        <p>Your city's first shelter.</p>
+        <strong>20 points</strong>
+    </div>
+
+    <button id="shelterBuyBtn" type="button">
+        Buy
+    </button>
+
+    <p id="shelterStatus"></p>
+</div>
         </section>
 
     </aside>
@@ -141,7 +300,7 @@
 </main>
 
 <footer>
-    Every minute you focus today builds the person you'll be tomorrow.
+    - Every minute you focus today builds the person you'll be tomorrow -
 </footer>
 
 <dialog class="focus-reset-screen" id="focusResetScreen" aria-labelledby="focusResetTitle">
@@ -189,6 +348,35 @@
         <button class="focus-reset-return focus-reset-return-secondary" id="returnToTimer" type="button">Back to timer <span aria-hidden="true">→</span></button>
     </div>
 </dialog>
+<div class="modal-overlay" id="completionModal">
+    <div class="completion-modal">
+        <button class="modal-close" id="modalCloseBtn" type="button">
+            &times;
+        </button>
+
+        <div class="modal-icon">✨</div>
+
+        <p class="modal-eyebrow">SESSION COMPLETED</p>
+        <h2 id="modalTitle">Great work!</h2>
+        <p class="modal-description" id="modalDescription">
+            You completed your focus session.
+        </p>
+
+        <div class="points-earned">
+            <span>+</span>
+            <strong id="earnedPoints">10</strong>
+            <span>points</span>
+        </div>
+
+        <p class="total-points">
+            Total points: <strong id="modalTotalPoints">0</strong>
+        </p>
+
+        <button class="modal-continue" id="modalContinueBtn" type="button">
+            Continue
+        </button>
+    </div>
+</div>
 <script>
     const timerDisplay = document.getElementById("timer");
     const startBtn = document.getElementById("startBtn");
@@ -210,18 +398,23 @@
         short: 5 * 60,
         long: 15 * 60
     };
-
+    
     let currentMode = "focus";
     let remainingSeconds = durations[currentMode];
+    let totalSeconds = remainingSeconds;
     let interval = null;
 
     function updateDisplay() {
         const minutes = Math.floor(remainingSeconds / 60);
+      
         const seconds = remainingSeconds % 60;
+       
 
         timerDisplay.textContent =
             String(minutes).padStart(2, "0") + ":" +
             String(seconds).padStart(2, "0");
+            const percent = (remainingSeconds / totalSeconds) * 100;
+document.querySelector('.timer').style.setProperty('--progress', percent);
     }
 
     function stopTimer() {
@@ -234,7 +427,9 @@
         stopTimer();
         timerNotice.hidden = true;
         remainingSeconds = durations[currentMode];
+        totalSeconds = remainingSeconds;
         updateDisplay();
+        document.querySelector('.timer').style.setProperty('--progress', 100);
     }
 
     focusMinutesInput.addEventListener("change", () => {
@@ -294,7 +489,8 @@
         }
 
         if (remainingSeconds <= 0) {
-            remainingSeconds = durations[currentMode];
+            remainingSeconds = durations [currentMode];
+            totalSeconds = remainingSeconds;
             updateDisplay();
         }
 
@@ -303,19 +499,48 @@
         }
         startBtn.textContent = "Pause";
 
-        interval = setInterval(() => {
-            remainingSeconds--;
-            updateDisplay();
+       interval = setInterval(() => {
+    remainingSeconds = Math.max(0, remainingSeconds - 1);
+       
+    updateDisplay();
 
-            if (remainingSeconds <= 0) {
-                stopTimer();
+    if (remainingSeconds <= 0) {
+  console.log("1. bitiş bloğuna girdi, mode:", currentMode);
+  remainingSeconds = 0;
+  stopTimer();
+  console.log("2. stopTimer sonrası, mode:", currentMode);
+  playCompletionSound();
 
-                const message = currentMode === "focus"
-                    ? "Focus session completed! Great job!"
-                    : "Break is over. Ready to focus again?";
-                showCompletionNotice(message);
-                playCompletionSound();
-            }
+  if (currentMode === "focus") {
+    console.log("3. fetch gönderiliyor");
+    fetch("/api/pomodoro/complete", { method: "POST" })
+    // ...
+       
+        .then(response => response.json())
+        .then(data => {
+
+            document.getElementById("headerPoints").textContent =
+                data.points + " point";
+
+            document.getElementById("marketPoints").textContent =
+                data.points + " point";
+
+            document.getElementById("marketPoints").textContent =
+        data.points + " points";
+
+    openCompletionModal(10, data.points);
+
+        })
+        .catch(error => {
+            console.error("Points could not be saved:", error);
+            alert("An error occurred while saving points.");
+        }); 
+
+    } else {
+        alert("Break is over. Ready to focus again?");
+    }
+}
+
         }, 1000);
     }
 
@@ -462,6 +687,245 @@
     });
 
     updateDisplay();
+    const shelterBuyBtn = document.getElementById("shelterBuyBtn");
+const shelterStatus = document.getElementById("shelterStatus");
+
+shelterBuyBtn.addEventListener("click", () => {
+    shelterBuyBtn.disabled = true;
+    shelterStatus.textContent = "Processing...";
+
+    fetch("/api/building/buy", {
+        method: "POST"
+    })
+    .then(response => response.json())
+    .then(data => {
+        shelterStatus.textContent = data.message;
+
+        if (data.success) {
+            document.getElementById("headerPoints").textContent =
+                data.points + " points";
+
+            document.getElementById("marketPoints").textContent =
+                data.points + " points";
+
+            shelterBuyBtn.textContent = "Owned";
+            shelterBuyBtn.disabled = true;
+        } else {
+            shelterBuyBtn.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error("Purchase failed:", error);
+        shelterStatus.textContent = "Something went wrong. Try again.";
+        shelterBuyBtn.disabled = false;
+    });
+});
+
+const completionModal = document.getElementById("completionModal");
+const modalCloseBtn = document.getElementById("modalCloseBtn");
+const modalContinueBtn = document.getElementById("modalContinueBtn");
+
+function openCompletionModal(pointsEarned, totalPoints) {
+    document.getElementById("modalTitle").textContent = "Great work!";
+    document.getElementById("modalDescription").textContent =
+        "You completed your focus session.";
+
+    document.getElementById("earnedPoints").textContent = pointsEarned;
+    document.getElementById("modalTotalPoints").textContent = totalPoints;
+
+    completionModal.classList.add("show");
+}
+
+function closeCompletionModal() {
+    completionModal.classList.remove("show");
+}
+
+modalCloseBtn.addEventListener("click", closeCompletionModal);
+modalContinueBtn.addEventListener("click", closeCompletionModal);
+
+completionModal.addEventListener("click", (event) => {
+    if (event.target === completionModal) {
+        closeCompletionModal();
+    }
+});
+
+// ===== Ambient Sound Player =====
+
+const soundCards = document.querySelectorAll(".sound-card");
+const soundStatus = document.getElementById("soundStatus");
+const currentSoundTitle = document.getElementById("currentSoundTitle");
+const currentSoundDescription = document.getElementById("currentSoundDescription");
+const soundArt = document.querySelector(".sound-art");
+
+const pauseSoundBtn = document.getElementById("pauseSoundBtn");
+const stopSoundBtn = document.getElementById("stopSoundBtn");
+const soundVolume = document.getElementById("soundVolume");
+const volumeValue = document.getElementById("volumeValue");
+
+let currentSound = null;
+let currentSoundCard = null;
+
+const audioElements = document.querySelectorAll(
+    ".ambient-panel audio, audio[id$='Audio']"
+);
+
+// Set the starting volume
+audioElements.forEach(audio => {
+    audio.volume = Number(soundVolume.value);
+});
+
+function updateSoundStatus(message, isPlaying = false) {
+    soundStatus.innerHTML = `
+        <span class="status-dot"></span>
+        ${message}
+    `;
+
+    soundStatus.classList.toggle("is-playing", isPlaying);
+}
+
+function pauseAllSounds() {
+    audioElements.forEach(audio => audio.pause());
+}
+
+function clearActiveCards() {
+    soundCards.forEach(card => card.classList.remove("active"));
+}
+
+soundCards.forEach(card => {
+    card.addEventListener("click", async () => {
+        const soundName = card.dataset.sound;
+        const audio = document.getElementById(`${soundName}Audio`);
+
+        if (!audio) {
+            console.error(`Audio file not found: ${soundName}`);
+            updateSoundStatus("Sound file not found");
+            return;
+        }
+
+        // Stop the previous sound before playing another one
+        pauseAllSounds();
+
+        if (currentSound && currentSound !== audio) {
+            currentSound.currentTime = 0;
+        }
+
+        currentSound = audio;
+        currentSoundCard = card;
+
+        currentSoundTitle.textContent = card.dataset.title;
+        currentSoundDescription.textContent = card.dataset.description;
+        soundArt.textContent = card.querySelector(".sound-card-icon").textContent;
+
+        clearActiveCards();
+        card.classList.add("active");
+
+        try {
+            await currentSound.play();
+            updateSoundStatus("Playing", true);
+        } catch (error) {
+            console.error(error);
+            updateSoundStatus("Could not play sound");
+        }
+    });
+});
+
+// Pause / Resume
+pauseSoundBtn.addEventListener("click", async () => {
+    if (!currentSound) {
+        updateSoundStatus("Choose a sound first");
+        return;
+    }
+
+    if (currentSound.paused) {
+        try {
+            await currentSound.play();
+            updateSoundStatus("Playing", true);
+        } catch (error) {
+            console.error(error);
+            updateSoundStatus("Could not resume sound");
+        }
+    } else {
+        currentSound.pause();
+        updateSoundStatus("Paused");
+    }
+});
+
+// Stop and reset
+stopSoundBtn.addEventListener("click", () => {
+    if (currentSound) {
+        currentSound.pause();
+        currentSound.currentTime = 0;
+    }
+
+    currentSound = null;
+    currentSoundCard = null;
+
+    clearActiveCards();
+    updateSoundStatus("Choose a sound");
+
+    currentSoundTitle.textContent = "No sound selected";
+    currentSoundDescription.textContent = "Choose your ambience";
+    soundArt.textContent = "🎧";
+});
+
+// Volume slider
+soundVolume.addEventListener("input", () => {
+    const volume = Number(soundVolume.value);
+
+    audioElements.forEach(audio => {
+        audio.volume = volume;
+    });
+
+    volumeValue.textContent = `${Math.round(volume * 100)}%`;
+});
+
+Object.values(sounds).forEach(sound => {
+    sound.volume = 0.5;
+});
+
+musicItems.forEach(item => {
+    item.addEventListener("click", async () => {
+        const selectedSound = sounds[item.dataset.sound];
+
+        Object.values(sounds).forEach(sound => {
+            sound.pause();
+            sound.currentTime = 0;
+        });
+
+        musicItems.forEach(music => {
+            music.classList.remove("active");
+        });
+
+        try {
+            await selectedSound.play();
+            item.classList.add("active");
+            soundStatus.textContent = item.textContent.trim() + " is playing.";
+        } catch (error) {
+            console.error(error);
+            soundStatus.textContent = "Sound could not be played.";
+        }
+    });
+});
+
+soundVolume.addEventListener("input", () => {
+    Object.values(sounds).forEach(sound => {
+        sound.volume = Number(soundVolume.value);
+    });
+});
+
+stopSoundBtn.addEventListener("click", () => {
+    Object.values(sounds).forEach(sound => {
+        sound.pause();
+        sound.currentTime = 0;
+    });
+
+    musicItems.forEach(item => {
+        item.classList.remove("active");
+    });
+
+    soundStatus.textContent = "All sounds stopped.";
+});
+
 </script>
 </body>
 </html>

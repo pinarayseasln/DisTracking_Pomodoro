@@ -31,6 +31,14 @@ def init_db():
         INSERT OR IGNORE INTO user_data (id, points, completed_sessions)
         VALUES (1, 0, 0)
     """)
+    conn.execute("""
+    CREATE TABLE IF NOT EXISTS buildings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        building_type TEXT NOT NULL UNIQUE,
+        cost INTEGER NOT NULL
+    )
+""")
 
     conn.execute("""
         CREATE TABLE IF NOT EXISTS task_completions (
@@ -55,6 +63,15 @@ def get_user_data():
     conn.close()
     return user
 
+def get_user_buildings():
+    conn = get_db()
+
+    buildings = conn.execute(
+        "SELECT * FROM buildings ORDER BY id"
+    ).fetchall()
+
+    conn.close()
+    return buildings
 
 # Mini görevler / quiz soruları
 sorular = [
@@ -84,12 +101,76 @@ sorular = [
 @app.route('/')
 def ana_sayfa():
     user = get_user_data()
+    buildings = get_user_buildings()
 
     return render_template(
         "index.html",
         points=user["points"],
-        completed_sessions=user["completed_sessions"]
-         )
+        completed_sessions=user["completed_sessions"],
+        buildings=buildings
+    )
+
+@app.route('/api/building/buy', methods=['POST'])
+def buy_building():
+    conn = get_db()
+
+    building_name = "Shelter"
+    building_type = "shelter"
+    building_cost = 20
+
+    user = conn.execute(
+        "SELECT points FROM user_data WHERE id = 1"
+    ).fetchone()
+
+    # Yeterli puan var mı?
+    if user["points"] < building_cost:
+        conn.close()
+        return jsonify({
+            "success": False,
+            "message": "You don't have enough points to get a shelter.!"
+        }), 400
+
+    # Shelter zaten alınmış mı?
+    existing = conn.execute(
+        "SELECT * FROM buildings WHERE building_type = ?",
+        (building_type,)
+    ).fetchone()
+
+    if existing:
+        conn.close()
+        return jsonify({
+            "success": False,
+            "message": "You already have a shelter!"
+        }), 400
+
+    # Puanı düşür
+    conn.execute(
+        "UPDATE user_data SET points = points - ? WHERE id = 1",
+        (building_cost,)
+    )
+
+    # Barınağı kaydet
+    conn.execute(
+        """
+        INSERT INTO buildings (name, building_type, cost)
+        VALUES (?, ?, ?)
+        """,
+        (building_name, building_type, building_cost)
+    )
+
+    conn.commit()
+
+    updated_user = conn.execute(
+        "SELECT points FROM user_data WHERE id = 1"
+    ).fetchone()
+
+    conn.close()
+
+    return jsonify({
+        "success": True,
+        "message": "Shelter added to your city!",
+        "points": updated_user["points"]
+    })
 
 
 # Pomodoro tamamlanınca puan kazan

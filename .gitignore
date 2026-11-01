@@ -1,2 +1,5 @@
 venv/
 
+distracking.db
+static/audio/*.mp3
+__pycache__/
