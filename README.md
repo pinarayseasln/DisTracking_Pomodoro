@@ -47,3 +47,14 @@ Instead of simply tracking study time, the application aims to motivate users by
 ### Focus reset tasks
 
 The `/tasks` page contains five task categories and all 27 catalog entries. The `I lost concentration` flow maps the selected need to a recommendation strategy in `task_strategies.py`; each strategy recommends tasks from its own category. Mini-game interactions are placeholders until their game logic is implemented. Completing a task records it in SQLite and adds its XP to the existing points balance.
+
+## Audio Files
+
+The audio files are not included in this repository because of their file size
+(GitHub does not accept files larger than 100 MB). Before running the app:
+
+1. Download the mp3 files from [this Google Drive folder](https://drive.google.com/drive/folders/1dcinhR_wVjKo5hD9vGTqr3rJ0o4OyqeW?usp=sharing).
+2. In the project's root folder, create the `static/audio` folder if it does not exist.
+3. Place the downloaded files (`Cat.mp3`, `Fire.mp3`, `Forest.mp3`, `Meditation.mp3`, `Rain.mp3`) inside it.
+
+Without these files the app still runs, but the ambient sounds will not play.
