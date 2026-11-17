@@ -9,7 +9,7 @@
 <body>
 <header class="navbar">
     <h1>DisTracking</h1>
-    <nav><a href="{{ url_for('ana_sayfa') }}">My Day</a><a href="{{ url_for('tasks_page') }}" aria-current="page">Tasks</a></nav>
+    <nav><a href="{{ url_for('home.ana_sayfa') }}">My Day</a><a href="{{ url_for('tasks.tasks_page') }}" aria-current="page">Tasks</a></nav>
 </header>
 <main class="tasks-page">
     <p class="tasks-eyebrow">TASK LIBRARY</p>
@@ -33,7 +33,7 @@
         </div>
     </section>
     {% endfor %}
-    <a class="focus-reset-return tasks-back-link" href="{{ url_for('ana_sayfa') }}">Back to My Day <span aria-hidden="true">→</span></a>
+    <a class="focus-reset-return tasks-back-link" href="{{ url_for('home.ana_sayfa') }}">Back to My Day <span aria-hidden="true">→</span></a>
 </main>
 <footer>Every minute you focus today builds the person you'll be tomorrow.</footer>
 </body>

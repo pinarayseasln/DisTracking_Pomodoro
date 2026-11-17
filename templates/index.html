@@ -30,7 +30,56 @@
         <em><b>Your productivity builds your world </b></em>
     </p>
 </div>
+<nav class="top-actions">
+    <button class="nav-action" data-panel="todo" aria-label="To-do List">
+        <span class="nav-icon">🎯</span>
+        <span class="nav-label">To-do List</span>
+    </button>
+
+    <button class="nav-action" data-panel="themes" aria-label="Themes">
+        <span class="nav-icon">🎨</span>
+        <span class="nav-label">Themes</span>
+    </button>
+
+    <button class="nav-action" data-panel="friends" aria-label="Friends">
+        <span class="nav-icon">👥</span>
+        <span class="nav-label">Friends</span>
+    </button>
+
+    <button class="nav-action" data-panel="market" aria-label="Market">
+        <span class="nav-icon">🛍️</span>
+        <span class="nav-label">Market</span>
+    </button>
+
+    <button class="nav-action profile-action" data-panel="profile" aria-label="Profile">
+        <span class="nav-icon">👤</span>
+        <span class="nav-label">Profile</span>
+    </button>
+</nav>
 </header>
+
+
+<!-- TOP NAVIGATION PANEL -->
+<section class="top-panel" id="topPanel" hidden>
+    <div class="top-panel-header">
+        <div>
+            <h2 id="topPanelTitle">Themes</h2>
+            <p id="topPanelDescription">Choose your workspace atmosphere</p>
+        </div>
+
+        <strong id="marketBalance" class="market-balance" hidden>
+    100 points
+</strong>
+        <button type="button" id="closeTopPanel" aria-label="Close panel">
+            ×
+        </button>
+    </div>
+
+    <div class="top-panel-content" id="topPanelContent">
+    </div>
+</section>
+
+
 
 <main class="dashboard">
 
@@ -43,10 +92,22 @@
                 <span>Level 1</span>
             </div>
 
-            <div class="city">
-                <span>🏰</span>
-                <p>Your city will rise here.</p>
-            </div>
+
+<button type="button" class="city-preview-button" id="openCityBtn">
+    <div class="city-preview-art">
+        <div class="city-sun"></div>
+        <span class="city-cloud cloud-one">☁</span>
+        <span class="city-cloud cloud-two">☁</span>
+        <span class="city-tree tree-one">🌲</span>
+        <span class="city-house">🏡</span>
+        <span class="city-tree tree-two">🌳</span>
+        <span class="city-hill"></span>
+    </div>
+    <span class="city-preview-label">
+        Explore your city <span>↗</span>
+    </span>
+</button>
+
 
             <p>🌳 Starting Village</p>
             <p>Today +0 structures
@@ -77,7 +138,7 @@
         <section class="card">
             <h3>Music and ambiance</h3>
 
-           
+
 <section class="ambient-panel">
     <div class="ambient-header">
         <div class="ambient-heading">
@@ -135,7 +196,7 @@
 
         <button class="sound-card" type="button"
         data-sound="cat" data-title="Cat"
-        data-description="Gentle ocean waves">
+        data-description="Soft purring">
         <span class="sound-card-icon">🐈</span>
         <span class="sound-card-name">Cat</span>
         </button>
@@ -172,7 +233,7 @@
     <p class="sound-scroll-hint">⌄ &nbsp; Scroll for more sounds</p>
 </section>
 
-<!-- Ambient audio files -->
+<!-- Ambient audio files --><!--MÜZİKLER-->
  <audio id="catAudio"
        src="{{ url_for('static', filename='audio/Cat.mp3') }}"
        loop></audio>
@@ -195,10 +256,7 @@
 
 
 
-<audio id="rainAudio" src="{{ url_for('static', filename='audio/Rain.mp3') }}" loop></audio>
-<audio id="fireAudio" src="{{ url_for('static', filename='audio/Fire.mp3') }}" loop></audio>
-<audio id="forestAudio" src="{{ url_for('static', filename='audio/Forest.mp3') }}" loop></audio>
-<audio id="meditationAudio" src="{{ url_for('static', filename='audio/Meditation.mp3') }}" loop></audio>
+
 
         </section>
 
@@ -247,6 +305,7 @@
     <!-- SAĞ PANEL -->
     <aside class="right-panel">
 
+
         <section class="card">
             <div class="card-heading">
                 <h3>Workroom</h3>
@@ -265,10 +324,10 @@
         <section class="card">
             <div class="card-heading">
                 <h3>Market</h3>
-                <strong id="marketPoints">{{ points }} puan</strong>
+                <strong id="marketPoints">{{ points }} points</strong>
             </div>
 
-            <p>Every pomodoro +10 points.</p>
+            <p>Earn 1 point for every minute of completed focus.</p>
 
             <h4>Sounds</h4>
             <div class="market-item">🎵 Lofi piano <span>120 points</span></div>
@@ -298,6 +357,80 @@
     </aside>
 
 </main>
+
+
+<!-- CITY WINDOW -->
+<div class="city-overlay" id="cityOverlay" hidden>
+    <section class="city-window">
+
+        <header class="city-window-header">
+            <div>
+                <span class="city-eyebrow">YOUR WORLD</span>
+                <h2>Starting Village</h2>
+                <p>Build your world, one step at a time.</p>
+            </div>
+
+            <button type="button" id="closeCityBtn"
+                    class="city-close-btn" aria-label="Close">
+                ×
+            </button>
+        </header>
+
+        <div class="city-resource-bar">
+            <div>🍎 <span>Food</span><strong id="cityFood">0</strong></div>
+            <div>💧 <span>Water</span><strong id="cityWater">0</strong></div>
+            <div>⚡ <span>Electricity</span><strong id="cityElectricity">0</strong></div>
+            <div>🔥 <span>Natural Gas</span><strong id="cityGas">0</strong></div>
+        </div>
+
+        <div class="city-main-scene">
+            <div class="scene-sky">
+                <span class="scene-cloud">☁</span>
+                <span class="scene-sun">☀</span>
+            </div>
+            <div class="scene-hills"></div>
+            <div class="scene-buildings">
+    {% if buildings %}
+        {% for building in buildings %}
+            <div class="scene-building">
+                {% if building["building_type"] == "shelter" %}
+                    🛖
+                {% elif building["building_type"] == "cabin" %}
+                    🏡
+                {% elif building["building_type"] == "house" %}
+                    🏠
+                {% elif building["building_type"] == "watchtower" %}
+                    🗼
+                {% else %}
+                    🏘️
+                {% endif %}
+                <span>{{ building["name"] }}</span>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="scene-empty">
+            🌱 Your first building will appear here!
+        </div>
+    {% endif %}
+</div>
+            <p>Your city is waiting to grow.</p>
+        </div>
+
+        <div class="city-status-grid">
+            <div>😊 Happiness <strong>100%</strong></div>
+            <div>🍽️ Hunger <strong>0%</strong></div>
+            <div>❤️ Health <strong>100%</strong></div>
+            <div>📚 Education <strong>0%</strong></div>
+        </div>
+
+        <div class="city-window-footer">
+            <span>🏗️ City development</span>
+            <span>Level 1</span>
+        </div>
+
+    </section>
+</div>
+
 
 <footer>
     - Every minute you focus today builds the person you'll be tomorrow -
@@ -386,6 +519,15 @@
     const completionSoundInput = document.getElementById("completionSound");
     const timerNotice = document.getElementById("timerNotice");
 
+
+function updatePointsDisplay(points) {
+    const marketBalance = document.getElementById("marketBalance");
+    const marketPoints = document.getElementById("marketPoints");
+
+    if (marketBalance) marketBalance.textContent = `${points} points`;
+    if (marketPoints) marketPoints.textContent = `${points} points`;
+}
+
     let savedFocusMinutes = Number(localStorage.getItem("focusMinutes"));
     if (!Number.isInteger(savedFocusMinutes) || savedFocusMinutes < 1 || savedFocusMinutes > 180) {
         savedFocusMinutes = 25;
@@ -398,7 +540,7 @@
         short: 5 * 60,
         long: 15 * 60
     };
-    
+
     let currentMode = "focus";
     let remainingSeconds = durations[currentMode];
     let totalSeconds = remainingSeconds;
@@ -406,9 +548,9 @@
 
     function updateDisplay() {
         const minutes = Math.floor(remainingSeconds / 60);
-      
+
         const seconds = remainingSeconds % 60;
-       
+
 
         timerDisplay.textContent =
             String(minutes).padStart(2, "0") + ":" +
@@ -458,6 +600,8 @@ document.querySelector('.timer').style.setProperty('--progress', percent);
         timerNotice.hidden = false;
     }
 
+
+
     function playCompletionSound() {
         if (!completionSoundInput.checked) return;
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -499,48 +643,62 @@ document.querySelector('.timer').style.setProperty('--progress', percent);
         }
         startBtn.textContent = "Pause";
 
-       interval = setInterval(() => {
-    remainingSeconds = Math.max(0, remainingSeconds - 1);
-       
-    updateDisplay();
+        interval = setInterval(() => {
+            remainingSeconds = Math.max(0, remainingSeconds - 1);
+            updateDisplay();
 
-    if (remainingSeconds <= 0) {
-  console.log("1. bitiş bloğuna girdi, mode:", currentMode);
-  remainingSeconds = 0;
-  stopTimer();
-  console.log("2. stopTimer sonrası, mode:", currentMode);
-  playCompletionSound();
+            if (remainingSeconds <= 0) {
+                remainingSeconds = 0;
+                stopTimer();
+                playCompletionSound();
 
-  if (currentMode === "focus") {
-    console.log("3. fetch gönderiliyor");
-    fetch("/api/pomodoro/complete", { method: "POST" })
-    // ...
-       
-        .then(response => response.json())
-        .then(data => {
+                if (currentMode === "focus") {
+                   fetch("/api/pomodoro/complete", {
+                   method: "POST",
+                   headers: {
+                      "Content-Type": "application/json"
+                     },
+                   body: JSON.stringify({
+                      quest_id: activeQuestId,
+                      focus_minutes: Math.round(totalSeconds / 60)
+                     })
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error("Could not save the completed session.");
+                         return response.json();
+                           })
+                    .then(async data => {
+                         updatePointsDisplay(data.points);
 
-            document.getElementById("headerPoints").textContent =
-                data.points + " point";
+                        const earnedPoints = data.earned_points;
+                         openCompletionModal(earnedPoints, data.points);
 
-            document.getElementById("marketPoints").textContent =
-                data.points + " point";
+                        if (activeQuestId !== null) {
+                           const completedQuestId = activeQuestId;
 
-            document.getElementById("marketPoints").textContent =
-        data.points + " points";
+                           await loadQuests();
 
-    openCompletionModal(10, data.points);
+                           const currentQuest = quests.find(
+                           quest => quest.id === completedQuestId
+                         );
 
-        })
-        .catch(error => {
-            console.error("Points could not be saved:", error);
-            alert("An error occurred while saving points.");
-        }); 
-
-    } else {
-        alert("Break is over. Ready to focus again?");
-    }
-}
-
+                         if (
+                             currentQuest &&
+                             currentQuest.completed_pomodoros >= currentQuest.required_pomodoros
+                          ) {
+                             activeQuestId = null;
+                             renderQuests();
+                          }
+                        }
+                    })
+                    .catch(error => {
+                         console.error("Points could not be saved:", error);
+                         alert("An error occurred while saving points.");
+                         });
+                } else {
+                    alert("Break is over. Ready to focus again?");
+                }
+            }
         }, 1000);
     }
 
@@ -673,8 +831,7 @@ document.querySelector('.timer').style.setProperty('--progress', percent);
             });
             const payload = await response.json();
             if (!response.ok || !payload.success) throw new Error(payload.error || "Could not save this task.");
-            document.getElementById("headerPoints").textContent = `${payload.points} points`;
-            document.getElementById("marketPoints").textContent = `${payload.points} points`;
+            updatePointsDisplay(payload.points)
             button.textContent = "Completed ✓";
             taskCompleteMessage.textContent = `You earned ${payload.earned_xp} XP. Nice work!`;
             taskCompleteMessage.hidden = false;
@@ -701,18 +858,13 @@ shelterBuyBtn.addEventListener("click", () => {
     .then(data => {
         shelterStatus.textContent = data.message;
 
-        if (data.success) {
-            document.getElementById("headerPoints").textContent =
-                data.points + " points";
-
-            document.getElementById("marketPoints").textContent =
-                data.points + " points";
-
-            shelterBuyBtn.textContent = "Owned";
-            shelterBuyBtn.disabled = true;
-        } else {
-            shelterBuyBtn.disabled = false;
-        }
+       if (data.success) {
+    updatePointsDisplay(data.points);
+    shelterBuyBtn.textContent = "Owned";
+    shelterBuyBtn.disabled = true;
+} else {
+    shelterBuyBtn.disabled = false;
+}
     })
     .catch(error => {
         console.error("Purchase failed:", error);
@@ -829,6 +981,8 @@ soundCards.forEach(card => {
     });
 });
 
+
+
 // Pause / Resume
 pauseSoundBtn.addEventListener("click", async () => {
     if (!currentSound) {
@@ -839,6 +993,8 @@ pauseSoundBtn.addEventListener("click", async () => {
     if (currentSound.paused) {
         try {
             await currentSound.play();
+            pauseSoundBtn.textContent = "❚❚";
+            pauseSoundBtn.setAttribute("aria-label", "Pause sound");
             updateSoundStatus("Playing", true);
         } catch (error) {
             console.error(error);
@@ -846,9 +1002,12 @@ pauseSoundBtn.addEventListener("click", async () => {
         }
     } else {
         currentSound.pause();
+        pauseSoundBtn.textContent = "▶";
+        pauseSoundBtn.setAttribute("aria-label", "Resume sound");
         updateSoundStatus("Paused");
     }
 });
+
 
 // Stop and reset
 stopSoundBtn.addEventListener("click", () => {
@@ -860,6 +1019,9 @@ stopSoundBtn.addEventListener("click", () => {
     currentSound = null;
     currentSoundCard = null;
 
+    pauseSoundBtn.textContent = "❚❚";
+    pauseSoundBtn.setAttribute("aria-label", "Pause sound");
+
     clearActiveCards();
     updateSoundStatus("Choose a sound");
 
@@ -867,6 +1029,7 @@ stopSoundBtn.addEventListener("click", () => {
     currentSoundDescription.textContent = "Choose your ambience";
     soundArt.textContent = "🎧";
 });
+
 
 // Volume slider
 soundVolume.addEventListener("input", () => {
@@ -879,53 +1042,542 @@ soundVolume.addEventListener("input", () => {
     volumeValue.textContent = `${Math.round(volume * 100)}%`;
 });
 
-Object.values(sounds).forEach(sound => {
-    sound.volume = 0.5;
-});
+ // ===== THEME SELECTOR =====
 
-musicItems.forEach(item => {
-    item.addEventListener("click", async () => {
-        const selectedSound = sounds[item.dataset.sound];
+// ===== THEME INITIALIZATION =====
+const savedTheme = localStorage.getItem("disTheme") || "woods";
+document.body.dataset.theme = savedTheme;
 
-        Object.values(sounds).forEach(sound => {
-            sound.pause();
-            sound.currentTime = 0;
+// ===== TOP NAVIGATION PANELS =====
+
+const navButtons = document.querySelectorAll(".nav-action");
+const topPanel = document.getElementById("topPanel");
+const topPanelTitle = document.getElementById("topPanelTitle");
+const topPanelDescription = document.getElementById("topPanelDescription");
+const topPanelContent = document.getElementById("topPanelContent");
+const closeTopPanel = document.getElementById("closeTopPanel");
+
+const panelInfo = {
+    todo: {
+        title: "To-do List",
+        description: "Organize your tasks",
+        content: "Your tasks will appear here."
+    },
+    themes: {
+        title: "Themes",
+        description: "Choose your workspace atmosphere",
+        content: "Your themes will appear here."
+    },
+    friends: {
+        title: "Friends & Group",
+        description: "Connect and focus together",
+        content: "Your friends and groups will appear here."
+    },
+    market: {
+        title: "Market",
+        description: "Build your productivity world",
+        content: "Available items will appear here."
+    },
+    profile: {
+        title: "Profile",
+        description: "Your personal productivity space",
+        content: "Your profile information will appear here."
+    }
+};
+
+function loadMarket() {
+    topPanelContent.innerHTML = `
+        <p class="market-loading">Loading market...</p>
+    `;
+
+    fetch("/api/market/buildings")
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                throw new Error("Market could not be loaded.");
+            }
+
+            const icons = {
+                shelter: "🛖",
+                cabin: "🏡",
+                house: "🏠",
+                watchtower: "🗼"
+            };
+
+            topPanelContent.innerHTML = `
+                <div class="market-header">
+                    <span>🏗️ Available Buildings</span>
+                </div>
+
+                <div class="market-grid">
+                    ${data.items.map(item => `
+                        <article class="market-card">
+                            <div class="market-icon">
+                                ${icons[item.building_type] || "🏠"}
+                            </div>
+
+                            <h3>${item.name}</h3>
+                            <p>Build and expand your city.</p>
+
+                            <strong class="market-price">
+                                ${item.cost} points
+                            </strong>
+
+                            <button
+                                class="market-buy-button"
+                                data-buy-building="${item.building_type}"
+                                ${item.owned ? "disabled" : ""}
+                            >
+                                ${item.owned ? "Owned ✓" : "Buy"}
+                            </button>
+                        </article>
+                    `).join("")}
+                </div>
+
+                <p id="marketMessage" class="market-message"></p>
+            `;
+        })
+        .catch(error => {
+            topPanelContent.innerHTML = `
+                <p class="market-message">${error.message}</p>
+            `;
         });
+}
 
-        musicItems.forEach(music => {
-            music.classList.remove("active");
-        });
 
-        try {
-            await selectedSound.play();
-            item.classList.add("active");
-            soundStatus.textContent = item.textContent.trim() + " is playing.";
-        } catch (error) {
-            console.error(error);
-            soundStatus.textContent = "Sound could not be played.";
+navButtons.forEach(button => {
+    button.addEventListener("click", () => {
+
+        const buyButton = event.target.closest("[data-buy-building]");
+
+if (buyButton) {
+    const buildingType = buyButton.dataset.buyBuilding;
+    const message = document.getElementById("marketMessage");
+
+    buyButton.disabled = true;
+    buyButton.textContent = "Processing...";
+
+    fetch("/api/building/buy", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            building_type: buildingType
+        })
+    })
+    .then(response => response.json().then(result => ({
+        ok: response.ok,
+        result: result
+    })))
+    .then(data => {
+        if (!data.ok || !data.result.success) {
+            throw new Error(data.result.message || "Purchase failed.");
         }
+
+        message.textContent = data.result.message;
+        buyButton.textContent = "Owned ✓";
+
+        setTimeout(() => {
+            window.location.reload();
+        }, 800);
+    })
+    .catch(error => {
+        message.textContent = error.message;
+        buyButton.disabled = false;
+        buyButton.textContent = "Buy";
+    });
+
+    return;
+}
+        const panelName = button.dataset.panel;
+        topPanel.dataset.panel = panelName;
+
+
+        if (button.classList.contains("active")) {
+            topPanel.hidden = true;
+            button.classList.remove("active");
+            return;
+        }
+
+        navButtons.forEach(item => item.classList.remove("active"));
+
+        button.classList.add("active");
+
+        const panel = panelInfo[panelName];
+
+        topPanelTitle.textContent = panel.title;
+        topPanelDescription.textContent = panel.description;
+
+        const marketBalance = document.getElementById("marketBalance");
+
+if (marketBalance) {
+    marketBalance.hidden = panelName !== "market";
+}
+
+if (panelName === "market") {
+    fetch("/api/user")
+        .then(response => response.json())
+        .then(data => {
+            updatePointsDisplay(data.points);
+        })
+        .catch(error => console.error("Points could not load:", error));
+}
+        if (panelName === "themes") {
+    const currentTheme = document.body.dataset.theme;
+
+    const themes = [
+        { id: "woods", name: "Whispering Woods", image: "whispering-woods.png" },
+        { id: "neon", name: "Neon Afterglow", image: "neon-afterglow.png" },
+        { id: "sakura-coast", name: "Sakura Coast", image: "sakura-coast.png" },
+        { id: "burgundy", name: "Burgundy Royale", image: "burgundy-royale.png" }
+    ];
+
+    topPanelContent.innerHTML = `
+        <div class="theme-grid">
+            ${themes.map(theme => `
+                <button
+                    type="button"
+                    class="theme-card ${currentTheme === theme.id ? "selected" : ""}"
+                    data-theme-choice="${theme.id}"
+                >
+                    <img
+                        src="/static/backgrounds/${theme.image}"
+                        alt="${theme.name}"
+                    >
+                    <span>${theme.name}</span>
+                    <small>${currentTheme === theme.id ? "Currently selected" : "Select theme"}</small>
+                </button>
+            `).join("")}
+        </div>
+    `;
+
+
+} else if (panelName === "todo") {
+    topPanelContent.innerHTML = `
+        <div class="todo-panel">
+            <form id="todoForm" class="todo-form">
+                <input
+                    type="text"
+                    id="todoInput"
+                    placeholder="What needs to get done?"
+                    maxlength="100"
+                    required
+                >
+
+               <select id="todoCategory" required>
+    <option value="">Choose category</option>
+    <option value="study">📚 Study</option>
+    <option value="work">💻 Work</option>
+    <option value="personal">🌱 Personal</option>
+    <option value="health">💪 Health</option>
+    <option value="creative">🎨 Creative</option>
+</select>
+
+<div class="pomodoro-goal-field">
+    <label for="requiredPomodoros">Pomodoro goal</label>
+    <select id="requiredPomodoros" required>
+        ${Array.from({length: 10}, (_, i) =>
+            `<option value="${i + 1}">${i + 1} Pomodoro${i ? "s" : ""}</option>`
+        ).join("")}
+    </select>
+</div>
+
+
+                <button type="submit">＋ Add Quest</button>
+            </form>
+
+            <div class="todo-list" id="todoList"></div>
+
+            <p class="todo-empty" id="todoEmpty" hidden>
+                No quests yet. Create your first daily quest!
+            </p>
+        </div>
+    `;
+    loadQuests();
+
+} else if (panelName === "market") {
+    loadMarket();
+} else {
+    topPanelContent.textContent = panel.content;
+}
+
+        topPanel.hidden = false;
     });
 });
 
-soundVolume.addEventListener("input", () => {
-    Object.values(sounds).forEach(sound => {
-        sound.volume = Number(soundVolume.value);
+closeTopPanel.addEventListener("click", () => {
+    topPanel.hidden = true;
+    navButtons.forEach(button => button.classList.remove("active"));
+});
+
+topPanelContent.addEventListener("click", (event) => {
+
+const buyButton = event.target.closest("[data-buy-building]");
+
+if (buyButton) {
+    const buildingType = buyButton.dataset.buyBuilding;
+    const message = document.getElementById("marketMessage");
+
+    buyButton.disabled = true;
+    buyButton.textContent = "Processing...";
+
+    fetch("/api/building/buy", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            building_type: buildingType
+        })
+    })
+    .then(response => response.json().then(result => ({
+        ok: response.ok,
+        result
+    })))
+    .then(({ ok, result }) => {
+        if (!ok || !result.success) {
+            throw new Error(result.message || "Purchase failed.");
+        }
+
+        updatePointsDisplay(result.points);
+        message.textContent = result.message;
+        buyButton.textContent = "Owned ✓";
+
+        setTimeout(() => window.location.reload(), 800);
+    })
+    .catch(error => {
+        message.textContent = error.message;
+        buyButton.disabled = false;
+        buyButton.textContent = "Buy";
+    });
+
+    return;
+}
+
+
+    const themeButton = event.target.closest("[data-theme-choice]");
+
+    if (!themeButton) return;
+
+    const selectedTheme = themeButton.dataset.themeChoice;
+
+    document.body.dataset.theme = selectedTheme;
+    localStorage.setItem("disTheme", selectedTheme);
+
+    topPanelContent.querySelectorAll(".theme-card").forEach(card => {
+        const isSelected = card.dataset.themeChoice === selectedTheme;
+
+        card.classList.toggle("selected", isSelected);
+        card.querySelector("small").textContent =
+            isSelected ? "Currently selected" : "Select theme";
     });
 });
 
-stopSoundBtn.addEventListener("click", () => {
-    Object.values(sounds).forEach(sound => {
-        sound.pause();
-        sound.currentTime = 0;
-    });
 
-    musicItems.forEach(item => {
-        item.classList.remove("active");
-    });
 
-    soundStatus.textContent = "All sounds stopped.";
+// ===== DAILY QUESTS =====
+
+let quests = [];
+let activeQuestId = null;
+
+async function loadQuests() {
+    try {
+        const response = await fetch("/api/quests");
+        const data = await response.json();
+
+        if (!data.success) throw new Error("Could not load quests.");
+
+        quests = data.quests;
+        renderQuests();
+    } catch (error) {
+        console.error(error);
+        const list = document.getElementById("todoList");
+        if (list) list.textContent = "Could not load quests.";
+    }
+}
+
+
+function renderQuests() {
+    const list = document.getElementById("todoList");
+    const empty = document.getElementById("todoEmpty");
+
+    if (!list || !empty) return;
+
+    list.innerHTML = "";
+    empty.hidden = quests.length > 0;
+
+    const categories = {
+        study: { name: "STUDY", icon: "📚" },
+        work: { name: "WORK", icon: "💻" },
+        personal: { name: "PERSONAL", icon: "🌱" },
+        health: { name: "HEALTH", icon: "💪" },
+        creative: { name: "CREATIVE", icon: "🎨" }
+    };
+
+    quests.forEach(quest => {
+        const completed =
+            quest.completed_pomodoros >= quest.required_pomodoros;
+        const active = activeQuestId === quest.id;
+        const category = categories[quest.category] ||
+            { name: quest.category.toUpperCase(), icon: "✨" };
+
+        const item = document.createElement("div");
+        item.className = `todo-item ${completed ? "completed" : ""} ${active ? "active" : ""}`;
+
+        const top = document.createElement("div");
+        top.className = "quest-card-top";
+
+        const categoryBadge = document.createElement("span");
+        categoryBadge.className = "quest-category";
+        categoryBadge.textContent = `${category.icon} ${category.name}`;
+
+        const reward = document.createElement("span");
+        reward.className = "quest-reward";
+        reward.textContent = completed ? "✓ COMPLETED" : "+10 XP";
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.textContent = "×";
+        deleteButton.className = "todo-delete";
+        deleteButton.setAttribute("aria-label", "Delete quest");
+
+        top.append(categoryBadge, reward, deleteButton);
+
+        const heading = document.createElement("div");
+        heading.className = "todo-task-text";
+        heading.textContent = quest.task_text;
+
+        const progressInfo = document.createElement("div");
+        progressInfo.className = "quest-progress-info";
+
+        const progressText = document.createElement("span");
+        progressText.textContent =
+            `${quest.completed_pomodoros} / ${quest.required_pomodoros} Pomodoros`;
+
+        const percentage = document.createElement("span");
+        percentage.textContent =
+            `${Math.round((quest.completed_pomodoros / quest.required_pomodoros) * 100)}%`;
+
+        progressInfo.append(progressText, percentage);
+
+        const progressBar = document.createElement("progress");
+        progressBar.max = quest.required_pomodoros;
+        progressBar.value = quest.completed_pomodoros;
+
+        const focusButton = document.createElement("button");
+        focusButton.type = "button";
+        focusButton.className = "quest-focus-button";
+        focusButton.textContent = completed
+            ? "✓ Quest completed"
+            : active
+                ? "🎯 Currently focusing"
+                : "Focus on this quest →";
+        focusButton.disabled = completed;
+
+        focusButton.addEventListener("click", () => {
+            activeQuestId = quest.id;
+            renderQuests();
+        });
+
+        deleteButton.addEventListener("click", async () => {
+            if (!confirm("Delete this quest?")) return;
+
+            const response = await fetch(`/api/quests/${quest.id}`, {
+                method: "DELETE"
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                if (activeQuestId === quest.id) activeQuestId = null;
+                await loadQuests();
+            }
+        });
+
+        item.append(
+            top,
+            heading,
+            progressInfo,
+            progressBar,
+            focusButton
+        );
+
+        list.appendChild(item);
+    });
+}
+
+// Quest oluştur
+topPanelContent.addEventListener("submit", async (event) => {
+    if (event.target.id !== "todoForm") return;
+
+    event.preventDefault();
+
+    const taskText = document.getElementById("todoInput").value.trim();
+    const category = document.getElementById("todoCategory").value;
+    const requiredPomodoros =
+        Number(document.getElementById("requiredPomodoros").value);
+
+    if (!taskText || !category) return;
+
+    try {
+        const response = await fetch("/api/quests", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                task_text: taskText,
+                category: category,
+                required_pomodoros: requiredPomodoros
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.error || "Quest could not be created.");
+        }
+
+        event.target.reset();
+        await loadQuests();
+
+    } catch (error) {
+        console.error(error);
+        alert(error.message);
+    }
 });
+
+
+// ===== CITY WINDOW =====
+
+const openCityBtn = document.getElementById("openCityBtn");
+const closeCityBtn = document.getElementById("closeCityBtn");
+const cityOverlay = document.getElementById("cityOverlay");
+
+openCityBtn.addEventListener("click", () => {
+    cityOverlay.hidden = false;
+});
+
+closeCityBtn.addEventListener("click", () => {
+    cityOverlay.hidden = true;
+});
+
+cityOverlay.addEventListener("click", (event) => {
+    if (event.target === cityOverlay) {
+        cityOverlay.hidden = true;
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        cityOverlay.hidden = true;
+    }
+});
+
 
 </script>
+
+
 </body>
 </html>

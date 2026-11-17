@@ -1,60 +1,44 @@
-# 🏰 DisTracking – Pomodoro & Civilization
+# DisTracking
 
-**DisTracking** is a Pomodoro-based web application that aims to make studying more productive and enjoyable through gamification.
+DisTracking is a Flask and SQLite Pomodoro app with focus reset tasks and lightweight city-building rewards.
 
-Users earn points by completing focus sessions and gradually develop their own cities. In future versions, they will also be able to build a shared civilization with their friends.
+## Features
 
-## 🎯 Project Goal
+- Focus, short-break, and long-break timer modes
+- Configurable focus duration and completion sound
+- Points for completed focus sessions and reset tasks
+- Daily quests linked to Pomodoro progress
+- Focus reset task catalog and category-based recommendations
+- Building marketplace and ambient audio player
+- Random mini-challenge question API
 
-The main goal of DisTracking is to combine the traditional Pomodoro technique with a city-building and progression system.
+The app currently uses one shared local profile. Account login, friend features, shared cities, and interactive mini-games are not implemented. Some city and theme views are interface prototypes.
 
-Instead of simply tracking study time, the application aims to motivate users by allowing them to see the results of their efforts through in-game rewards and progress.
+## Run locally
 
-## ✨ Features
+Requires Python 3.14 or newer. Install dependencies and start the Flask app:
 
-### Currently Implemented
-- [x] Pomodoro timer
-- [x] Focus, short break, and long break modes
-- [x] Start, pause, and reset timer controls
-- [x] Main dashboard interface
-- [x] Study room and marketplace interface
-- [x] Random question API for mini challenges
-- [x] Focus reset task library with category-based Strategy recommendations
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python app.py
+```
 
-### Planned Features
-- [ ] Earn points by completing Pomodoro sessions
-- [ ] Store user data using SQLite
-- [ ] Resource system (wood, stone, and gold)
-- [ ] Building construction and city development
-- [ ] City levels and progression system
-- [ ] Music and ambient sound options
-- [ ] Daily goals and study statistics
-- [ ] User registration and login
-- [ ] Friend system and shared study rooms
-- [ ] Build a shared civilization with friends
+The database schema is initialized when the Flask app starts. The local database file is `distracking.db` and is excluded from Git.
 
-## 🛠️ Technologies Used
+## Audio files
 
-| Technology | Purpose |
-|---|---|
-| Python | Application logic |
-| Flask | Web framework and API management |
-| HTML | Web page structure |
-| CSS | Interface design |
-| JavaScript | Timer functionality and interactions |
-| SQLite | Data storage (
+Audio files are excluded from this repository because of their size. Download the MP3 files from [the project's Google Drive folder](https://drive.google.com/drive/folders/1dcinhR_wVjKo5hD9vGTqr3rJ0o4OyqeW?usp=sharing) and place `Cat.mp3`, `Fire.mp3`, `Forest.mp3`, `Meditation.mp3`, and `Rain.mp3` in `static/audio/`. The app runs without them, but ambient sounds will not play.
 
-### Focus reset tasks
+## Project layout
 
-The `/tasks` page contains five task categories and all 27 catalog entries. The `I lost concentration` flow maps the selected need to a recommendation strategy in `task_strategies.py`; each strategy recommends tasks from its own category. Mini-game interactions are placeholders until their game logic is implemented. Completing a task records it in SQLite and adds its XP to the existing points balance.
+- `app.py`: Flask application and blueprint registration
+- `routes/`: page and API routes
+- `models/`: database operations and feature logic
+- `database/db.py`: SQLite schema and connections
+- `task_library.py`, `task_strategies.py`: task catalog and recommendation strategies
+- `templates/`, `static/`: web interface, styles, backgrounds, and audio
+- `tests/`: Flask route and model tests
 
-## Audio Files
-
-The audio files are not included in this repository because of their file size
-(GitHub does not accept files larger than 100 MB). Before running the app:
-
-1. Download the mp3 files from [this Google Drive folder](https://drive.google.com/drive/folders/1dcinhR_wVjKo5hD9vGTqr3rJ0o4OyqeW?usp=sharing).
-2. In the project's root folder, create the `static/audio` folder if it does not exist.
-3. Place the downloaded files (`Cat.mp3`, `Fire.mp3`, `Forest.mp3`, `Meditation.mp3`, `Rain.mp3`) inside it.
-
-Without these files the app still runs, but the ambient sounds will not play.
+Run the test suite with `python -m pytest` after installing pytest.

@@ -3,3 +3,5 @@ venv/
 distracking.db
 static/audio/*.mp3
 __pycache__/
+.coverage
+.pytest_cache/
