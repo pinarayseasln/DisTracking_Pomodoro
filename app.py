@@ -16,6 +16,8 @@ from routes.user import user_bp
 from routes.buildings import buildings_bp
 from routes.tasks import tasks_bp
 from routes.challenge import challenge_bp
+from routes.city import city_bp
+from routes.music import music_bp
 
 
 app = Flask(__name__)
@@ -26,6 +28,8 @@ app.register_blueprint(user_bp)
 app.register_blueprint(buildings_bp)
 app.register_blueprint(tasks_bp)
 app.register_blueprint(challenge_bp)
+app.register_blueprint(city_bp)
+app.register_blueprint(music_bp)
 
 # Initialize the schema for Flask CLI and WSGI launches as well as direct runs.
 init_db()

@@ -6,13 +6,21 @@ def complete_task(task):
     conn = get_db()
 
     try:
-        conn.execute(
+        completion = conn.execute(
             """
-            INSERT INTO task_completions (task_id, category, xp)
+            INSERT OR IGNORE INTO task_completions (task_id, category, xp)
             VALUES (?, ?, ?)
             """,
             (task["id"], task["category"], task["xp"])
         )
+
+        if completion.rowcount == 0:
+            conn.rollback()
+            return {
+                "success": False,
+                "earned_xp": 0,
+                "error": "Task has already been completed."
+            }, 409
 
         conn.execute(
             """

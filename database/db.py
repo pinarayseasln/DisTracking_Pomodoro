@@ -1,12 +1,27 @@
 
 import sqlite3
+import os
+import sys
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATABASE_PATH = BASE_DIR / "distracking.db"
+PRODUCTION_DATABASE_PATH = (BASE_DIR / "distracking.db").resolve()
+DATABASE_PATH = Path(
+    os.environ.get("DISTRACKING_DATABASE_PATH", PRODUCTION_DATABASE_PATH)
+).expanduser().resolve()
+
+
+def _is_test_environment():
+    test_flag = os.environ.get("DISTRACKING_TESTING", "").strip().lower()
+    return test_flag in {"1", "true", "yes", "on"} or "pytest" in sys.modules
 
 
 def get_db():
+    if _is_test_environment() and DATABASE_PATH.resolve() == PRODUCTION_DATABASE_PATH:
+        raise RuntimeError(
+            "Tests cannot open the production database. Set "
+            "DISTRACKING_DATABASE_PATH to a temporary test database."
+        )
     conn = sqlite3.connect(DATABASE_PATH)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
@@ -184,6 +199,68 @@ def init_db():
             )
         """)
 
+        # Persistent quantities for newly purchased Market materials and tools.
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS market_inventory (
+                item_id TEXT PRIMARY KEY,
+                quantity INTEGER NOT NULL DEFAULT 0 CHECK(quantity >= 0)
+            )
+        """)
+
+        # Account-owned Market stock. Copy old shared inventory once and keep
+        # the legacy rows intact; timber is the previous name for wood.
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS user_inventory (
+                user_data_id INTEGER NOT NULL,
+                item_id TEXT NOT NULL,
+                quantity INTEGER NOT NULL DEFAULT 0 CHECK(quantity >= 0),
+                PRIMARY KEY (user_data_id, item_id),
+                FOREIGN KEY (user_data_id) REFERENCES user_data(id)
+            )
+        """)
+        conn.execute("""
+            INSERT OR IGNORE INTO user_inventory (user_data_id, item_id, quantity)
+            SELECT 1,
+                   CASE WHEN item_id = 'timber' THEN 'wood' ELSE item_id END,
+                   SUM(quantity)
+            FROM market_inventory
+            GROUP BY CASE WHEN item_id = 'timber' THEN 'wood' ELSE item_id END
+        """)
+
+        # Green Valley MVP progress is scoped by account and a stable city key.
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS city_rebuild_progress (
+                user_data_id INTEGER NOT NULL,
+                city_id TEXT NOT NULL,
+                stage INTEGER NOT NULL DEFAULT 0 CHECK(stage BETWEEN 0 AND 3),
+                updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (user_data_id, city_id),
+                FOREIGN KEY (user_data_id) REFERENCES user_data(id)
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS city_rebuild_tasks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_data_id INTEGER NOT NULL,
+                city_id TEXT NOT NULL,
+                task_id TEXT NOT NULL,
+                completed_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE (user_data_id, city_id, task_id),
+                FOREIGN KEY (user_data_id) REFERENCES user_data(id)
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS city_decorations (
+                user_data_id INTEGER NOT NULL,
+                city_id TEXT NOT NULL,
+                slot_id TEXT NOT NULL,
+                decoration_id TEXT NOT NULL,
+                placed_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (user_data_id, city_id, slot_id),
+                FOREIGN KEY (user_data_id) REFERENCES user_data(id)
+            )
+        """)
+
         # Görev kayıtları
         conn.execute("""
             CREATE TABLE IF NOT EXISTS task_completions (
@@ -193,6 +270,41 @@ def init_db():
                 xp INTEGER NOT NULL,
                 completed_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             )
+        """)
+
+        # Preserve any historical duplicate completions before enforcing the
+        # one-reward-per-task rule. The earliest row remains canonical.
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS task_completion_legacy_duplicates (
+                id INTEGER PRIMARY KEY,
+                task_id TEXT NOT NULL,
+                category TEXT NOT NULL,
+                xp INTEGER NOT NULL,
+                completed_at TEXT NOT NULL
+            )
+        """)
+        conn.execute("""
+            INSERT OR IGNORE INTO task_completion_legacy_duplicates
+                (id, task_id, category, xp, completed_at)
+            SELECT id, task_id, category, xp, completed_at
+            FROM task_completions AS old
+            WHERE EXISTS (
+                SELECT 1 FROM task_completions AS earlier
+                WHERE earlier.task_id = old.task_id AND earlier.id < old.id
+            )
+        """)
+        conn.execute("""
+            DELETE FROM task_completions
+            WHERE EXISTS (
+                SELECT 1 FROM task_completions AS earlier
+                WHERE earlier.task_id = task_completions.task_id
+                  AND earlier.id < task_completions.id
+            )
+        """)
+        conn.execute("""
+            CREATE UNIQUE INDEX IF NOT EXISTS
+            idx_task_completions_task_id
+            ON task_completions(task_id)
         """)
 
         # Günlük görevler
@@ -206,6 +318,29 @@ def init_db():
                 reward_claimed INTEGER NOT NULL DEFAULT 0,
                 created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             )
+        """)
+
+        # Server-tracked focus and break timer sessions. Existing balances,
+        # quests, and task completion records are left untouched.
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS pomodoro_sessions (
+                id TEXT PRIMARY KEY,
+                user_data_id INTEGER NOT NULL DEFAULT 1,
+                mode TEXT NOT NULL CHECK(mode IN ('focus', 'short', 'long')),
+                status TEXT NOT NULL CHECK(status IN ('running', 'paused', 'completed', 'cancelled')),
+                duration_seconds INTEGER NOT NULL CHECK(duration_seconds BETWEEN 60 AND 10800),
+                elapsed_seconds REAL NOT NULL DEFAULT 0 CHECK(elapsed_seconds >= 0),
+                heartbeat_at REAL,
+                quest_id INTEGER,
+                rewarded INTEGER NOT NULL DEFAULT 0 CHECK(rewarded IN (0, 1)),
+                created_at REAL NOT NULL,
+                completed_at REAL
+            )
+        """)
+        conn.execute("""
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_pomodoro_one_active_session
+            ON pomodoro_sessions(user_data_id)
+            WHERE status IN ('running', 'paused')
         """)
 
         conn.commit()

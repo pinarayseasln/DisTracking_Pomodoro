@@ -156,6 +156,10 @@ nav a, .user-info span {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    justify-self: center;
+    width: max-content;
+    left: -175px;
     padding-top: 10px;
 }
 
@@ -703,12 +707,13 @@ footer {
 
 @media (max-width: 950px) {
     .dashboard {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 320px minmax(0, 1fr);
     }
 
     .timer-panel {
-        grid-column: 1 / -1;
+        grid-column: 2;
         grid-row: 1;
+        min-width: 0;
     }
 }
 
@@ -720,6 +725,7 @@ footer {
     .timer-panel {
         grid-column: auto;
         grid-row: auto;
+        left: 0;
     }
 
     .navbar {
@@ -3088,13 +3094,6 @@ body[data-theme="burgundy"] {
     }
 }
 
-/* Pomodoro ekranın genel merkezinde kalsın */
-@media (min-width: 951px) {
-    .timer-panel {
-        position: relative;
-        left: -160px;
-    }
-}
 /* MARKET DESIGN */
 .market-grid {
     display: grid;
@@ -3121,6 +3120,61 @@ body[data-theme="burgundy"] {
 .market-card:hover {
     transform: translateY(-4px);
     border-color: #bd55f5;
+}
+
+.market-category-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 5px;
+    border: 1px solid var(--panel-border, #49305f);
+    border-radius: 14px;
+    background: var(--card-bg, #1b1029);
+}
+
+.market-category-tab {
+    flex: 1;
+    min-height: 42px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    color: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.market-category-tab:hover,
+.market-category-tab.active {
+    border-color: var(--theme-accent, #bd55f5);
+    background: var(--card-selected, rgba(189, 80, 245, 0.15));
+}
+
+.market-category-panel[hidden] {
+    display: none;
+}
+
+.market-category-note {
+    margin: 0 0 16px;
+    opacity: .78;
+}
+
+.market-product-section + .market-product-section {
+    margin-top: 26px;
+}
+
+.market-product-section > h3 {
+    margin: 0 0 12px;
+    font-size: 18px;
+}
+
+.market-owned-count {
+    margin-top: auto;
+    color: var(--theme-accent, #cda6ff);
+}
+
+.market-card [data-market-unique="true"]:disabled {
+    background: #61775b;
+    opacity: 1;
 }
 
 .market-icon {
@@ -3160,6 +3214,16 @@ body[data-theme="burgundy"] {
 }
 
 @media (max-width: 600px) {
+    .market-category-tabs {
+        gap: 5px;
+    }
+
+    .market-category-tab {
+        min-height: 38px;
+        padding: 0 6px;
+        font-size: 13px;
+    }
+
     .market-grid {
         grid-template-columns: 1fr;
         gap: 14px;
@@ -3168,6 +3232,153 @@ body[data-theme="burgundy"] {
     .market-card {
         min-height: 190px;
         padding: 20px;
+    }
+}
+
+/* Keep the Market shell and category tabs in place; scroll its active content. */
+body:has(#topPanel[data-panel="market"]:not([hidden])) {
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
+#topPanel[data-panel="market"] {
+    position: fixed;
+    top: 78px;
+    min-height: 800px;
+    max-height: calc(100vh - 102px);
+    max-height: calc(100dvh - 102px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#topPanel[data-panel="market"] .top-panel-header {
+    flex: 0 0 auto;
+}
+
+#topPanel[data-panel="market"] .top-panel-content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+#topPanel[data-panel="market"] .market-category-tabs {
+    flex: 0 0 auto;
+}
+
+#topPanel[data-panel="market"] .market-category-panel {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--theme-accent, #bd55f5) transparent;
+}
+
+#topPanel[data-panel="market"] .market-category-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+#topPanel[data-panel="market"] .market-category-panel::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: var(--theme-accent, #bd55f5);
+}
+
+/* Compact product cards in the Items category only. */
+.market-item-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.market-item-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    min-height: 58px;
+    padding: 8px 10px;
+    overflow: visible;
+}
+
+.market-item-card .market-icon {
+    flex: 0 0 auto;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.market-item-copy {
+    display: flex;
+    flex: 1 1 0;
+    flex-wrap: wrap;
+    align-items: baseline;
+    min-width: 0;
+    gap: 2px 7px;
+}
+
+.market-item-card h3 {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: visible;
+    font-size: clamp(13px, 1vw, 16px);
+    line-height: 1.25;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.market-item-card .market-price {
+    flex: 0 0 auto;
+    margin: 0;
+    font-size: clamp(13px, .95vw, 15px);
+    font-weight: 600;
+    line-height: 1.25;
+    white-space: nowrap;
+}
+
+.market-item-card .market-buy-button {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 56px;
+    max-width: 42%;
+    min-height: 32px;
+    margin-left: auto;
+    padding: 5px 9px;
+    overflow: visible;
+    font-size: clamp(10px, .8vw, 13px);
+    line-height: 1.2;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.market-item-owned-count {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .market-item-grid { gap: 6px; }
+    .market-item-card { gap: 6px; min-height: 54px; padding: 7px; }
+    .market-item-card .market-icon { font-size: 18px; }
+    .market-item-copy { gap: 2px 5px; }
+    .market-item-card h3 { font-size: clamp(12px, 3vw, 15px); }
+    .market-item-card .market-price { font-size: clamp(12px, 2.8vw, 14px); }
+    .market-item-card .market-buy-button {
+        min-width: 42px;
+        max-width: 40%;
+        min-height: 30px;
+        padding: 4px 6px;
+        font-size: clamp(9px, 2.6vw, 12px);
     }
 }
 
@@ -3670,4 +3881,1124 @@ body[data-theme="burgundy"] {
     background: var(--card-bg, var(--forest-card-light));
     color: var(--theme-card-text, var(--forest-text));
     border: 1px solid var(--panel-border, var(--forest-border));
+}
+
+
+/* GREEN VALLEY MAP */
+
+.city-main-scene {
+    position: relative;
+    width: 100%;
+    height: min(62vh, 580px);
+    min-height: 360px;
+    overflow: hidden;
+    border-radius: 17px;
+    background: #263d30;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.city-main-scene:active {
+    cursor: grabbing;
+}
+
+.city-map-world {
+    position: absolute;
+    width: 1600px;
+    height: 900px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+}
+
+.city-map-world img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
+.city-map-label {
+    position: absolute;
+    left: 40%;
+    top: 58%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px 15px;
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 10px;
+    background: rgba(27, 43, 32, .78);
+    color: white;
+    pointer-events: none;
+    box-shadow: 0 5px 20px rgba(0,0,0,.2);
+}
+
+.city-map-label span {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #d5dfb9;
+}
+
+.city-map-label strong {
+    font-size: 14px;
+}
+
+.map-drag-hint {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    background: rgba(20, 35, 25, .75);
+    color: white;
+    font-size: 11px;
+    pointer-events: none;
+}
+
+@media (max-width: 600px) {
+    .city-main-scene {
+        min-height: 300px;
+        height: 55vh;
+    }
+
+    .city-map-world {
+        width: 1200px;
+        height: 675px;
+    }
+}
+.city-main-scene {
+    position: relative;
+    width: 100%;
+    height: 580px;
+    overflow: hidden;
+    border-radius: 17px;
+    background: #263d30;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.city-main-scene.dragging {
+    cursor: grabbing;
+}
+
+.city-map-world {
+    position: absolute;
+    width: 1648px;
+    height: 928px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.city-map-world img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    max-width: none;
+    display: block;
+    pointer-events: none;
+}
+
+.city-map-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: rgba(20, 35, 25, .75);
+    color: white;
+    text-align: center;
+}
+
+.map-drag-hint {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    z-index: 5;
+    padding: 9px 13px;
+    border-radius: 9px;
+    background: rgba(15, 25, 20, .75);
+    color: white;
+    font-size: 11px;
+    pointer-events: none;
+}
+/* ===== CITY WINDOW THEME COLORS ===== */
+
+/* WHISPERING WOODS */
+body[data-theme="woods"] .city-window {
+    background: #18251f;
+    color: #e5ecdf;
+}
+body[data-theme="woods"] .city-window-header h2,
+body[data-theme="woods"] .city-window-header p,
+body[data-theme="woods"] .city-window-footer {
+    color: #e5ecdf;
+}
+body[data-theme="woods"] .city-resource-bar > div,
+body[data-theme="woods"] .city-status-grid > div {
+    background: #293d30;
+    color: #f1f7f2;
+    border-color: rgba(176, 200, 178, .22);
+}
+body[data-theme="woods"] .city-close-btn {
+    background: #354b3b;
+    color: #f1f7f2;
+}
+
+/* NEON AFTERGLOW */
+body[data-theme="neon"] .city-window {
+    background: #160d27;
+    color: #f5eaff;
+}
+body[data-theme="neon"] .city-window-header h2,
+body[data-theme="neon"] .city-window-header p,
+body[data-theme="neon"] .city-window-footer {
+    color: #f5eaff;
+}
+body[data-theme="neon"] .city-resource-bar > div,
+body[data-theme="neon"] .city-status-grid > div {
+    background: #2b1940;
+    color: #f5eaff;
+    border-color: #70409a;
+}
+body[data-theme="neon"] .city-close-btn {
+    background: #43205e;
+    color: #f5eaff;
+}
+
+/* SAKURA COAST */
+body[data-theme="sakura-coast"] .city-window {
+    background: #f5e6f0;
+    color: #393c59;
+}
+body[data-theme="sakura-coast"] .city-window-header h2,
+body[data-theme="sakura-coast"] .city-window-header p,
+body[data-theme="sakura-coast"] .city-window-footer {
+    color: #393c59;
+}
+body[data-theme="sakura-coast"] .city-resource-bar > div,
+body[data-theme="sakura-coast"] .city-status-grid > div {
+    background: #dce2f6;
+    color: #393c59;
+    border-color: #d5a8c7;
+}
+body[data-theme="sakura-coast"] .city-close-btn {
+    background: #df9fbd;
+    color: #393c59;
+}
+
+/* BURGUNDY ROYALE */
+body[data-theme="burgundy"] .city-window {
+    background: #31171c;
+    color: #f8e8df;
+}
+body[data-theme="burgundy"] .city-window-header h2,
+body[data-theme="burgundy"] .city-window-header p,
+body[data-theme="burgundy"] .city-window-footer {
+    color: #f8e8df;
+}
+body[data-theme="burgundy"] .city-resource-bar > div,
+body[data-theme="burgundy"] .city-status-grid > div {
+    background: #4b252a;
+    color: #f8e8df;
+    border-color: rgba(190, 128, 111, .32);
+}
+body[data-theme="burgundy"] .city-close-btn {
+    background: #704047;
+    color: #fff4eb;
+}
+
+/* Decorative city frame layer. Keep the existing city data and controls live. */
+.city-overlay {
+    padding: 2vh 2vw;
+    overflow: auto;
+}
+
+.city-window.city-frame-window {
+    position: relative;
+    isolation: isolate;
+    display: block;
+    width: min(96vw, 1600px, calc(92vh * 1.777));
+    height: auto;
+    max-height: 92vh;
+    aspect-ratio: 1672 / 941;
+    flex: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.city-frame-window > .city-main-scene {
+    position: absolute;
+    z-index: 1;
+    left: 11.2%;
+    top: 27.2%;
+    width: 77.6%;
+    height: 50.8%;
+    min-height: 0;
+    border-radius: 0;
+}
+
+.city-frame-window > .city-window-header,
+.city-frame-window > .city-resource-bar,
+.city-frame-window > .city-status-grid,
+.city-frame-window > .city-window-footer,
+.city-frame-window > .city-frame-art {
+    position: absolute;
+    z-index: 4;
+}
+
+.city-frame-window > .city-window-header {
+    top: 2%;
+    left: 34%;
+    width: 32%;
+    min-height: 11%;
+    margin: 0;
+    justify-content: center;
+    text-align: center;
+}
+
+.city-frame-window .city-window-header h2 {
+    margin: 3px 0;
+    font-size: clamp(14px, 1.6vw, 25px);
+}
+
+.city-frame-window .city-window-header p {
+    margin: 2px 0;
+    font-size: clamp(9px, .8vw, 13px);
+}
+
+.city-frame-window .city-eyebrow {
+    font-size: clamp(8px, .7vw, 11px);
+}
+
+.city-frame-window > .city-resource-bar {
+    top: 79%;
+    left: 16%;
+    width: 68%;
+    margin: 0;
+    gap: 6px;
+}
+
+.city-frame-window .city-resource-bar div {
+    padding: 5px 7px;
+    gap: 3px;
+    font-size: clamp(9px, .8vw, 13px);
+}
+
+.city-frame-window > .city-status-grid {
+    top: 17%;
+    left: 16%;
+    width: 68%;
+    margin: 0;
+    gap: 5px;
+}
+
+.city-frame-window .city-status-grid div {
+    padding: 5px 3px;
+    background: rgba(24, 37, 31, .58);
+    border-color: rgba(220, 225, 192, .24);
+    color: #f1f0d7;
+    font-size: clamp(9px, .8vw, 13px);
+    text-align: center;
+}
+
+.city-frame-window .city-status-grid strong {
+    color: #fff8d8;
+    font-size: clamp(11px, 1vw, 16px);
+}
+
+.city-frame-window > .city-window-footer {
+    bottom: 2.2%;
+    left: 30%;
+    width: 40%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: #f5edce;
+    font-size: clamp(9px, .8vw, 13px);
+    text-align: center;
+}
+
+.city-frame-art {
+    z-index: 5 !important;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: fill;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.city-frame-window > .city-window-header,
+.city-frame-window > .city-resource-bar,
+.city-frame-window > .city-status-grid,
+.city-frame-window > .city-window-footer {
+    z-index: 6;
+}
+
+.city-frame-window > .city-window-header .city-close-btn {
+    position: absolute;
+    top: 8%;
+    right: -91%;
+    width: clamp(28px, 4vw, 58px);
+    height: clamp(28px, 4vw, 58px);
+    border: 0;
+    border-radius: 50%;
+    background: transparent !important;
+    color: transparent !important;
+    box-shadow: none;
+}
+
+.city-frame-window > .city-window-header .city-close-btn:focus-visible {
+    outline: 3px solid #fff8d8;
+    outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+    .city-frame-window > .city-resource-bar {
+        top: 80%;
+        left: 12%;
+        width: 76%;
+    }
+
+    .city-frame-window > .city-status-grid {
+        left: 13%;
+        width: 74%;
+    }
+
+    .city-frame-window > .city-window-footer {
+        display: none;
+    }
+}
+
+/* ===== CITY FRAME - CLEAN VERSION ===== */
+
+/* 1. Ekranın ortasında büyük şehir penceresi */
+.city-overlay:not([hidden]) {
+    position: fixed !important;
+    inset: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+/* 2. Çerçevenin tamamını büyüt */
+.city-window.city-frame-window {
+    position: relative !important;
+    flex: none !important;
+    width: min(100vw, calc(200vh * 1672 / 941)) !important;
+    aspect-ratio: 1672 / 941 !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    transform: none !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+/* 3. Harita, çerçevenin içindeki boşluğa yerleşsin */
+.city-frame-window > .city-main-scene {
+    position: absolute !important;
+    z-index: 1;
+    left: 11.2% !important;
+    top: 27.2% !important;
+    width: 77.6% !important;
+    height: 70% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    border-radius: 0 !important;
+}
+
+/* 4. Harita fotoğrafını hafif yakınlaştır
+   Sürükleme JavaScript'inin transform ayarını ezme */
+.city-frame-window .city-map-world {
+    width: 150% !important;
+    height: 150% !important;
+    aspect-ratio: 16 / 9;
+}
+
+.city-frame-window .city-map-world img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+/* 5. Dekoratif çerçeve görseli */
+.city-frame-window > .city-frame-art {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 4 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
+    pointer-events: none !important;
+}
+
+/* 6. Ada ismi üstteki tabelanın ortasında */
+.city-frame-window > .city-island-name {
+    position: absolute !important;
+    z-index: 6 !important;
+    top: 7.5% !important;
+    left: 36% !important;
+    width: 28% !important;
+    margin: 0 !important;
+    text-align: center !important;
+    font-family: "Palatino Linotype", Georgia, serif !important;
+    font-size: clamp(14px, 1.4vw, 22px) !important;
+    font-weight: 700 !important;
+    letter-spacing: .5px !important;
+    color: #f6e8c8 !important;
+    text-shadow: 0 2px 4px #24190e !important;
+}
+
+/* 7. Altı şehir göstergesi */
+.city-frame-window > .city-stat-overlay {
+    position: absolute !important;
+    z-index: 6 !important;
+    top: 19.5% !important;
+    left: 18% !important;
+    width: 64% !important;
+    height: 7.5% !important;
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    gap: 3px !important;
+    pointer-events: none !important;
+}
+
+/* Compact Green Valley rebuilding controls and fixed decoration points. */
+.city-rebuild-panel {
+    position: absolute;
+    z-index: 5;
+    left: 1.5%;
+    bottom: 2.5%;
+    width: min(330px, 38%);
+    max-height: 48%;
+    overflow: auto;
+    padding: 12px;
+    border: 1px solid rgba(220, 231, 188, .48);
+    border-radius: 12px;
+    background: rgba(25, 42, 30, .94);
+    color: #f3f0df;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, .32);
+    font-family: Georgia, serif;
+    font-size: 13px;
+    touch-action: auto;
+}
+
+.city-rebuild-panel[hidden],
+.city-decoration-world[hidden] {
+    display: none;
+}
+
+.city-rebuild-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: #e4d5a6;
+}
+
+.city-rebuild-heading small,
+.city-completed-tasks,
+.city-decoration-picker small,
+.city-market-hint {
+    opacity: .75;
+    font-size: 11px;
+}
+
+.city-rebuild-panel h3 {
+    margin: 8px 0 4px;
+    font-size: 16px;
+}
+
+.city-rebuild-panel p {
+    margin: 5px 0;
+    font-size: 12px;
+}
+
+.city-task-inventory {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin: 7px 0;
+}
+
+.city-task-inventory span { font-size: 11px; }
+.city-task-inventory .has-stock { color: #bce39c; }
+.city-task-inventory .needs-stock { color: #f0b8a6; }
+
+.city-task-button,
+.city-decoration-picker select {
+    width: 100%;
+    min-height: 34px;
+    border: 0;
+    border-radius: 8px;
+    padding: 6px 9px;
+}
+
+.city-task-button {
+    margin-top: 6px;
+    background: #87a96a;
+    color: #17241a;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.city-task-button:disabled { opacity: .5; cursor: not-allowed; }
+.city-rebuild-message { color: #e9d59e; }
+.city-decoration-picker { margin-top: 8px; }
+.city-decoration-picker label,
+.city-decoration-picker small { display: block; margin: 4px 0; }
+.city-market-hint { display: block; margin: 5px 0; }
+
+.city-rebuild-markers,
+.city-decoration-world {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.city-map-marker {
+    position: absolute;
+    display: none;
+    transform: translate(-50%, -50%);
+    font-size: clamp(28px, 3.2vw, 58px);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .7));
+}
+
+.city-weed-marker { left: 39%; top: 55%; }
+.city-debris-marker { left: 58%; top: 63%; }
+.city-shelter-marker { left: 49%; top: 57%; }
+.city-map-world[data-rebuild-stage="0"] .city-weed-marker,
+.city-map-world[data-rebuild-stage="0"] .city-debris-marker,
+.city-map-world[data-rebuild-stage="1"] .city-debris-marker,
+.city-map-world[data-rebuild-stage="3"] .city-shelter-marker { display: block; }
+
+.city-decoration-world > * {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+}
+
+.city-decoration-slot {
+    width: clamp(28px, 3vw, 48px);
+    height: clamp(28px, 3vw, 48px);
+    border: 2px dashed rgba(255, 245, 204, .9);
+    border-radius: 50%;
+    background: rgba(28, 49, 31, .78);
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .5);
+}
+
+.city-decoration-slot:hover { background: rgba(79, 115, 66, .95); }
+.city-decoration-placement {
+    font-size: clamp(28px, 3.5vw, 56px);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .7));
+}
+
+@media (max-width: 700px) {
+    .city-rebuild-panel {
+        left: 1%;
+        bottom: 1.5%;
+        width: min(260px, 62%);
+        max-height: 56%;
+        padding: 8px;
+        font-size: 11px;
+    }
+
+    .city-rebuild-panel h3 { font-size: 13px; }
+    .city-task-inventory span { font-size: 10px; }
+}
+
+.city-frame-window .city-stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    min-width: 0;
+    color: #fff8e8 !important;
+    font-family: Georgia, serif !important;
+    text-shadow: 0 1px 3px #172018 !important;
+}
+
+.city-frame-window .city-stat-label {
+    font-size: clamp(7px, .65vw, 10px) !important;
+    font-weight: 700 !important;
+}
+
+.city-frame-window .city-stat-value {
+    font-size: clamp(9px, .8vw, 13px) !important;
+    font-weight: 700 !important;
+}
+
+/* 8. Çerçevedeki kapatma düğmesinin tıklama alanı */
+.city-frame-window > .city-frame-close {
+    position: absolute !important;
+    z-index: 8 !important;
+    top: 5% !important;
+    right: 4% !important;
+    width: 6% !important;
+    height: 9% !important;
+    opacity: 0 !important;
+    cursor: pointer;
+}
+
+/* Eski kaynak kartları ve alt bilgi */
+.city-frame-window > .city-resource-bar,
+.city-frame-window > .city-status-grid,
+.city-frame-window > .city-window-footer {
+    display: none !important;
+}
+
+
+/* SOUND PLAYER BUTTON SYMMETRY */
+
+.player-controls {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+}
+
+.player-controls .player-button {
+    box-sizing: border-box !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    flex: 0 0 36px !important;
+}
+
+.player-controls .player-button span,
+.player-controls .player-button svg {
+    display: block;
+    width: 14px;
+    height: 14px;
+    margin: 0;
+}
+
+
+/* ===== CITY FRAME: COMPACT STATUS HUD ===== */
+
+.city-frame-window > .city-stat-overlay {
+    position: absolute !important;
+    z-index: 6 !important;
+    left: 18.5% !important;
+    top: 16.1% !important;
+    width: 69% !important;
+    height: 8% !important;
+
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    pointer-events: none !important;
+}
+
+.city-frame-window .city-stat-item {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    text-shadow: none !important;
+}
+
+/* Percentage above the segmented bar */
+.city-frame-window .city-stat-value {
+    position: absolute !important;
+    left: 38% !important;
+    top: 0 !important;
+    width: 58% !important;
+
+    display: block !important;
+    margin: 0 !important;
+    text-align: center !important;
+
+    color: #fff5dc !important;
+    font-family: Georgia, serif !important;
+    font-size: clamp(7px, .65vw, 10px) !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+}
+
+/* Dynamic fill over the empty 12-segment artwork */
+.city-frame-window .city-stat-meter {
+    position: absolute !important;
+    left: 38% !important;
+    top: 48% !important;
+    width: 58% !important;
+    height: 24% !important;
+
+    display: block !important;
+    overflow: hidden !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 3px !important;
+}
+
+.city-frame-window .city-stat-meter i {
+    display: block !important;
+    height: 100% !important;
+    width: 0%;
+    border-radius: 2px !important;
+
+    background: repeating-linear-gradient(
+        90deg,
+        #a6df62 0%,
+        #a6df62 7%,
+        transparent 7%,
+        transparent 8.333%
+    ) !important;
+}
+
+/* Open island previews beneath My City */
+.island-preview-section { margin: 14px 0; }
+.island-section-title { margin: 0 0 9px; font-size: .85rem; font-weight: 700; }
+.island-preview-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.island-preview-card { min-width: 0; padding: 6px; border: 1px solid rgba(255,255,255,.14); border-radius: 12px; background: rgba(255,255,255,.05); color: inherit; text-align: left; cursor: pointer; }
+.island-preview-card:hover, .island-preview-card:focus-visible { border-color: #9dd58b; background: rgba(255,255,255,.1); }
+.island-preview-card img { display: block; width: 100%; height: 64px; object-fit: cover; border-radius: 8px; }
+.island-preview-card span, .island-preview-card small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.island-preview-card span { margin-top: 6px; font-size: .76rem; font-weight: 700; }
+.island-preview-card small { margin-top: 3px; opacity: .7; font-size: .66rem; }
+@media (max-width: 420px) { .island-preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Match each map viewport to the measured transparent opening in its frame PNG. */
+.city-frame-window > .city-main-scene {
+    position: absolute !important;
+    z-index: 1 !important;
+    min-height: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    background: transparent !important;
+}
+.city-frame-window .city-map-world {
+    left: 50% !important;
+    top: 50% !important;
+    width: 135% !important;
+    height: 135% !important;
+    /* Keep this overridable so the drag handler can update the translation. */
+    transform: translate(-50%, -50%);
+    will-change: transform;
+}
+.city-frame-window .city-map-world img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
+}
+.city-frame-window > .city-frame-art {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 4 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
+    mix-blend-mode: normal !important;
+    pointer-events: none !important;
+}
+.city-overlay[data-island="green-valley"] .city-frame-window > .city-main-scene {
+    left: 11.36% !important;
+    top: 14.45% !important;
+    width: 78% !important;
+    height: 79.28% !important;
+}
+.city-overlay[data-island="crystal-village"] .city-frame-window > .city-main-scene {
+    left: 8.92% !important;
+    top: 14.22% !important;
+    width: 82.51% !important;
+    height: 78.77% !important;
+}
+.city-overlay[data-island="dark-thorn"] .city-frame-window > .city-main-scene {
+    left: 9.66% !important;
+    top: 15.65% !important;
+    width: 81.95% !important;
+    height: 76.16% !important;
+}
+.city-frame-window > .map-drag-hint {
+    position: absolute !important;
+    z-index: 8 !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: 2.5% !important;
+    transform: translateX(-50%) !important;
+    padding: 4px 9px !important;
+    border: 1px solid rgba(255, 255, 255, .28) !important;
+    border-radius: 999px !important;
+    background: rgba(18, 25, 20, .72) !important;
+    color: #fff !important;
+    font-size: clamp(9px, .75vw, 12px) !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    pointer-events: none !important;
+}
+
+/* Show each island city inside its matching transparent frame in the preview cards. */
+.island-preview-card .island-preview-art {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 64px;
+    overflow: hidden;
+    border-radius: 8px;
+    isolation: isolate;
+}
+.island-preview-card .island-preview-art img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+    border-radius: 0;
+}
+.island-preview-card .island-preview-city {
+    z-index: 0;
+    object-fit: cover;
+}
+.island-preview-card .island-preview-frame {
+    z-index: 1;
+    object-fit: fill;
+    pointer-events: none;
+}
+
+
+/* Use the Green Valley city image as the My City cover. */
+.city-preview-art {
+    background: #263d30;
+}
+.city-preview-art .city-preview-cover {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    -webkit-user-drag: none;
+}
+
+/* ===== MUSIC MARKET - SINGLE ROW DESIGN ===== */
+
+#marketMusicGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    width: 100%;
+    margin-top: 16px;
+}
+
+#marketMusicGrid .market-item-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 86px;
+    padding: 14px 20px;
+    border: 1px solid #d8b84c;
+    border-radius: 48px;
+    background: var(--card-bg, #1b1029);
+    border-color: var(--panel-border, #49305f);
+    color: var(--text-color, #f4f0fa);
+    color: #f4f0fa;
+}
+
+#marketMusicGrid .market-icon {
+    flex: 0 0 auto;
+    font-size: 28px;
+    color: #bd55f5;
+}
+
+#marketMusicGrid .market-item-copy {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    flex-wrap: nowrap;
+    min-width: 0;
+    gap: 12px;
+}
+
+#marketMusicGrid .market-item-copy h3 {
+    font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#marketMusicGrid .market-price {
+    margin: 0 0 0 auto;
+    white-space: nowrap;
+    font-size: 15px;
+}
+
+/* Music action buttons */
+#marketMusicGrid .music-track-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+#marketMusicGrid .music-action-button {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #a855f7;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+#marketMusicGrid .music-play-button {
+    color: #55aaff;
+}
+
+#marketMusicGrid .music-stop-button {
+    color: #55aaff;
+}
+
+#marketMusicGrid .music-favorite-button {
+    color: #bd55f5;
+    font-size: 25px;
+}
+
+#marketMusicGrid .music-buy-button {
+    min-width: 82px;
+    min-height: 48px;
+    padding: 8px 18px;
+    border: 1px solid #bd55f5;
+    border-radius: 28px;
+    background: #281333;
+    color: #e9caff;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+#marketMusicGrid .music-action-button:hover {
+    transform: scale(1.12);
+}
+
+@media (max-width: 600px) {
+    #marketMusicGrid .market-item-card {
+        gap: 7px;
+        min-height: 72px;
+        padding: 10px;
+    }
+
+    #marketMusicGrid .market-item-copy h3 {
+        font-size: 13px;
+    }
+
+    #marketMusicGrid .music-track-actions {
+        gap: 4px;
+    }
+
+    #marketMusicGrid .music-action-button {
+        width: 27px;
+        height: 30px;
+        font-size: 18px;
+    }
+
+    #marketMusicGrid .music-buy-button {
+        min-width: 55px;
+        min-height: 38px;
+        padding: 5px 9px;
+        font-size: 13px;
+    }
+}
+#marketMusicGrid .market-item-card:hover {
+    border-color: var(--theme-accent, #bd55f5);
+    background: var(--card-selected, var(--card-bg, #1b1029));
+}
+
+/* Music cards: readable text in every theme */
+
+#marketMusicGrid .market-item-card {
+    color: #f4f0fa !important;
+    background: var(--card-bg) !important;
+    border-color: var(--panel-border) !important;
+}
+
+#marketMusicGrid .market-item-copy h3,
+#marketMusicGrid .market-item-copy .market-price {
+    color: #f4f0fa !important;
+}
+
+#marketMusicGrid .music-buy-button {
+    color: #f4f0fa !important;
+    border-color: var(--theme-accent) !important;
+}
+
+#marketMusicGrid .market-item-card:hover {
+    background: var(--card-hover) !important;
+    border-color: var(--theme-accent) !important;
+}
+
+/* ===== MARKET ITEMS - THEME ADAPTATION ===== */
+
+[data-market-panel="items"] .market-card {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--panel-border) !important;
+    color: #f4f0fa !important;
+}
+
+[data-market-panel="items"] .market-card:hover {
+    background: var(--card-hover) !important;
+    border-color: var(--theme-accent) !important;
+}
+
+[data-market-panel="items"] .market-card h3,
+[data-market-panel="items"] .market-card p,
+[data-market-panel="items"] .market-card strong {
+    color: #f4f0fa !important;
+}
+
+[data-market-panel="items"] .market-buy-button {
+    background: var(--theme-accent) !important;
+    border: 1px solid var(--theme-accent) !important;
+    color: #211b25 !important;
+}
+
+[data-market-panel="items"] .market-buy-button:hover {
+    filter: brightness(1.12);
 }

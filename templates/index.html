@@ -95,13 +95,12 @@
 
 <button type="button" class="city-preview-button" id="openCityBtn">
     <div class="city-preview-art">
-        <div class="city-sun"></div>
-        <span class="city-cloud cloud-one">☁</span>
-        <span class="city-cloud cloud-two">☁</span>
-        <span class="city-tree tree-one">🌲</span>
-        <span class="city-house">🏡</span>
-        <span class="city-tree tree-two">🌳</span>
-        <span class="city-hill"></span>
+        <img
+            class="city-preview-cover"
+            src="{{ url_for('static', filename='city/green_valley.png') }}"
+            alt="Green Valley city"
+            draggable="false"
+        >
     </div>
     <span class="city-preview-label">
         Explore your city <span>↗</span>
@@ -109,7 +108,30 @@
 </button>
 
 
-            <p>🌳 Starting Village</p>
+            <p>🌳 <span id="activeCityName">Green Valley</span></p>
+            <div class="island-preview-section">
+                <p class="island-section-title">Other islands</p>
+                <div class="island-preview-grid">
+                    <button type="button" class="island-preview-card" data-island-name="Crystal Village" data-island-frame="cyristal_village_transparent.png" data-island-image="Cyristal_Village_HD.png">
+                        <span class="island-preview-art">
+                            <img class="island-preview-city" src="{{ url_for('static', filename='city/Cyristal_Village_HD.png') }}" alt="Crystal Village city">
+                            <img class="island-preview-frame" src="{{ url_for('static', filename='city/cyristal_village_transparent.png') }}" alt="">
+                        </span><span>Crystal Village</span><small>Open to explore</small>
+                    </button>
+                    <button type="button" class="island-preview-card" data-island-name="Dark Thorn" data-island-frame="dark_thorn_transparent.png" data-island-image="Dark_Thorn_village_HD.png">
+                        <span class="island-preview-art">
+                            <img class="island-preview-city" src="{{ url_for('static', filename='city/Dark_Thorn_village_HD.png') }}" alt="Dark Thorn city">
+                            <img class="island-preview-frame" src="{{ url_for('static', filename='city/dark_thorn_transparent.png') }}" alt="">
+                        </span><span>Dark Thorn</span><small>Open to explore</small>
+                    </button>
+                    <button type="button" class="island-preview-card" data-island-name="Green Valley" data-island-frame="city_frame_ivy.png" data-island-image="green_valley.png">
+                        <span class="island-preview-art">
+                            <img class="island-preview-city" src="{{ url_for('static', filename='city/green_valley.png') }}" alt="Green Valley city">
+                            <img class="island-preview-frame" src="{{ url_for('static', filename='city/city_frame_ivy.png') }}" alt="">
+                        </span><span>Green Valley</span><small>Open to explore</small>
+                    </button>
+                </div>
+            </div>
             <p>Today +0 structures
             </p>
             <div class="city-grid">
@@ -230,6 +252,9 @@
         </button>
     </div>
 
+
+</div>
+
     <p class="sound-scroll-hint">⌄ &nbsp; Scroll for more sounds</p>
 </section>
 
@@ -339,19 +364,6 @@
                 <div class="background rainy"></div>
                 <div class="background night"></div>
             </div>
-            <div class="market-item" id="shelterCard">
-    <div class="market-item-info">
-        <h3>Shelter</h3>
-        <p>Your city's first shelter.</p>
-        <strong>20 points</strong>
-    </div>
-
-    <button id="shelterBuyBtn" type="button">
-        Buy
-    </button>
-
-    <p id="shelterStatus"></p>
-</div>
         </section>
 
     </aside>
@@ -361,77 +373,90 @@
 
 <!-- CITY WINDOW -->
 <div class="city-overlay" id="cityOverlay" hidden>
-    <section class="city-window">
-
-        <header class="city-window-header">
-            <div>
-                <span class="city-eyebrow">YOUR WORLD</span>
-                <h2>Starting Village</h2>
-                <p>Build your world, one step at a time.</p>
+    <section class="city-window city-frame-window" aria-label="City view">
+        <div class="city-main-scene" id="cityMapViewport">
+            <div class="city-map-world" id="cityMapWorld">
+                <img
+                    src="{{ url_for('static', filename='city/green_valley.png') }}"
+                    alt="Green Valley"
+                    draggable="false"
+                >
+                <div class="city-rebuild-markers" aria-hidden="true">
+                    <span class="city-map-marker city-weed-marker" data-city-marker="weeds">🌿</span>
+                    <span class="city-map-marker city-debris-marker" data-city-marker="debris">🪨</span>
+                    <span class="city-map-marker city-shelter-marker" data-city-marker="shelter">🏠</span>
+                </div>
+                <div class="city-decoration-world" id="cityDecorationWorld" aria-label="City decorations"></div>
             </div>
-
-            <button type="button" id="closeCityBtn"
-                    class="city-close-btn" aria-label="Close">
-                ×
-            </button>
-        </header>
-
-        <div class="city-resource-bar">
-            <div>🍎 <span>Food</span><strong id="cityFood">0</strong></div>
-            <div>💧 <span>Water</span><strong id="cityWater">0</strong></div>
-            <div>⚡ <span>Electricity</span><strong id="cityElectricity">0</strong></div>
-            <div>🔥 <span>Natural Gas</span><strong id="cityGas">0</strong></div>
+            <section class="city-rebuild-panel city-interactive" id="cityRebuildPanel" aria-live="polite" hidden>
+                <div class="city-rebuild-heading">
+                    <strong>Green Valley Restoration</strong>
+                    <small id="cityRebuildStage">Loading</small>
+                </div>
+                <small class="city-completed-tasks" id="cityCompletedTasks">0/3 tasks complete</small>
+                <h3 id="cityTaskTitle">Loading city progress…</h3>
+                <p id="cityTaskRequirements"></p>
+                <div class="city-task-inventory" id="cityTaskInventory"></div>
+                <small class="city-market-hint">Buy missing items in Market, then return here.</small>
+                <button type="button" class="city-task-button" id="completeCityStage" disabled>Complete stage</button>
+                <p class="city-rebuild-message" id="cityRebuildMessage" role="status"></p>
+                <div class="city-decoration-picker" id="cityDecorationPicker" hidden>
+                    <label for="cityDecorationChoice">Place a decoration</label>
+                    <select id="cityDecorationChoice">
+                        <option value="">Choose owned decoration</option>
+                    </select>
+                    <small>Choose an empty marked spot on the map.</small>
+                </div>
+            </section>
         </div>
+        <div class="map-drag-hint">Drag to explore</div>
 
-        <div class="city-main-scene">
-            <div class="scene-sky">
-                <span class="scene-cloud">☁</span>
-                <span class="scene-sun">☀</span>
+        <img
+            class="city-frame-art"
+            src="{{ url_for('static', filename='city/city_frame_ivy.png') }}"
+            id="cityFrameImage"
+            alt=""
+            aria-hidden="true"
+            draggable="false"
+        >
+
+        <h2 class="city-island-name" id="cityIslandName">Green Valley</h2>
+
+        <div class="city-stat-overlay" aria-label="City status">
+            <div class="city-stat-item" data-stat="happiness">
+                <strong class="city-stat-value">0%</strong>
+                <span class="city-stat-meter"><i></i></span>
             </div>
-            <div class="scene-hills"></div>
-            <div class="scene-buildings">
-    {% if buildings %}
-        {% for building in buildings %}
-            <div class="scene-building">
-                {% if building["building_type"] == "shelter" %}
-                    🛖
-                {% elif building["building_type"] == "cabin" %}
-                    🏡
-                {% elif building["building_type"] == "house" %}
-                    🏠
-                {% elif building["building_type"] == "watchtower" %}
-                    🗼
-                {% else %}
-                    🏘️
-                {% endif %}
-                <span>{{ building["name"] }}</span>
+            <div class="city-stat-item" data-stat="hunger">
+                <strong class="city-stat-value">0%</strong>
+                <span class="city-stat-meter"><i></i></span>
             </div>
-        {% endfor %}
-    {% else %}
-        <div class="scene-empty">
-            🌱 Your first building will appear here!
-        </div>
-    {% endif %}
-</div>
-            <p>Your city is waiting to grow.</p>
-        </div>
-
-        <div class="city-status-grid">
-            <div>😊 Happiness <strong>100%</strong></div>
-            <div>🍽️ Hunger <strong>0%</strong></div>
-            <div>❤️ Health <strong>100%</strong></div>
-            <div>📚 Education <strong>0%</strong></div>
-        </div>
-
-        <div class="city-window-footer">
-            <span>🏗️ City development</span>
-            <span>Level 1</span>
+            <div class="city-stat-item" data-stat="energy">
+                <strong class="city-stat-value">0%</strong>
+                <span class="city-stat-meter"><i></i></span>
+            </div>
+            <div class="city-stat-item" data-stat="health">
+                <strong class="city-stat-value">0%</strong>
+                <span class="city-stat-meter"><i></i></span>
+            </div>
+            <div class="city-stat-item" data-stat="water">
+                <strong class="city-stat-value">0%</strong>
+                <span class="city-stat-meter"><i></i></span>
+            </div>
+            <div class="city-stat-item" data-stat="population">
+                <strong class="city-stat-value">0</strong>
+                <span class="city-stat-meter"><i></i></span>
+            </div>
         </div>
 
+        <button
+            type="button"
+            id="closeCityBtn"
+            class="city-frame-close"
+            aria-label="Close city"
+        ></button>
     </section>
 </div>
-
-
 <footer>
     - Every minute you focus today builds the person you'll be tomorrow -
 </footer>
@@ -510,1073 +535,10 @@
         </button>
     </div>
 </div>
-<script>
-    const timerDisplay = document.getElementById("timer");
-    const startBtn = document.getElementById("startBtn");
-    const resetBtn = document.getElementById("resetBtn");
-    const modeButtons = document.querySelectorAll("[data-mode]");
-    const focusMinutesInput = document.getElementById("focusMinutes");
-    const completionSoundInput = document.getElementById("completionSound");
-    const timerNotice = document.getElementById("timerNotice");
 
+<script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
 
-function updatePointsDisplay(points) {
-    const marketBalance = document.getElementById("marketBalance");
-    const marketPoints = document.getElementById("marketPoints");
 
-    if (marketBalance) marketBalance.textContent = `${points} points`;
-    if (marketPoints) marketPoints.textContent = `${points} points`;
-}
-
-    let savedFocusMinutes = Number(localStorage.getItem("focusMinutes"));
-    if (!Number.isInteger(savedFocusMinutes) || savedFocusMinutes < 1 || savedFocusMinutes > 180) {
-        savedFocusMinutes = 25;
-    }
-    focusMinutesInput.value = savedFocusMinutes;
-    completionSoundInput.checked = localStorage.getItem("completionSound") === "true";
-
-    const durations = {
-        focus: savedFocusMinutes * 60,
-        short: 5 * 60,
-        long: 15 * 60
-    };
-
-    let currentMode = "focus";
-    let remainingSeconds = durations[currentMode];
-    let totalSeconds = remainingSeconds;
-    let interval = null;
-
-    function updateDisplay() {
-        const minutes = Math.floor(remainingSeconds / 60);
-
-        const seconds = remainingSeconds % 60;
-
-
-        timerDisplay.textContent =
-            String(minutes).padStart(2, "0") + ":" +
-            String(seconds).padStart(2, "0");
-            const percent = (remainingSeconds / totalSeconds) * 100;
-document.querySelector('.timer').style.setProperty('--progress', percent);
-    }
-
-    function stopTimer() {
-        clearInterval(interval);
-        interval = null;
-        startBtn.textContent = "Start";
-    }
-
-    function resetTimer() {
-        stopTimer();
-        timerNotice.hidden = true;
-        remainingSeconds = durations[currentMode];
-        totalSeconds = remainingSeconds;
-        updateDisplay();
-        document.querySelector('.timer').style.setProperty('--progress', 100);
-    }
-
-    focusMinutesInput.addEventListener("change", () => {
-        const minutes = Math.max(1, Math.min(180, Math.round(Number(focusMinutesInput.value) || 25)));
-        focusMinutesInput.value = minutes;
-        durations.focus = minutes * 60;
-        localStorage.setItem("focusMinutes", String(minutes));
-        if (currentMode === "focus") resetTimer();
-    });
-
-    completionSoundInput.addEventListener("change", () => {
-        localStorage.setItem("completionSound", String(completionSoundInput.checked));
-        if (completionSoundInput.checked) {
-            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-            if (AudioContextClass) {
-                audioContext = audioContext || new AudioContextClass();
-                if (audioContext.state === "suspended") audioContext.resume().catch(() => {});
-            }
-        }
-    });
-
-    let audioContext = null;
-
-    function showCompletionNotice(message) {
-        timerNotice.textContent = message;
-        timerNotice.hidden = false;
-    }
-
-
-
-    function playCompletionSound() {
-        if (!completionSoundInput.checked) return;
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContextClass) return;
-        audioContext = audioContext || new AudioContextClass();
-        const playChime = () => {
-            [660, 880].forEach((frequency, index) => {
-                const startAt = audioContext.currentTime + index * 0.25;
-                const oscillator = audioContext.createOscillator();
-                const volume = audioContext.createGain();
-                oscillator.type = "sine";
-                oscillator.frequency.value = frequency;
-                volume.gain.setValueAtTime(0.0001, startAt);
-                volume.gain.exponentialRampToValueAtTime(0.06, startAt + 0.03);
-                volume.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.22);
-                oscillator.connect(volume);
-                volume.connect(audioContext.destination);
-                oscillator.start(startAt);
-                oscillator.stop(startAt + 0.23);
-            });
-        };
-        if (audioContext.state === "running") playChime();
-        else audioContext.resume().then(playChime).catch(() => {});
-    }
-    function startTimer() {
-        if (interval !== null) {
-            stopTimer();
-            return;
-        }
-
-        if (remainingSeconds <= 0) {
-            remainingSeconds = durations [currentMode];
-            totalSeconds = remainingSeconds;
-            updateDisplay();
-        }
-
-        if (completionSoundInput.checked && audioContext && audioContext.state === "suspended") {
-            audioContext.resume().catch(() => {});
-        }
-        startBtn.textContent = "Pause";
-
-        interval = setInterval(() => {
-            remainingSeconds = Math.max(0, remainingSeconds - 1);
-            updateDisplay();
-
-            if (remainingSeconds <= 0) {
-                remainingSeconds = 0;
-                stopTimer();
-                playCompletionSound();
-
-                if (currentMode === "focus") {
-                   fetch("/api/pomodoro/complete", {
-                   method: "POST",
-                   headers: {
-                      "Content-Type": "application/json"
-                     },
-                   body: JSON.stringify({
-                      quest_id: activeQuestId,
-                      focus_minutes: Math.round(totalSeconds / 60)
-                     })
-                })
-                    .then(response => {
-                        if (!response.ok) throw new Error("Could not save the completed session.");
-                         return response.json();
-                           })
-                    .then(async data => {
-                         updatePointsDisplay(data.points);
-
-                        const earnedPoints = data.earned_points;
-                         openCompletionModal(earnedPoints, data.points);
-
-                        if (activeQuestId !== null) {
-                           const completedQuestId = activeQuestId;
-
-                           await loadQuests();
-
-                           const currentQuest = quests.find(
-                           quest => quest.id === completedQuestId
-                         );
-
-                         if (
-                             currentQuest &&
-                             currentQuest.completed_pomodoros >= currentQuest.required_pomodoros
-                          ) {
-                             activeQuestId = null;
-                             renderQuests();
-                          }
-                        }
-                    })
-                    .catch(error => {
-                         console.error("Points could not be saved:", error);
-                         alert("An error occurred while saving points.");
-                         });
-                } else {
-                    alert("Break is over. Ready to focus again?");
-                }
-            }
-        }, 1000);
-    }
-
-    modeButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            currentMode = button.dataset.mode;
-
-            modeButtons.forEach(item => {
-                item.classList.remove("selected");
-            });
-
-            button.classList.add("selected");
-            resetTimer();
-        });
-    });
-
-    startBtn.addEventListener("click", startTimer);
-    resetBtn.addEventListener("click", resetTimer);
-
-    const focusResetScreen = document.getElementById("focusResetScreen");
-    const lostFocusBtn = document.getElementById("lostFocusBtn");
-    const taskChoiceStep = document.getElementById("taskChoiceStep");
-    const taskResultStep = document.getElementById("taskResultStep");
-    const taskFlowError = document.getElementById("taskFlowError");
-    const taskCompleteMessage = document.getElementById("taskCompleteMessage");
-    let selectedNeed = null;
-    let selectedMaxDuration = 3;
-    let currentRecommendedTask = null;
-    let recommendedTaskIds = [];
-
-    lostFocusBtn.addEventListener("click", () => {
-        if (interval !== null) stopTimer();
-        selectedNeed = null;
-        currentRecommendedTask = null;
-        recommendedTaskIds = [];
-        taskChoiceStep.hidden = false;
-        taskResultStep.hidden = true;
-        taskFlowError.hidden = true;
-        document.querySelectorAll("[data-feeling]").forEach(item => {
-            item.classList.remove("is-selected");
-            item.setAttribute("aria-pressed", "false");
-        });
-        focusResetScreen.showModal();
-    });
-    document.getElementById("closeFocusReset").addEventListener("click", () => focusResetScreen.close());
-    document.getElementById("returnToTimer").addEventListener("click", () => focusResetScreen.close());
-
-    document.querySelectorAll("[data-feeling]").forEach(option => {
-        option.addEventListener("click", () => {
-            selectedNeed = option.dataset.feeling;
-            document.querySelectorAll("[data-feeling]").forEach(item => {
-                item.classList.remove("is-selected");
-                item.setAttribute("aria-pressed", "false");
-            });
-            option.classList.add("is-selected");
-            option.setAttribute("aria-pressed", "true");
-        });
-    });
-
-    document.querySelectorAll("[data-reset-duration]").forEach(option => {
-        option.addEventListener("click", () => {
-            selectedMaxDuration = Number(option.dataset.resetDuration);
-            document.querySelectorAll("[data-reset-duration]").forEach(item => {
-                item.classList.remove("is-selected");
-                item.setAttribute("aria-pressed", "false");
-            });
-            option.classList.add("is-selected");
-            option.setAttribute("aria-pressed", "true");
-        });
-    });
-
-    async function requestRecommendedTask(excludeCurrent = false) {
-        taskFlowError.hidden = true;
-        taskCompleteMessage.hidden = true;
-        if (!selectedNeed) {
-            taskFlowError.textContent = "Choose what you need first.";
-            taskFlowError.hidden = false;
-            return;
-        }
-        if (excludeCurrent && currentRecommendedTask) recommendedTaskIds.push(currentRecommendedTask.id);
-        const button = document.getElementById("getTaskBtn");
-        button.disabled = true;
-        button.textContent = "Finding a task…";
-        try {
-            const response = await fetch("/api/tasks/recommend", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ need: selectedNeed, max_duration: selectedMaxDuration, exclude_ids: recommendedTaskIds })
-            });
-            const payload = await response.json();
-            if (!response.ok || !payload.success) throw new Error(payload.error || "Could not find a task.");
-            currentRecommendedTask = payload.task;
-            document.getElementById("recommendedCategory").textContent = payload.category_name;
-            document.getElementById("recommendedTitle").textContent = payload.task.title;
-            document.getElementById("recommendedDescription").textContent = payload.task.description;
-            document.getElementById("recommendedDuration").textContent = `${payload.task.duration} min`;
-            document.getElementById("recommendedXp").textContent = `+${payload.task.xp} XP`;
-            document.getElementById("completeTaskBtn").disabled = false;
-            document.getElementById("completeTaskBtn").textContent = "Complete task";
-            taskChoiceStep.hidden = true;
-            taskResultStep.hidden = false;
-        } catch (error) {
-            taskFlowError.textContent = error.message;
-            taskFlowError.hidden = false;
-        } finally {
-            button.disabled = false;
-            button.innerHTML = 'Suggest a task <span aria-hidden="true">→</span>';
-        }
-    }
-
-    document.getElementById("getTaskBtn").addEventListener("click", () => requestRecommendedTask(false));
-    document.getElementById("tryAnotherTaskBtn").addEventListener("click", () => requestRecommendedTask(true));
-    document.getElementById("chooseTaskAgainBtn").addEventListener("click", () => {
-        taskResultStep.hidden = true;
-        taskChoiceStep.hidden = false;
-        taskCompleteMessage.hidden = true;
-    });
-
-    document.getElementById("completeTaskBtn").addEventListener("click", async event => {
-        if (!currentRecommendedTask) return;
-        const button = event.currentTarget;
-        button.disabled = true;
-        button.textContent = "Saving…";
-        taskCompleteMessage.hidden = true;
-        try {
-            const response = await fetch("/api/tasks/complete", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ task_id: currentRecommendedTask.id })
-            });
-            const payload = await response.json();
-            if (!response.ok || !payload.success) throw new Error(payload.error || "Could not save this task.");
-            updatePointsDisplay(payload.points)
-            button.textContent = "Completed ✓";
-            taskCompleteMessage.textContent = `You earned ${payload.earned_xp} XP. Nice work!`;
-            taskCompleteMessage.hidden = false;
-        } catch (error) {
-            button.disabled = false;
-            button.textContent = "Complete task";
-            taskCompleteMessage.textContent = error.message;
-            taskCompleteMessage.hidden = false;
-        }
-    });
-
-    updateDisplay();
-    const shelterBuyBtn = document.getElementById("shelterBuyBtn");
-const shelterStatus = document.getElementById("shelterStatus");
-
-shelterBuyBtn.addEventListener("click", () => {
-    shelterBuyBtn.disabled = true;
-    shelterStatus.textContent = "Processing...";
-
-    fetch("/api/building/buy", {
-        method: "POST"
-    })
-    .then(response => response.json())
-    .then(data => {
-        shelterStatus.textContent = data.message;
-
-       if (data.success) {
-    updatePointsDisplay(data.points);
-    shelterBuyBtn.textContent = "Owned";
-    shelterBuyBtn.disabled = true;
-} else {
-    shelterBuyBtn.disabled = false;
-}
-    })
-    .catch(error => {
-        console.error("Purchase failed:", error);
-        shelterStatus.textContent = "Something went wrong. Try again.";
-        shelterBuyBtn.disabled = false;
-    });
-});
-
-const completionModal = document.getElementById("completionModal");
-const modalCloseBtn = document.getElementById("modalCloseBtn");
-const modalContinueBtn = document.getElementById("modalContinueBtn");
-
-function openCompletionModal(pointsEarned, totalPoints) {
-    document.getElementById("modalTitle").textContent = "Great work!";
-    document.getElementById("modalDescription").textContent =
-        "You completed your focus session.";
-
-    document.getElementById("earnedPoints").textContent = pointsEarned;
-    document.getElementById("modalTotalPoints").textContent = totalPoints;
-
-    completionModal.classList.add("show");
-}
-
-function closeCompletionModal() {
-    completionModal.classList.remove("show");
-}
-
-modalCloseBtn.addEventListener("click", closeCompletionModal);
-modalContinueBtn.addEventListener("click", closeCompletionModal);
-
-completionModal.addEventListener("click", (event) => {
-    if (event.target === completionModal) {
-        closeCompletionModal();
-    }
-});
-
-// ===== Ambient Sound Player =====
-
-const soundCards = document.querySelectorAll(".sound-card");
-const soundStatus = document.getElementById("soundStatus");
-const currentSoundTitle = document.getElementById("currentSoundTitle");
-const currentSoundDescription = document.getElementById("currentSoundDescription");
-const soundArt = document.querySelector(".sound-art");
-
-const pauseSoundBtn = document.getElementById("pauseSoundBtn");
-const stopSoundBtn = document.getElementById("stopSoundBtn");
-const soundVolume = document.getElementById("soundVolume");
-const volumeValue = document.getElementById("volumeValue");
-
-let currentSound = null;
-let currentSoundCard = null;
-
-const audioElements = document.querySelectorAll(
-    ".ambient-panel audio, audio[id$='Audio']"
-);
-
-// Set the starting volume
-audioElements.forEach(audio => {
-    audio.volume = Number(soundVolume.value);
-});
-
-function updateSoundStatus(message, isPlaying = false) {
-    soundStatus.innerHTML = `
-        <span class="status-dot"></span>
-        ${message}
-    `;
-
-    soundStatus.classList.toggle("is-playing", isPlaying);
-}
-
-function pauseAllSounds() {
-    audioElements.forEach(audio => audio.pause());
-}
-
-function clearActiveCards() {
-    soundCards.forEach(card => card.classList.remove("active"));
-}
-
-soundCards.forEach(card => {
-    card.addEventListener("click", async () => {
-        const soundName = card.dataset.sound;
-        const audio = document.getElementById(`${soundName}Audio`);
-
-        if (!audio) {
-            console.error(`Audio file not found: ${soundName}`);
-            updateSoundStatus("Sound file not found");
-            return;
-        }
-
-        // Stop the previous sound before playing another one
-        pauseAllSounds();
-
-        if (currentSound && currentSound !== audio) {
-            currentSound.currentTime = 0;
-        }
-
-        currentSound = audio;
-        currentSoundCard = card;
-
-        currentSoundTitle.textContent = card.dataset.title;
-        currentSoundDescription.textContent = card.dataset.description;
-        soundArt.textContent = card.querySelector(".sound-card-icon").textContent;
-
-        clearActiveCards();
-        card.classList.add("active");
-
-        try {
-            await currentSound.play();
-            updateSoundStatus("Playing", true);
-        } catch (error) {
-            console.error(error);
-            updateSoundStatus("Could not play sound");
-        }
-    });
-});
-
-
-
-// Pause / Resume
-pauseSoundBtn.addEventListener("click", async () => {
-    if (!currentSound) {
-        updateSoundStatus("Choose a sound first");
-        return;
-    }
-
-    if (currentSound.paused) {
-        try {
-            await currentSound.play();
-            pauseSoundBtn.textContent = "❚❚";
-            pauseSoundBtn.setAttribute("aria-label", "Pause sound");
-            updateSoundStatus("Playing", true);
-        } catch (error) {
-            console.error(error);
-            updateSoundStatus("Could not resume sound");
-        }
-    } else {
-        currentSound.pause();
-        pauseSoundBtn.textContent = "▶";
-        pauseSoundBtn.setAttribute("aria-label", "Resume sound");
-        updateSoundStatus("Paused");
-    }
-});
-
-
-// Stop and reset
-stopSoundBtn.addEventListener("click", () => {
-    if (currentSound) {
-        currentSound.pause();
-        currentSound.currentTime = 0;
-    }
-
-    currentSound = null;
-    currentSoundCard = null;
-
-    pauseSoundBtn.textContent = "❚❚";
-    pauseSoundBtn.setAttribute("aria-label", "Pause sound");
-
-    clearActiveCards();
-    updateSoundStatus("Choose a sound");
-
-    currentSoundTitle.textContent = "No sound selected";
-    currentSoundDescription.textContent = "Choose your ambience";
-    soundArt.textContent = "🎧";
-});
-
-
-// Volume slider
-soundVolume.addEventListener("input", () => {
-    const volume = Number(soundVolume.value);
-
-    audioElements.forEach(audio => {
-        audio.volume = volume;
-    });
-
-    volumeValue.textContent = `${Math.round(volume * 100)}%`;
-});
-
- // ===== THEME SELECTOR =====
-
-// ===== THEME INITIALIZATION =====
-const savedTheme = localStorage.getItem("disTheme") || "woods";
-document.body.dataset.theme = savedTheme;
-
-// ===== TOP NAVIGATION PANELS =====
-
-const navButtons = document.querySelectorAll(".nav-action");
-const topPanel = document.getElementById("topPanel");
-const topPanelTitle = document.getElementById("topPanelTitle");
-const topPanelDescription = document.getElementById("topPanelDescription");
-const topPanelContent = document.getElementById("topPanelContent");
-const closeTopPanel = document.getElementById("closeTopPanel");
-
-const panelInfo = {
-    todo: {
-        title: "To-do List",
-        description: "Organize your tasks",
-        content: "Your tasks will appear here."
-    },
-    themes: {
-        title: "Themes",
-        description: "Choose your workspace atmosphere",
-        content: "Your themes will appear here."
-    },
-    friends: {
-        title: "Friends & Group",
-        description: "Connect and focus together",
-        content: "Your friends and groups will appear here."
-    },
-    market: {
-        title: "Market",
-        description: "Build your productivity world",
-        content: "Available items will appear here."
-    },
-    profile: {
-        title: "Profile",
-        description: "Your personal productivity space",
-        content: "Your profile information will appear here."
-    }
-};
-
-function loadMarket() {
-    topPanelContent.innerHTML = `
-        <p class="market-loading">Loading market...</p>
-    `;
-
-    fetch("/api/market/buildings")
-        .then(response => response.json())
-        .then(data => {
-            if (!data.success) {
-                throw new Error("Market could not be loaded.");
-            }
-
-            const icons = {
-                shelter: "🛖",
-                cabin: "🏡",
-                house: "🏠",
-                watchtower: "🗼"
-            };
-
-            topPanelContent.innerHTML = `
-                <div class="market-header">
-                    <span>🏗️ Available Buildings</span>
-                </div>
-
-                <div class="market-grid">
-                    ${data.items.map(item => `
-                        <article class="market-card">
-                            <div class="market-icon">
-                                ${icons[item.building_type] || "🏠"}
-                            </div>
-
-                            <h3>${item.name}</h3>
-                            <p>Build and expand your city.</p>
-
-                            <strong class="market-price">
-                                ${item.cost} points
-                            </strong>
-
-                            <button
-                                class="market-buy-button"
-                                data-buy-building="${item.building_type}"
-                                ${item.owned ? "disabled" : ""}
-                            >
-                                ${item.owned ? "Owned ✓" : "Buy"}
-                            </button>
-                        </article>
-                    `).join("")}
-                </div>
-
-                <p id="marketMessage" class="market-message"></p>
-            `;
-        })
-        .catch(error => {
-            topPanelContent.innerHTML = `
-                <p class="market-message">${error.message}</p>
-            `;
-        });
-}
-
-
-navButtons.forEach(button => {
-    button.addEventListener("click", () => {
-
-        const buyButton = event.target.closest("[data-buy-building]");
-
-if (buyButton) {
-    const buildingType = buyButton.dataset.buyBuilding;
-    const message = document.getElementById("marketMessage");
-
-    buyButton.disabled = true;
-    buyButton.textContent = "Processing...";
-
-    fetch("/api/building/buy", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            building_type: buildingType
-        })
-    })
-    .then(response => response.json().then(result => ({
-        ok: response.ok,
-        result: result
-    })))
-    .then(data => {
-        if (!data.ok || !data.result.success) {
-            throw new Error(data.result.message || "Purchase failed.");
-        }
-
-        message.textContent = data.result.message;
-        buyButton.textContent = "Owned ✓";
-
-        setTimeout(() => {
-            window.location.reload();
-        }, 800);
-    })
-    .catch(error => {
-        message.textContent = error.message;
-        buyButton.disabled = false;
-        buyButton.textContent = "Buy";
-    });
-
-    return;
-}
-        const panelName = button.dataset.panel;
-        topPanel.dataset.panel = panelName;
-
-
-        if (button.classList.contains("active")) {
-            topPanel.hidden = true;
-            button.classList.remove("active");
-            return;
-        }
-
-        navButtons.forEach(item => item.classList.remove("active"));
-
-        button.classList.add("active");
-
-        const panel = panelInfo[panelName];
-
-        topPanelTitle.textContent = panel.title;
-        topPanelDescription.textContent = panel.description;
-
-        const marketBalance = document.getElementById("marketBalance");
-
-if (marketBalance) {
-    marketBalance.hidden = panelName !== "market";
-}
-
-if (panelName === "market") {
-    fetch("/api/user")
-        .then(response => response.json())
-        .then(data => {
-            updatePointsDisplay(data.points);
-        })
-        .catch(error => console.error("Points could not load:", error));
-}
-        if (panelName === "themes") {
-    const currentTheme = document.body.dataset.theme;
-
-    const themes = [
-        { id: "woods", name: "Whispering Woods", image: "whispering-woods.png" },
-        { id: "neon", name: "Neon Afterglow", image: "neon-afterglow.png" },
-        { id: "sakura-coast", name: "Sakura Coast", image: "sakura-coast.png" },
-        { id: "burgundy", name: "Burgundy Royale", image: "burgundy-royale.png" }
-    ];
-
-    topPanelContent.innerHTML = `
-        <div class="theme-grid">
-            ${themes.map(theme => `
-                <button
-                    type="button"
-                    class="theme-card ${currentTheme === theme.id ? "selected" : ""}"
-                    data-theme-choice="${theme.id}"
-                >
-                    <img
-                        src="/static/backgrounds/${theme.image}"
-                        alt="${theme.name}"
-                    >
-                    <span>${theme.name}</span>
-                    <small>${currentTheme === theme.id ? "Currently selected" : "Select theme"}</small>
-                </button>
-            `).join("")}
-        </div>
-    `;
-
-
-} else if (panelName === "todo") {
-    topPanelContent.innerHTML = `
-        <div class="todo-panel">
-            <form id="todoForm" class="todo-form">
-                <input
-                    type="text"
-                    id="todoInput"
-                    placeholder="What needs to get done?"
-                    maxlength="100"
-                    required
-                >
-
-               <select id="todoCategory" required>
-    <option value="">Choose category</option>
-    <option value="study">📚 Study</option>
-    <option value="work">💻 Work</option>
-    <option value="personal">🌱 Personal</option>
-    <option value="health">💪 Health</option>
-    <option value="creative">🎨 Creative</option>
-</select>
-
-<div class="pomodoro-goal-field">
-    <label for="requiredPomodoros">Pomodoro goal</label>
-    <select id="requiredPomodoros" required>
-        ${Array.from({length: 10}, (_, i) =>
-            `<option value="${i + 1}">${i + 1} Pomodoro${i ? "s" : ""}</option>`
-        ).join("")}
-    </select>
-</div>
-
-
-                <button type="submit">＋ Add Quest</button>
-            </form>
-
-            <div class="todo-list" id="todoList"></div>
-
-            <p class="todo-empty" id="todoEmpty" hidden>
-                No quests yet. Create your first daily quest!
-            </p>
-        </div>
-    `;
-    loadQuests();
-
-} else if (panelName === "market") {
-    loadMarket();
-} else {
-    topPanelContent.textContent = panel.content;
-}
-
-        topPanel.hidden = false;
-    });
-});
-
-closeTopPanel.addEventListener("click", () => {
-    topPanel.hidden = true;
-    navButtons.forEach(button => button.classList.remove("active"));
-});
-
-topPanelContent.addEventListener("click", (event) => {
-
-const buyButton = event.target.closest("[data-buy-building]");
-
-if (buyButton) {
-    const buildingType = buyButton.dataset.buyBuilding;
-    const message = document.getElementById("marketMessage");
-
-    buyButton.disabled = true;
-    buyButton.textContent = "Processing...";
-
-    fetch("/api/building/buy", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            building_type: buildingType
-        })
-    })
-    .then(response => response.json().then(result => ({
-        ok: response.ok,
-        result
-    })))
-    .then(({ ok, result }) => {
-        if (!ok || !result.success) {
-            throw new Error(result.message || "Purchase failed.");
-        }
-
-        updatePointsDisplay(result.points);
-        message.textContent = result.message;
-        buyButton.textContent = "Owned ✓";
-
-        setTimeout(() => window.location.reload(), 800);
-    })
-    .catch(error => {
-        message.textContent = error.message;
-        buyButton.disabled = false;
-        buyButton.textContent = "Buy";
-    });
-
-    return;
-}
-
-
-    const themeButton = event.target.closest("[data-theme-choice]");
-
-    if (!themeButton) return;
-
-    const selectedTheme = themeButton.dataset.themeChoice;
-
-    document.body.dataset.theme = selectedTheme;
-    localStorage.setItem("disTheme", selectedTheme);
-
-    topPanelContent.querySelectorAll(".theme-card").forEach(card => {
-        const isSelected = card.dataset.themeChoice === selectedTheme;
-
-        card.classList.toggle("selected", isSelected);
-        card.querySelector("small").textContent =
-            isSelected ? "Currently selected" : "Select theme";
-    });
-});
-
-
-
-// ===== DAILY QUESTS =====
-
-let quests = [];
-let activeQuestId = null;
-
-async function loadQuests() {
-    try {
-        const response = await fetch("/api/quests");
-        const data = await response.json();
-
-        if (!data.success) throw new Error("Could not load quests.");
-
-        quests = data.quests;
-        renderQuests();
-    } catch (error) {
-        console.error(error);
-        const list = document.getElementById("todoList");
-        if (list) list.textContent = "Could not load quests.";
-    }
-}
-
-
-function renderQuests() {
-    const list = document.getElementById("todoList");
-    const empty = document.getElementById("todoEmpty");
-
-    if (!list || !empty) return;
-
-    list.innerHTML = "";
-    empty.hidden = quests.length > 0;
-
-    const categories = {
-        study: { name: "STUDY", icon: "📚" },
-        work: { name: "WORK", icon: "💻" },
-        personal: { name: "PERSONAL", icon: "🌱" },
-        health: { name: "HEALTH", icon: "💪" },
-        creative: { name: "CREATIVE", icon: "🎨" }
-    };
-
-    quests.forEach(quest => {
-        const completed =
-            quest.completed_pomodoros >= quest.required_pomodoros;
-        const active = activeQuestId === quest.id;
-        const category = categories[quest.category] ||
-            { name: quest.category.toUpperCase(), icon: "✨" };
-
-        const item = document.createElement("div");
-        item.className = `todo-item ${completed ? "completed" : ""} ${active ? "active" : ""}`;
-
-        const top = document.createElement("div");
-        top.className = "quest-card-top";
-
-        const categoryBadge = document.createElement("span");
-        categoryBadge.className = "quest-category";
-        categoryBadge.textContent = `${category.icon} ${category.name}`;
-
-        const reward = document.createElement("span");
-        reward.className = "quest-reward";
-        reward.textContent = completed ? "✓ COMPLETED" : "+10 XP";
-
-        const deleteButton = document.createElement("button");
-        deleteButton.type = "button";
-        deleteButton.textContent = "×";
-        deleteButton.className = "todo-delete";
-        deleteButton.setAttribute("aria-label", "Delete quest");
-
-        top.append(categoryBadge, reward, deleteButton);
-
-        const heading = document.createElement("div");
-        heading.className = "todo-task-text";
-        heading.textContent = quest.task_text;
-
-        const progressInfo = document.createElement("div");
-        progressInfo.className = "quest-progress-info";
-
-        const progressText = document.createElement("span");
-        progressText.textContent =
-            `${quest.completed_pomodoros} / ${quest.required_pomodoros} Pomodoros`;
-
-        const percentage = document.createElement("span");
-        percentage.textContent =
-            `${Math.round((quest.completed_pomodoros / quest.required_pomodoros) * 100)}%`;
-
-        progressInfo.append(progressText, percentage);
-
-        const progressBar = document.createElement("progress");
-        progressBar.max = quest.required_pomodoros;
-        progressBar.value = quest.completed_pomodoros;
-
-        const focusButton = document.createElement("button");
-        focusButton.type = "button";
-        focusButton.className = "quest-focus-button";
-        focusButton.textContent = completed
-            ? "✓ Quest completed"
-            : active
-                ? "🎯 Currently focusing"
-                : "Focus on this quest →";
-        focusButton.disabled = completed;
-
-        focusButton.addEventListener("click", () => {
-            activeQuestId = quest.id;
-            renderQuests();
-        });
-
-        deleteButton.addEventListener("click", async () => {
-            if (!confirm("Delete this quest?")) return;
-
-            const response = await fetch(`/api/quests/${quest.id}`, {
-                method: "DELETE"
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                if (activeQuestId === quest.id) activeQuestId = null;
-                await loadQuests();
-            }
-        });
-
-        item.append(
-            top,
-            heading,
-            progressInfo,
-            progressBar,
-            focusButton
-        );
-
-        list.appendChild(item);
-    });
-}
-
-// Quest oluştur
-topPanelContent.addEventListener("submit", async (event) => {
-    if (event.target.id !== "todoForm") return;
-
-    event.preventDefault();
-
-    const taskText = document.getElementById("todoInput").value.trim();
-    const category = document.getElementById("todoCategory").value;
-    const requiredPomodoros =
-        Number(document.getElementById("requiredPomodoros").value);
-
-    if (!taskText || !category) return;
-
-    try {
-        const response = await fetch("/api/quests", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                task_text: taskText,
-                category: category,
-                required_pomodoros: requiredPomodoros
-            })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok || !data.success) {
-            throw new Error(data.error || "Quest could not be created.");
-        }
-
-        event.target.reset();
-        await loadQuests();
-
-    } catch (error) {
-        console.error(error);
-        alert(error.message);
-    }
-});
-
-
-// ===== CITY WINDOW =====
-
-const openCityBtn = document.getElementById("openCityBtn");
-const closeCityBtn = document.getElementById("closeCityBtn");
-const cityOverlay = document.getElementById("cityOverlay");
-
-openCityBtn.addEventListener("click", () => {
-    cityOverlay.hidden = false;
-});
-
-closeCityBtn.addEventListener("click", () => {
-    cityOverlay.hidden = true;
-});
-
-cityOverlay.addEventListener("click", (event) => {
-    if (event.target === cityOverlay) {
-        cityOverlay.hidden = true;
-    }
-});
-
-document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-        cityOverlay.hidden = true;
-    }
-});
-
-
-</script>
 
 
 </body>

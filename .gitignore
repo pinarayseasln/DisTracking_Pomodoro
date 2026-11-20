@@ -1,7 +1,12 @@
 venv/
 
+.env
 distracking.db
 static/audio/*.mp3
 __pycache__/
 .coverage
 .pytest_cache/
+
+# Local backups and archives
+DTP.zip
+/backups/

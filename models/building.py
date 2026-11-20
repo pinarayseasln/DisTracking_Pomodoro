@@ -3,10 +3,6 @@ from database.db import get_db
 
 
 BUILDINGS = {
-    "shelter": {
-        "name": "Shelter",
-        "cost": 20
-    },
     "cabin": {
         "name": "Cabin",
         "cost": 50
@@ -45,7 +41,7 @@ def get_market_items():
         conn.close()
 
 
-def buy_building(building_type="shelter"):
+def buy_building(building_type):
     item = BUILDINGS.get(building_type)
 
     if item is None:
