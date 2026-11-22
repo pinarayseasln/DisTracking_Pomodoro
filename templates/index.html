@@ -51,6 +51,7 @@
         <span class="nav-label">Market</span>
     </button>
 
+    <p><b>│</b></p>
     <button class="nav-action profile-action" data-panel="profile" aria-label="Profile">
         <span class="nav-icon">👤</span>
         <span class="nav-label">Profile</span>
@@ -132,33 +133,11 @@
                     </button>
                 </div>
             </div>
-            <p>Today +0 structures
-            </p>
-            <div class="city-grid">
-    {% if buildings %}
-        {% for building in buildings %}
-            <div class="city-building">
-                <div class="building-icon">
-                    {% if building["building_type"] == "shelter" %}
-                        🛖
-                    {% else %}
-                        🏠
-                    {% endif %}
-                </div>
 
-                <span>{{ building["name"] }}</span>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p class="empty-city">
-            Your city waiting for your first building. Go to the market and buy your first building!
-        </p>
-    {% endif %}
-</div>
         </section>
 
         <section class="card">
-            <h3>Music and ambiance</h3>
+
 
 
 <section class="ambient-panel">
@@ -167,95 +146,164 @@
             <span class="ambient-headphone">♫</span>
             <h2>Music &amp; Ambience</h2>
         </div>
-        <span class="ambient-equalizer">▮ ▮ ▮</span>
+       <span class="ambient-equalizer" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i>
+</span>
     </div>
 
-    <div class="now-playing">
-        <div class="sound-art">🌧️</div>
+<div class="now-playing is-empty" id="nowPlaying">
+    <div class="sound-art" id="soundArt">♫</div>
 
-        <div class="playing-info">
-            <h3 id="currentSoundTitle">Rain</h3>
-            <p id="currentSoundDescription">Calm atmosphere</p>
-            <span class="playing-badge" id="soundStatus">
-                <span class="status-dot"></span>
-                Choose a sound
-            </span>
-        </div>
-
-        <div class="player-controls">
-            <button id="pauseSoundBtn" class="player-button pause-button"
-                    type="button" aria-label="Pause sound">
-                ❚❚
-            </button>
-
-            <button id="stopSoundBtn" class="player-button stop-button"
-                    type="button" aria-label="Stop sound">
-                ■
-            </button>
-        </div>
+    <div class="playing-info">
+        <h3 id="currentSoundTitle">Choose a sound or play music</h3>
+        <p id="currentSoundDescription">
+            Your personal listening space
+        </p>
+        <span class="playing-badge" id="soundStatus">
+            <span class="status-dot"></span>
+            Nothing playing
+        </span>
     </div>
 
-    <div class="volume-row">
-        <span class="volume-icon">🔊</span>
-        <input
-            type="range"
-            id="soundVolume"
-            min="0"
-            max="1"
-            step="0.01"
-            value="0.6"
-            aria-label="Sound volume"
-        >
-        <span id="volumeValue">60%</span>
+    <div class="player-controls">
+        <button id="pauseSoundBtn" class="player-button pause-button"
+                type="button" aria-label="Play or pause">
+            ▶
+        </button>
+        <button id="stopSoundBtn" class="player-button stop-button"
+                type="button" aria-label="Stop">
+            ■
+        </button>
+        <button id="volumeToggleBtn"
+        class="player-button volume-toggle-button"
+        type="button"
+        aria-label="Volume settings"
+        aria-expanded="false">
+        🔊
+       </button>
     </div>
+</div>
 
-    <div class="sound-picker-heading">
-        <h3>Choose your sound</h3>
-        <span>Sounds</span>
-    </div>
 
-      <div class="sound-grid" id="soundGrid">
+<div class="music-library-tabs">
+    <button
+        type="button"
+        class="music-library-tab active"
+        data-library-tab="my-music"
+    >
+        My Music
+    </button>
 
-        <button class="sound-card" type="button"
-        data-sound="cat" data-title="Cat"
-        data-description="Soft purring">
+    <button
+        type="button"
+        class="music-library-tab"
+        data-library-tab="favorites"
+    >
+        ♥ Favorites
+    </button>
+</div>
+
+<div id="myMusicList" class="music-library-content">
+    <div class="sound-grid" id="soundGrid">
+
+    <div class="sound-card" data-sound="cat"
+         data-title="Cat" data-description="Soft purring">
         <span class="sound-card-icon">🐈</span>
-        <span class="sound-card-name">Cat</span>
-        </button>
-
-        <button class="sound-card" type="button"
-                data-sound="rain" data-title="Rain"
-                data-description="Calm atmosphere">
-            <span class="sound-card-icon">🌧️</span>
-            <span class="sound-card-name">Rain</span>
-        </button>
-
-        <button class="sound-card" type="button"
-                data-sound="fire" data-title="Fire"
-                data-description="Warm and cozy">
-            <span class="sound-card-icon">🔥</span>
-            <span class="sound-card-name">Fire</span>
-        </button>
-
-        <button class="sound-card" type="button"
-                data-sound="forest" data-title="Forest"
-                data-description="Peaceful nature">
-            <span class="sound-card-icon">🌲</span>
-            <span class="sound-card-name">Forest</span>
-        </button>
-
-        <button class="sound-card" type="button"
-                data-sound="meditation" data-title="Meditation"
-                data-description="Relax and breathe">
-            <span class="sound-card-icon">🧘</span>
-            <span class="sound-card-name">Meditation</span>
-        </button>
+        <div class="sound-card-info">
+            <span class="sound-card-name">Cat</span>
+            <span class="sound-card-description">Soft purring</span>
+        </div>
+        <div class="sound-card-actions">
+            <button type="button" class="sound-play-btn" aria-label="Play Cat">▶</button>
+            <button type="button" class="sound-favorite-btn" aria-label="Favorite Cat" aria-pressed="false"> ♡ </button>
+        </div>
     </div>
 
+    <div class="sound-card" data-sound="rain"
+         data-title="Rain" data-description="Calm atmosphere">
+        <span class="sound-card-icon">🌧️</span>
+        <div class="sound-card-info">
+            <span class="sound-card-name">Rain</span>
+            <span class="sound-card-description">Calm atmosphere</span>
+        </div>
+        <div class="sound-card-actions">
+            <button type="button" class="sound-play-btn" aria-label="Play Rain">▶</button>
+            <button type="button" class="sound-favorite-btn" aria-label="Favorite Rain" aria-pressed="false">♡</button>
+        </div>
+    </div>
+
+    <div class="sound-card" data-sound="fire"
+         data-title="Fire" data-description="Warm and cozy">
+        <span class="sound-card-icon">🔥</span>
+        <div class="sound-card-info">
+            <span class="sound-card-name">Fire</span>
+            <span class="sound-card-description">Warm and cozy</span>
+        </div>
+        <div class="sound-card-actions">
+            <button type="button" class="sound-play-btn" aria-label="Play Fire">▶</button>
+            <button type="button" class="sound-favorite-btn" aria-label="Favorite Fire" aria-pressed="false">♡</button>
+        </div>
+    </div>
+
+    <div class="sound-card" data-sound="forest"
+         data-title="Forest" data-description="Peaceful nature">
+        <span class="sound-card-icon">🌲</span>
+        <div class="sound-card-info">
+            <span class="sound-card-name">Forest</span>
+            <span class="sound-card-description">Peaceful nature</span>
+        </div>
+        <div class="sound-card-actions">
+            <button type="button" class="sound-play-btn" aria-label="Play Forest">▶</button>
+            <button type="button" class="sound-favorite-btn" aria-label="Favorite Forest" aria-pressed="false">♡</button>
+        </div>
+    </div>
+
+    <div class="sound-card" data-sound="meditation"
+         data-title="Meditation" data-description="Relax and breathe">
+        <span class="sound-card-icon">🧘</span>
+        <div class="sound-card-info">
+            <span class="sound-card-name">Meditation</span>
+            <span class="sound-card-description">Relax and breathe</span>
+        </div>
+        <div class="sound-card-actions">
+            <button type="button" class="sound-play-btn" aria-label="Play Meditation">▶</button>
+            <button type="button" class="sound-favorite-btn" aria-label="Favorite Meditation" aria-pressed="false">♡</button>
+        </div>
+        </div>
+
+    <!-- PURCHASED MUSIC -->
+    <div id="ownedMusicList" class="owned-music-list"></div>
+
+    </div>
+</div>
+
+
+
+<!-- FAVORITES -->
+<div id="favoritesList" class="music-library-content" hidden>
+
+    <div class="favorites-scroll-list">
+
+        <!-- Purchased music favorites -->
+        <div id="favoriteTracksList">
+            <p class="music-library-empty">
+                Your favorite tracks will appear here.
+            </p>
+        </div>
+
+        <!-- Ambient sound favorites -->
+        <div id="ambientFavoritesList">
+            <h3>Ambient Sounds</h3>
+            <p class="music-library-empty">
+                Your favorite ambient sounds will appear here.
+            </p>
+        </div>
+
+    </div>
 
 </div>
 
-    <p class="sound-scroll-hint">⌄ &nbsp; Scroll for more sounds</p>
 </section>
 
 <!-- Ambient audio files --><!--MÜZİKLER-->

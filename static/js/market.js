@@ -1,4 +1,8 @@
-import { playAmbientSound } from "./ambient-player.js";
+import {
+    playAmbientSound,
+    playOwnedTrack,
+    preloadOwnedTrack
+} from "./ambient-player.js";
 
 function updatePointsDisplay(points) {
     const marketBalance = document.getElementById("marketBalance");
@@ -18,7 +22,48 @@ let marketRequestSequence = 0;
 
 
 let currentPreview = null;
+let favoriteTrackIds = new Set();
 let currentPreviewButton = null;
+
+function preloadOwnedTrackOnHover(button) {
+    const url = button.dataset.audioUrl;
+
+    if (url) {
+        preloadOwnedTrack(url);
+    }
+}
+
+document.addEventListener("pointerover", event => {
+    const button = event.target.closest("[data-play-owned-track]");
+
+    if (button) {
+        preloadOwnedTrackOnHover(button);
+    }
+});
+
+document.addEventListener("focusin", event => {
+    const button = event.target.closest("[data-play-owned-track]");
+
+    if (button) {
+        preloadOwnedTrackOnHover(button);
+    }
+});
+
+document.addEventListener("pointerover", event => {
+    const button = event.target.closest("[data-play-owned-track]");
+
+    if (button) {
+        preloadOwnedTrack(button);
+    }
+});
+
+document.addEventListener("focusin", event => {
+    const button = event.target.closest("[data-play-owned-track]");
+
+    if (button) {
+        preloadOwnedTrack(button);
+    }
+});
 
 function resetPreviewButton() {
     if (currentPreviewButton) {
@@ -146,6 +191,7 @@ function renderMarket(catalog) {
             <button type="button" class="market-category-tab active" role="tab" aria-selected="true" data-market-category="items">Items</button>
             <button type="button" class="market-category-tab" role="tab" aria-selected="false" data-market-category="music">Music</button>
             <button type="button" class="market-category-tab" role="tab" aria-selected="false" data-market-category="themes">Themes</button>
+            <button type="button" class="market-category-tab" role="tab" aria-selected="false" data-market-category="wishlist">Wishlist </button>
         </div>
 
         <section class="market-category-panel" role="tabpanel" data-market-panel="items">
@@ -180,22 +226,255 @@ function renderMarket(catalog) {
                 `).join("")}
             </div>
         </section>
+        <section class="market-category-panel" role="tabpanel" data-market-panel="wishlist" hidden>
+    <p class="market-category-note"><b>
+        Your saved music and themes will appear here.</b>
+    </p>
+
+    <div id="marketWishlistGrid" class="market-item-grid">
+        <p>Loading wishlist...</p>
+    </div>
+</section>
+
+
     `;
 }
 
+
+
+let marketPreviewAudio = null;
+let marketPreviewTimeout = null;
+
+function stopMarketPreview() {
+    if (marketPreviewTimeout) {
+        clearTimeout(marketPreviewTimeout);
+        marketPreviewTimeout = null;
+    }
+
+    if (marketPreviewAudio) {
+        marketPreviewAudio.pause();
+        marketPreviewAudio.currentTime = 0;
+        marketPreviewAudio = null;
+    }
+}
+
+async function loadOwnedMusic() {
+    const list = document.getElementById("ownedMusicList");
+    if (!list) return;
+
+    try {
+        const [libraryResponse, favoritesResponse] = await Promise.all([
+            fetch("/api/music/library"),
+            fetch("/api/music/favorites")
+        ]);
+
+        if (!libraryResponse.ok || !favoritesResponse.ok) {
+            throw new Error("Library could not be loaded.");
+        }
+
+        const libraryData = await libraryResponse.json();
+        const favoritesData = await favoritesResponse.json();
+
+        const tracks = Array.isArray(libraryData)
+            ? libraryData
+            : (libraryData.tracks || []);
+
+        const favorites = new Set(favoritesData.favorites || []);
+
+        list.replaceChildren();
+
+        if (!tracks.length) {
+    list.replaceChildren();
+    renderFavorites([]);
+    return;
+}
+
+        tracks.forEach(track => {
+            const row = document.createElement("div");
+            row.className = "owned-music-row";
+
+            const info = document.createElement("div");
+            info.className = "owned-music-info";
+
+            const title = document.createElement("strong");
+            title.textContent = track.title;
+
+            const artist = document.createElement("small");
+            artist.textContent = track.artist || "Unknown artist";
+
+            info.append(title, artist);
+
+            const actions = document.createElement("div");
+            actions.className = "owned-music-actions";
+
+            const playButton = document.createElement("button");
+            playButton.type = "button";
+            playButton.textContent = "▶";
+
+            playButton.dataset.playOwnedTrack = track.id;
+            playButton.dataset.audioUrl = track.audio_url || "";
+            playButton.dataset.trackTitle = track.title || "";
+            playButton.dataset.trackArtist = track.artist || "";
+
+
+            const favoriteButton = document.createElement("button");
+            favoriteButton.type = "button";
+            favoriteButton.textContent = favorites.has(track.id) ? "♥" : "  ♡";
+            favoriteButton.className = "music-favorite-button";
+            favoriteButton.dataset.toggleFavorite = track.id;
+            favoriteButton.dataset.favorite = String(favorites.has(track.id));
+
+            actions.append(playButton, favoriteButton);
+            row.append(info, actions);
+            list.appendChild(row);
+        });
+
+        renderFavorites(tracks.filter(track => favorites.has(track.id)));
+
+    } catch (error) {
+        console.error("Owned music error:", error);
+        list.textContent = "Your music library could not be loaded.";
+    }
+}
+
+function renderFavorites(tracks) {
+   const list = document.getElementById("favoriteTracksList");
+    if (!list) return;
+
+    list.replaceChildren();
+
+    if (!tracks.length) {
+        const empty = document.createElement("p");
+        empty.className = "music-library-empty";
+        empty.textContent = "Your favorite tracks will appear here.";
+        list.appendChild(empty);
+        return;
+    }
+
+    tracks.forEach(track => {
+        const row = document.createElement("div");
+        row.className = "owned-music-row";
+
+        const info = document.createElement("div");
+        info.className = "owned-music-info";
+
+        const title = document.createElement("strong");
+        title.textContent = track.title;
+
+        const artist = document.createElement("small");
+        artist.textContent = track.artist || "Unknown artist";
+
+        info.append(title, artist);
+
+        const actions = document.createElement("div");
+        actions.className = "owned-music-actions";
+
+        const playButton = document.createElement("button");
+        playButton.type = "button";
+        playButton.className = "sound-play-btn";
+        playButton.textContent = "▶";
+
+        playButton.dataset.playOwnedTrack = track.id;
+        playButton.dataset.audioUrl = track.audio_url || "";
+        playButton.dataset.trackTitle = track.title || "";
+        playButton.dataset.trackArtist = track.artist || "";
+
+        const favoriteButton = document.createElement("button");
+        favoriteButton.type = "button";
+        favoriteButton.textContent = "♥";
+        favoriteButton.className = "music-favorite-button";
+        favoriteButton.dataset.toggleFavorite = track.id;
+        favoriteButton.dataset.favorite = "true";
+
+        actions.append(playButton, favoriteButton);
+        row.append(info, actions);
+        list.appendChild(row);
+    });
+}
+
+function updateFavoriteTracksUI(button, isFavorite) {
+    const list = document.getElementById("favoriteTracksList");
+    if (!list) return;
+
+    const trackId = button.dataset.toggleFavorite;
+
+    // Aynı parçanın bütün kalp butonlarını güncelle
+    document.querySelectorAll("[data-toggle-favorite]").forEach(item => {
+        if (item.dataset.toggleFavorite === trackId) {
+            item.dataset.favorite = String(isFavorite);
+            item.textContent = isFavorite ? " ♥" : " ♡";
+        }
+    });
+
+    const existingButton = Array.from(
+        list.querySelectorAll("[data-toggle-favorite]")
+    ).find(item => item.dataset.toggleFavorite === trackId);
+
+    if (isFavorite) {
+        if (!existingButton) {
+            const sourceRow = button.closest(".owned-music-row");
+
+            if (sourceRow && !list.contains(sourceRow)) {
+                const newRow = sourceRow.cloneNode(true);
+
+                const newButton = newRow.querySelector("[data-toggle-favorite]");
+                newButton.dataset.favorite = "true";
+                newButton.textContent = " ♥";
+
+                list.querySelector(".music-library-empty")?.remove();
+                list.appendChild(newRow);
+            }
+        }
+    } else if (existingButton) {
+        existingButton.closest(".owned-music-row")?.remove();
+    }
+
+    const hasFavorites = list.querySelector("[data-toggle-favorite]");
+
+    if (!hasFavorites && !list.querySelector(".music-library-empty")) {
+        const empty = document.createElement("p");
+        empty.className = "music-library-empty";
+        empty.textContent = "Your favorite tracks will appear here.";
+        list.appendChild(empty);
+    }
+}
 
 async function loadMarketMusic() {
     const grid = document.getElementById("marketMusicGrid");
     if (!grid) return;
 
     try {
-        const response = await fetch("/api/music");
-        if (!response.ok) throw new Error("Music could not be loaded.");
+        const [musicResponse, wishlistResponse, libraryResponse] = await Promise.all([
+            fetch("/api/music"),
+            fetch("/api/music/wishlist"),
+            fetch("/api/music/library")
+        ]);
 
-        const tracks = await response.json();
-        window.musicTracks = tracks;
+        if (!musicResponse.ok) throw new Error("Music could not be loaded.");
+
+        const tracks = await musicResponse.json();
+
+        const wishlistData = wishlistResponse.ok
+            ? await wishlistResponse.json()
+            : { wishlist: [] };
+
+        const libraryData = libraryResponse.ok
+            ? await libraryResponse.json()
+            : [];
+
+        const wishlist = new Set(wishlistData.wishlist || []);
+        const ownedTracks = Array.isArray(libraryData)
+            ? libraryData
+            : (libraryData.tracks || []);
+        const owned = new Set(ownedTracks.map(track => track.id));
+
         grid.className = "market-item-grid";
         grid.replaceChildren();
+
+        if (!tracks.length) {
+            grid.textContent = "No music available yet.";
+            return;
+        }
 
         tracks.forEach(track => {
             const card = document.createElement("article");
@@ -203,7 +482,7 @@ async function loadMarketMusic() {
 
             const icon = document.createElement("div");
             icon.className = "market-icon";
-            icon.textContent = "♫";
+            icon.textContent = "🎵";
 
             const copy = document.createElement("div");
             copy.className = "market-item-copy";
@@ -211,50 +490,133 @@ async function loadMarketMusic() {
             const title = document.createElement("h3");
             title.textContent = track.title;
 
+            const artist = document.createElement("small");
+            artist.textContent = track.artist || "Unknown artist";
+
             const price = document.createElement("strong");
             price.className = "market-price";
             price.textContent = `${track.price} pts`;
 
-            copy.append(title, price);
+            copy.append(title, artist, price);
+            card.append(icon, copy);
 
             const actions = document.createElement("div");
-            actions.className = "music-track-actions";
+            actions.className = "market-music-actions";
 
-            const play = document.createElement("button");
-            play.className = "music-action-button music-play-button";
-            play.type = "button";
-            play.textContent = "▷";
-            play.title = "Play preview";
-            play.dataset.musicPlay = track.id;
+            if (track.preview_url) {
+                const previewButton = document.createElement("button");
+                previewButton.type = "button";
+                previewButton.textContent = "▶ Preview";
+                previewButton.dataset.previewTrack = track.id;
+                previewButton.dataset.previewUrl = track.preview_url;
+                actions.appendChild(previewButton);
+            }
 
-            const stop = document.createElement("button");
-            stop.className = "music-action-button music-stop-button";
-            stop.type = "button";
-            stop.textContent = "□";
-            stop.title = "Stop";
-            stop.dataset.musicStop = "true";
+            const wishlistButton = document.createElement("button");
+            wishlistButton.type = "button";
+            wishlistButton.textContent = wishlist.has(track.id)
+                ? "★ Wishlisted"
+                : "☆  Wishlist";
+            wishlistButton.dataset.toggleWishlist = track.id;
+            wishlistButton.dataset.wishlisted = String(wishlist.has(track.id));
+            actions.appendChild(wishlistButton);
 
-            const favorite = document.createElement("button");
-            favorite.className = "music-action-button music-favorite-button";
-            favorite.type = "button";
-            favorite.textContent = "☆";
-            favorite.title = "Add to favorites";
-            favorite.dataset.musicFavorite = track.id;
+            const buyButton = document.createElement("button");
+            buyButton.type = "button";
+            buyButton.className = "market-buy-button";
+            buyButton.dataset.buyMusic = track.id;
+            buyButton.textContent = owned.has(track.id) ? "Owned ✓" : "Buy";
+            buyButton.disabled = owned.has(track.id);
+            actions.appendChild(buyButton);
 
-            const buy = document.createElement("button");
-            buy.className = "music-buy-button";
-            buy.type = "button";
-            buy.textContent = "Buy";
-            buy.dataset.musicBuy = track.id;
-
-            actions.append(play, stop, favorite, buy);
-            card.append(icon, copy, actions);
+            card.appendChild(actions);
             grid.appendChild(card);
         });
 
     } catch (error) {
         console.error("Music catalog error:", error);
         grid.textContent = "Music could not be loaded.";
+    }
+}
+
+
+async function loadMarketWishlist() {
+    const grid = document.getElementById("marketWishlistGrid");
+    if (!grid) return;
+
+    try {
+        const [wishlistResponse, musicResponse] = await Promise.all([
+            fetch("/api/music/wishlist"),
+            fetch("/api/music")
+        ]);
+
+        if (!wishlistResponse.ok || !musicResponse.ok) {
+            throw new Error("Wishlist could not be loaded.");
+        }
+
+        const wishlistData = await wishlistResponse.json();
+        const tracks = await musicResponse.json();
+
+        const wishlist = new Set(wishlistData.wishlist || []);
+        const savedTracks = tracks.filter(track => wishlist.has(track.id));
+
+        grid.className = "market-item-grid";
+        grid.replaceChildren();
+
+        if (!savedTracks.length) {
+            grid.textContent = "Your wishlist is empty.";
+            return;
+        }
+
+        savedTracks.forEach(track => {
+            const card = document.createElement("article");
+            card.className = "market-card market-item-card";
+
+            const icon = document.createElement("div");
+            icon.className = "market-icon";
+            icon.textContent = "🎵";
+
+            const copy = document.createElement("div");
+            copy.className = "market-item-copy";
+
+            const title = document.createElement("h3");
+            title.textContent = track.title;
+
+            const artist = document.createElement("small");
+            artist.textContent = track.artist || "Unknown artist";
+
+            const price = document.createElement("strong");
+            price.className = "market-price";
+            price.textContent = `${track.price} pts`;
+
+            copy.append(title, artist, price);
+
+            const actions = document.createElement("div");
+            actions.className = "market-music-actions";
+
+            if (track.preview_url) {
+                const previewButton = document.createElement("button");
+                previewButton.type = "button";
+                previewButton.textContent = "▶ Preview";
+                previewButton.dataset.previewTrack = track.id;
+                previewButton.dataset.previewUrl = track.preview_url;
+                actions.appendChild(previewButton);
+            }
+
+            const removeButton = document.createElement("button");
+            removeButton.type = "button";
+            removeButton.textContent = "★ Wishlisted";
+            removeButton.dataset.removeWishlist = track.id;
+
+            actions.appendChild(removeButton);
+
+            card.append(icon, copy, actions);
+            grid.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error("Wishlist error:", error);
+        grid.textContent = error.message;
     }
 }
 
@@ -288,6 +650,12 @@ document.addEventListener("navigation:panel-open", event => {
 
     if (marketBalance) marketBalance.hidden = panelName !== "market";
 
+    const panelDescription = document.getElementById("topPanelDescription");
+
+if (panelDescription && panelName === "market") {
+    panelDescription.textContent = "Discover. Unlock. Customize.";
+}
+
     if (panelName !== "market") {
         marketRequestSequence += 1;
         return;
@@ -304,6 +672,58 @@ document.addEventListener("navigation:panel-open", event => {
 topPanelContent.addEventListener("click", async event => {
         const playButton = event.target.closest("[data-music-play]");
 
+
+
+
+const favoriteButton = event.target.closest("[data-music-favorite]");
+
+if (favoriteButton && event.currentTarget.contains(favoriteButton)) {
+    const trackId = favoriteButton.dataset.musicFavorite;
+    const wasFavorite = favoriteTrackIds.has(trackId);
+
+    // Görünümü anında değiştir
+    if (wasFavorite) {
+        favoriteTrackIds.delete(trackId);
+        favoriteButton.textContent = "♡ ";
+    } else {
+        favoriteTrackIds.add(trackId);
+        favoriteButton.textContent = "♥";
+    }
+
+    favoriteButton.disabled = true;
+
+    try {
+        const response = await fetch("/api/music/favorites/toggle", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ track_id: trackId })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Favorite update failed.");
+        }
+        await loadOwnedMusic();
+
+    } catch (error) {
+        // İşlem başarısızsa eski duruma dön
+        if (wasFavorite) {
+            favoriteTrackIds.add(trackId);
+            favoriteButton.textContent = "★";
+        } else {
+            favoriteTrackIds.delete(trackId);
+            favoriteButton.textContent = "☆ ";
+        }
+
+        console.error("Favorite error:", error);
+
+    } finally {
+        favoriteButton.disabled = false;
+    }
+
+    return;
+}
 
 
 
@@ -347,6 +767,9 @@ if (resetButton && event.currentTarget.contains(resetButton)) {
         topPanelContent.querySelectorAll("[data-market-panel]").forEach(panel => {
             panel.hidden = panel.dataset.marketPanel !== selectedCategory;
         });
+        if (selectedCategory === "wishlist") {
+    await loadMarketWishlist();
+}
         return;
     }
 
@@ -355,6 +778,123 @@ if (resetButton && event.currentTarget.contains(resetButton)) {
         await playAmbientSound(soundButton.dataset.marketPlaySound);
         return;
     }
+
+
+    const previewButton = event.target.closest("[data-preview-track]");
+    if (previewButton && event.currentTarget.contains(previewButton)) {
+        stopMarketPreview();
+
+        marketPreviewAudio = new Audio(previewButton.dataset.previewUrl);
+        marketPreviewAudio.volume = 0.7;
+
+        marketPreviewAudio.play().catch(error => {
+            console.error("Preview could not play:", error);
+        });
+
+        marketPreviewTimeout = setTimeout(stopMarketPreview, 25000);
+        marketPreviewAudio.addEventListener("ended", stopMarketPreview, { once: true });
+        return;
+    }
+
+    const wishlistButton = event.target.closest("[data-toggle-wishlist]");
+    if (wishlistButton && event.currentTarget.contains(wishlistButton)) {
+        wishlistButton.disabled = true;
+
+        try {
+            const response = await fetch("/api/music/wishlist/toggle", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    track_id: wishlistButton.dataset.toggleWishlist
+                })
+            });
+
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Wishlist update failed.");
+            }
+
+            const isWishlisted = result.is_wishlisted;
+            wishlistButton.dataset.wishlisted = String(isWishlisted);
+            wishlistButton.textContent = isWishlisted ? "★ Wishlisted" : "♡ Wishlist";
+
+        } catch (error) {
+            console.error(error);
+            document.getElementById("marketMusicMessage").textContent = error.message;
+        } finally {
+            wishlistButton.disabled = false;
+        }
+        return;
+    }
+
+const removeWishlistButton = event.target.closest("[data-remove-wishlist]");
+
+if (removeWishlistButton && event.currentTarget.contains(removeWishlistButton)) {
+    removeWishlistButton.disabled = true;
+
+    try {
+        const response = await fetch("/api/music/wishlist/toggle", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                track_id: removeWishlistButton.dataset.removeWishlist
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Could not remove track.");
+        }
+
+        await loadMarketWishlist();
+
+    } catch (error) {
+        console.error("Wishlist removal error:", error);
+        removeWishlistButton.disabled = false;
+    }
+
+    return;
+}
+
+    const musicBuyButton = event.target.closest("[data-buy-music]");
+    if (musicBuyButton && event.currentTarget.contains(musicBuyButton)) {
+        if (musicBuyButton.disabled) return;
+
+        musicBuyButton.disabled = true;
+        musicBuyButton.textContent = "Processing...";
+
+        try {
+            const response = await fetch("/api/music/buy", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    track_id: musicBuyButton.dataset.buyMusic
+                })
+            });
+
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Music purchase failed.");
+            }
+
+            updatePointsDisplay(result.points);
+            musicBuyButton.textContent = "Owned ✓";
+
+            await loadOwnedMusic();
+            await loadMarketMusic();
+
+            document.getElementById("marketMusicMessage").textContent =
+                result.message || "Music purchased successfully.";
+
+        } catch (error) {
+            document.getElementById("marketMusicMessage").textContent = error.message;
+            musicBuyButton.disabled = false;
+            musicBuyButton.textContent = "Buy";
+        }
+        return;
+    }
+
 
     const itemButton = event.target.closest("[data-buy-market-item]");
     if (itemButton && event.currentTarget.contains(itemButton)) {
@@ -428,5 +968,94 @@ if (resetButton && event.currentTarget.contains(resetButton)) {
         buildingButton.disabled = false;
         buildingButton.textContent = "Buy";
         delete buildingButton.dataset.purchasePending;
+    }
+});
+
+
+document.addEventListener("click", async event => {
+    // My Music / Favorites tab switching
+    const tab = event.target.closest("[data-library-tab]");
+    if (tab) {
+        const selected = tab.dataset.libraryTab;
+
+        document.querySelectorAll("[data-library-tab]").forEach(button => {
+            button.classList.toggle("active", button === tab);
+        });
+
+        const myMusic = document.getElementById("myMusicList");
+        const favorites = document.getElementById("favoritesList");
+
+        if (myMusic) myMusic.hidden = selected !== "my-music";
+        if (favorites) favorites.hidden = selected !== "favorites";
+
+        const ambientFavorites = document.getElementById("ambientFavoritesList");
+
+if (ambientFavorites) {
+    ambientFavorites.hidden = selected !== "favorites";
+}
+        return;
+    }
+// Play a purchased track
+const playButton = event.target.closest("[data-play-owned-track]");
+
+if (playButton) {
+    const track = {
+        audio_url: playButton.dataset.audioUrl,
+        title: playButton.dataset.trackTitle,
+        artist: playButton.dataset.trackArtist
+    };
+
+    if (!track.audio_url) {
+        console.error("Track audio URL is missing.");
+        return;
+    }
+
+    await playOwnedTrack(track);
+    return;
+}
+
+    // Toggle a purchased track's favorite status
+    const favoriteButton = event.target.closest("[data-toggle-favorite]");
+    if (favoriteButton) {
+    const wasFavorite = favoriteButton.dataset.favorite === "true";
+
+    // Update the button immediately
+    favoriteButton.dataset.favorite = String(!wasFavorite);
+    favoriteButton.textContent = !wasFavorite ? " ♥" : " ♡";
+
+    updateFavoriteTracksUI(favoriteButton, !wasFavorite);
+
+    try {
+        const response = await fetch("/api/music/favorites/toggle", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                track_id: favoriteButton.dataset.toggleFavorite
+            })
+        });
+
+        const result = await response.json();
+
+           if (!response.ok || !result.success) {
+            throw new Error(result.message || "Favorite update failed.");
+      }
+
+
+
+        } catch (error) {
+        // Restore previous state if the request fails
+        favoriteButton.dataset.favorite = String(wasFavorite);
+        favoriteButton.textContent = wasFavorite ? " ♥" : " ♡";
+        console.error(error);
+    }
+}
+});
+
+// Load the user's purchased music when the page starts
+loadOwnedMusic();
+
+document.addEventListener("navigation:panel-open", event => {
+    if (event.detail.panelName !== "market") {
+        stopMarketPreview();
     }
 });
