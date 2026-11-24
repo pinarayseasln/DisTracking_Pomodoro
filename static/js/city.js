@@ -1,6 +1,7 @@
 const cityMapWorld = document.getElementById("cityMapWorld");
 const cityMapViewport = document.getElementById("cityMapViewport");
 const cityRebuildPanel = document.getElementById("cityRebuildPanel");
+const cityTaskToggle = document.getElementById("cityTaskToggle");
 const cityDecorationWorld = document.getElementById("cityDecorationWorld");
 const cityItemNames = {
     weed: "Weed",
@@ -9,6 +10,8 @@ const cityItemNames = {
     brick: "Brick",
     weed_tool: "Weed Tool",
     shovel: "Shovel",
+    scythe: "Scythe",
+    scissors: "Scissors",
 };
 
 let activeRebuildCity = "green-valley";
@@ -150,17 +153,34 @@ function renderCityState(state) {
     if (state.current_task) {
         const task = state.current_task;
         taskTitle.textContent = task.name;
+        document.getElementById("cityTaskNumber").textContent =
+        `${String(state.stage + 1).padStart(2, "0")}`;
         taskRequirements.textContent = formatRequirements(task.requirements, task.tools);
         const allRequirements = { ...task.requirements, ...task.tools };
         inventory.replaceChildren();
         let canComplete = true;
-        Object.entries(allRequirements).forEach(([id, required]) => {
-            const owned = state.inventory[id] || 0;
-            const line = document.createElement("span");
-            line.className = owned >= required ? "has-stock" : "needs-stock";
-            line.textContent = `${cityItemNames[id] || id}: ${owned}/${required}`;
-            inventory.append(line);
-            if (owned < required) canComplete = false;
+       Object.entries(allRequirements).forEach(([id, required]) => {
+         const owned = state.inventory[id] || 0;
+        const completed = owned >= required;
+
+         const line = document.createElement("label");
+         line.className = `city-task-requirement ${completed ? "has-stock" : "needs-stock"}`;
+
+         const checkbox = document.createElement("input");
+         checkbox.type = "checkbox";
+         checkbox.checked = completed;
+         checkbox.disabled = true;
+
+         const name = document.createElement("span");
+         name.textContent = cityItemNames[id] || id;
+
+         const quantity = document.createElement("strong");
+         quantity.textContent = `${owned}/${required}`;
+
+         line.append(checkbox, name, quantity);
+         inventory.append(line);
+
+         if (!completed) canComplete = false;
         });
         completeButton.hidden = false;
         completeButton.dataset.requirementsMet = String(canComplete);
@@ -186,16 +206,38 @@ function renderCityState(state) {
     });
     renderDecorationSpots(state);
 
-    const completedList = document.getElementById("cityCompletedTasks");
-    if (completedList) {
-        completedList.textContent = `${completedIds.size}/${state.stages} tasks complete`;
-    }
+    const completedCount = document.getElementById("cityCompletedTasks");
+const completedList = document.getElementById("cityCompletedList");
+
+if (completedCount) {
+    completedCount.textContent =
+        `${completedIds.size}/${state.stages} tasks complete`;
+}
+
+if (completedList) {
+    const taskNames = {
+        "clear-weeds": "Clear Weeds",
+        "remove-debris": "Remove Debris",
+        "rebuild-shelter": "Rebuild Shelter"
+    };
+
+    completedList.replaceChildren();
+
+    state.completed_tasks.forEach(task => {
+        const item = document.createElement("div");
+        item.className = "city-completed-item";
+        item.textContent = `✓ ${taskNames[task.task_id] || task.task_id}`;
+        completedList.append(item);
+    });
+}
 }
 
 export async function loadCityState(cityName = "Green Valley") {
     activeRebuildCity = cityName.toLowerCase().replaceAll(" ", "-");
     const isGreenValley = activeRebuildCity === "green-valley";
-    cityRebuildPanel.hidden = !isGreenValley;
+    cityRebuildPanel.hidden = true;
+  cityTaskToggle.hidden = !isGreenValley;
+
     if (!isGreenValley) {
         delete cityMapWorld.dataset.rebuildStage;
         cityDecorationWorld.replaceChildren();
@@ -269,4 +311,16 @@ cityDecorationWorld.addEventListener("click", async event => {
         message.textContent = error.message;
         spot.disabled = false;
     }
+});
+
+// OPEN TASK PANEL
+cityTaskToggle.addEventListener("click", () => {
+    cityRebuildPanel.hidden = false;
+    cityTaskToggle.setAttribute("aria-expanded", "true");
+});
+
+// CLOSE TASK PANEL
+cityTaskClose.addEventListener("click", () => {
+    cityRebuildPanel.hidden = true;
+    cityTaskToggle.setAttribute("aria-expanded", "false");
 });

@@ -63,10 +63,8 @@ nav a, .user-info span {
 }
 
 .avatar {
-    background: #8B5CF6 !important;
-    color: rgb(252, 250, 250) !important;
-    border-radius: 50% !important;
-    padding: 12px 15px !important;
+    border-radius: 50%;
+    padding: 12px 15px;
 }
 
 /* ANA EKRAN */
@@ -146,9 +144,7 @@ nav a, .user-info span {
     font-size: 14px;
 }
 
-.music.active {
-    background: #8B5CF6
-}
+
 
 /* POMODORO */
 
@@ -237,7 +233,7 @@ button {
 .timer {
     border-radius: 50%;
     width: 318px;
-    height: 318px;   
+    height: 318px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -657,9 +653,7 @@ button {
     font-size: 13px;
 }
 
-.green {
-    background: #8B5CF6 !important;
-}
+
 
 .invite {
     background: #00E5C3;
@@ -806,82 +800,82 @@ footer {
 }
 /* DisTracking - Midnight Neon Color Theme */
 
-body {
+body[data-theme="neon"] {
     background-color: #101827;
     color: #F4F7FB;
 }
 
 /* Main cards and panels */
-.card,
-.panel,
-.navbar {
+body[data-theme="neon"] .card,
+body[data-theme="neon"] .panel,
+body[data-theme="neon"] .navbar {
     background-color: #1B263B;
     color: #F4F7FB;
 }
 
 /* Secondary text */
-p,
-small,
-.subtitle {
+body[data-theme="neon"] p,
+body[data-theme="neon"] small,
+body[data-theme="neon"] .subtitle {
     color: #A7B2C5;
 }
 
 /* Main buttons */
-button {
+body[data-theme="neon"] button {
     background-color: #00E5C3;
     color: #101827;
     border-color: #00E5C3;
 }
 
 /* Secondary buttons */
-button.secondary {
+body[data-theme="neon"] button.secondary {
     background-color: #8B5CF6;
     color: #FFFFFF;
     border-color: #8B5CF6;
 }
 
 /* City area */
-.city-grid {
+body[data-theme="neon"] .city-grid {
     background-color: #202D43;
 }
 
 /* Building cards */
-.city-building {
+body[data-theme="neon"] .city-building {
     background-color: #293850;
     color: #F4F7FB;
 }
 
 /* Market cards */
-.market-item {
+body[data-theme="neon"] .market-item {
     background-color: #202D43;
     border-color: #35445C;
     color: #F4F7FB;
 }
 
 /* Inputs */
-input,
-textarea,
-select {
+body[data-theme="neon"] input,
+body[data-theme="neon"] textarea,
+body[data-theme="neon"] select {
     background-color: #1B263B;
     color: #F4F7FB;
     border-color: #35445C;
 }
 
 /* Links and highlighted elements */
-a {
+body[data-theme="neon"] a {
     color: #00E5C3;
 }
 
 /* Disabled buttons */
-button:disabled {
+body[data-theme="neon"] button:disabled {
     background-color: #35445C;
     color: #A7B2C5;
     border-color: #35445C;
 }
 /* Fix remaining old theme colors */
 
-.navbar button,
-.navbar a {
+body[data-theme="neon"] .navbar button,
+body[data-theme="neon"] .navbar a {
     background-color: #293850;
     color: #F4F7FB;
     border-color: #35445C;
@@ -894,7 +888,8 @@ button:disabled {
 }
 
 .city-grid {
-    background-color: #202D43;
+    background-color: var(--card-bg);
+    color: var(--text-color);
 }
 
 .city-building {
@@ -1129,8 +1124,10 @@ button:disabled {
 }
 
 .logo span {
-    color: #00E5C3;
+    color: var(--theme-accent, #00E5C3);
+    transition: color 0.3s ease;
 }
+
 
 .brand-values {
     display: flex;
@@ -1160,13 +1157,12 @@ button:disabled {
     font-size: 13px;
 }
 /* ===== Ambient Music Player ===== */
-
 .ambient-panel {
-    background: linear-gradient(145deg, #111f38, #0b162b);
-    border: 1px solid #2b4168;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
     border-radius: 22px;
     padding: 18px;
-    color: #f4f7fb;
+    color: var(--text-color);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
     min-width: 0;
 }
@@ -1206,10 +1202,10 @@ button:disabled {
     align-items: center;
     gap: 14px;
     padding: 14px;
-    border: 1px solid #304a77;
     border-radius: 18px;
-    background: linear-gradient(120deg, #172b4b, #10203a);
     min-width: 0;
+    border: 1px solid var(--panel-border);
+    background: var(--card-bg);
 }
 
 .sound-art {
@@ -1244,10 +1240,10 @@ button:disabled {
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    border: 1px solid #286b7b;
+    border: 1px solid var(--panel-border);
     border-radius: 20px;
     padding: 5px 10px;
-    color: #8da8c8;
+    color: var(--theme-accent);
     font-size: 11px;
 }
 
@@ -1401,6 +1397,7 @@ button:disabled {
     .now-playing {
         gap: 10px;
         padding: 10px;
+
     }
 
     .sound-art {
@@ -1512,6 +1509,7 @@ button:disabled {
     font-size: 10px;
 }
 
+
 /* =================================
    WHISPERING WOODS THEME
 ================================= */
@@ -1527,8 +1525,9 @@ button:disabled {
     --forest-border: rgba(176, 200, 178, 0.22);
 }
 
-/* Arka plan görseli */
-body {
+/* Woods background */
+
+body[data-theme="woods"] {
     background:
         linear-gradient(
             rgba(10, 20, 14, 0.58),
@@ -1541,72 +1540,81 @@ body {
     color: var(--forest-text);
 }
 
-/* Üst menü */
-.navbar {
+/* Navbar */
+
+body[data-theme="woods"] .navbar {
     background: rgba(16, 29, 22, 0.88);
     color: var(--forest-text);
     border-bottom: 1px solid var(--forest-border);
 }
 
-/* Ana kartlar */
-.card,
-.ambient-panel {
+/* Main cards */
+
+body[data-theme="woods"] .card,
+body[data-theme="woods"] .ambient-panel {
     background: var(--forest-card);
     color: var(--forest-text);
     border: 1px solid var(--forest-border);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
 }
 
-/* Şehir alanı */
-.city,
-.city-grid {
+/* City */
+
+body[data-theme="woods"] .city,
+body[data-theme="woods"] .city-grid {
     background: var(--forest-card-light);
     color: var(--forest-text);
 }
 
-/* Binalar */
-.city-building {
+/* Buildings */
+
+body[data-theme="woods"] .city-building {
     background: #354b3b;
     color: var(--forest-text);
 }
 
 /* Market */
-.market-item,
-.task-library-card {
+
+body[data-theme="woods"] .market-item,
+body[data-theme="woods"] .task-library-card {
     background: var(--forest-card);
     color: var(--forest-text);
     border-color: var(--forest-border);
 }
 
-/* Yazılar */
-.card h3,
-.card h4,
-.card p,
-.timer-panel > p,
-.market-item p {
+/* Text */
+
+body[data-theme="woods"] .card h3,
+body[data-theme="woods"] .card h4,
+body[data-theme="woods"] .card p,
+body[data-theme="woods"] .timer-panel > p,
+body[data-theme="woods"] .market-item p {
     color: var(--forest-text);
 }
 
-/* Ana butonlar */
-.start,
-.invite,
-.market-item button,
-.modal-continue {
+/* Main buttons */
+
+body[data-theme="woods"] .start,
+body[data-theme="woods"] .invite,
+body[data-theme="woods"] .market-item button,
+body[data-theme="woods"] .modal-continue {
     background: var(--forest-accent);
     color: #142219;
     border: 1px solid var(--forest-accent);
 }
 
-/* Seçili butonlar */
-.timer-modes .selected,
-.music.active,
-[data-mode].selected {
+/* Selected buttons */
+
+body[data-theme="woods"] .timer-modes .selected,
+body[data-theme="woods"] .music.active,
+body[data-theme="woods"] [data-mode].selected {
     background: var(--forest-accent);
     color: #142219;
 }
 
-/* Zamanlayıcı */
-.timer {
+/* Timer */
+
+body[data-theme="woods"] .timer {
     background: conic-gradient(
         var(--forest-accent)
         calc(var(--progress) * 1%),
@@ -1615,23 +1623,26 @@ body {
     color: var(--forest-text);
 }
 
-.timer::before {
+body[data-theme="woods"] .timer::before {
     background: #1b2b21;
 }
 
-/* İlerleme ve ses kontrolleri */
-input[type="range"],
-.volume-row input {
+/* Range controls */
+
+body[data-theme="woods"] input[type="range"],
+body[data-theme="woods"] .volume-row input {
     accent-color: var(--forest-accent);
 }
 
-/* Bağlantılar */
-a {
+/* Links */
+
+body[data-theme="woods"] a {
     color: var(--forest-accent);
 }
 
-/* Alt bilgi */
-footer {
+/* Footer */
+
+body[data-theme="woods"] footer {
     color: var(--forest-muted);
 }
 
@@ -2082,6 +2093,7 @@ body[data-theme="burgundy"] .volume-row input {
     gap: 10px;
 }
 
+
 .nav-action {
     display: flex;
     align-items: center;
@@ -2092,10 +2104,12 @@ body[data-theme="burgundy"] .volume-row input {
     padding: 0;
     overflow: hidden;
     white-space: nowrap;
-    border: 1px solid rgba(190, 90, 255, 0.35);
+
+    border: 1px solid var(--panel-border);
     border-radius: 25px;
-    background: rgba(48, 24, 70, 0.8);
-    color: #f5eaff;
+    background: var(--card-bg);
+    color: var(--text-color);
+
     cursor: pointer;
     transition: width 0.3s ease, background 0.3s ease,
                 box-shadow 0.3s ease;
@@ -2115,10 +2129,12 @@ body[data-theme="burgundy"] .volume-row input {
 .nav-action.active {
     width: 145px;
     padding: 0 16px;
-    background: #bd50f5;
-    border-color: #d78aff;
-    box-shadow: 0 0 18px rgba(189, 80, 245, 0.45);
+    background: var(--theme-accent);
+    border-color: var(--theme-accent);
+    color: var(--button-text);
+    box-shadow: none;
 }
+
 
 .nav-action.active .nav-label {
     display: inline;
@@ -3134,11 +3150,12 @@ body[data-theme="burgundy"] {
 
 .market-category-tab {
     flex: 1;
-    min-height: 42px;
+    min-height: 52px;
     border: 1px solid transparent;
     border-radius: 10px;
     background: transparent;
     color: inherit;
+    font-size: 17px;
     font-weight: 700;
     cursor: pointer;
 }
@@ -3219,9 +3236,9 @@ body[data-theme="burgundy"] {
     }
 
     .market-category-tab {
-        min-height: 38px;
-        padding: 0 6px;
-        font-size: 13px;
+        min-height: 48px;
+        padding: 0 8px;
+        font-size: 15px;
     }
 
     .market-grid {
@@ -3288,97 +3305,158 @@ body:has(#topPanel[data-panel="market"]:not([hidden])) {
     background: var(--theme-accent, #bd55f5);
 }
 
-/* Compact product cards in the Items category only. */
+/* MARKET ITEM CARDS */
 .market-item-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: 12px;
     width: 100%;
     margin-top: 12px;
 }
 
 .market-item-card {
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
     align-items: center;
-    gap: 8px;
+    column-gap: 10px;
+    row-gap: 5px;
     min-width: 0;
-    min-height: 58px;
-    padding: 8px 10px;
-    overflow: visible;
+    min-height: 112px;
+    padding: 12px;
+    overflow: hidden;
 }
 
 .market-item-card .market-icon {
-    flex: 0 0 auto;
-    font-size: 24px;
+    grid-column: 1;
+    grid-row: 1 / 3;
+    font-size: 32px;
     line-height: 1;
 }
 
 .market-item-copy {
+    grid-column: 2;
+    grid-row: 1;
     display: flex;
-    flex: 1 1 0;
-    flex-wrap: wrap;
-    align-items: baseline;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
     min-width: 0;
-    gap: 2px 7px;
+    transform: translateY(8px);
 }
 
 .market-item-card h3 {
-    flex: 0 1 auto;
-    min-width: 0;
-    overflow: visible;
-    font-size: clamp(13px, 1vw, 16px);
-    line-height: 1.25;
+    max-width: 100%;
+    font-size: 18px;
+    line-height: 1.2;
     white-space: normal;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
+    word-break: normal;
 }
 
 .market-item-card .market-price {
-    flex: 0 0 auto;
     margin: 0;
-    font-size: clamp(13px, .95vw, 15px);
-    font-weight: 600;
-    line-height: 1.25;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.market-item-owned-count {
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: center;
+    display: inline-flex;
+    align-self: start;
+    width: fit-content;
+    margin-top: 3px;
+    padding: 4px 7px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.22);
+    color: var(--text-color);
+    font-size: 18px;
+    font-weight: 800;
     white-space: nowrap;
 }
 
 .market-item-card .market-buy-button {
-    flex: 0 0 auto;
+    grid-column: 3;
+    grid-row: 1;
     width: auto;
-    min-width: 56px;
-    max-width: 42%;
-    min-height: 32px;
-    margin-left: auto;
-    padding: 5px 9px;
-    overflow: visible;
-    font-size: clamp(10px, .8vw, 13px);
+    min-width: 75px;
+    max-width: none;
+    min-height: 38px;
+    margin: 0;
+    padding: 7px 10px;
+    font-size: 18px;
     line-height: 1.2;
-    white-space: normal;
-    overflow-wrap: anywhere;
-}
-
-.market-item-owned-count {
-    position: absolute !important;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
     white-space: nowrap;
+    align-self: end;
 }
 
+/* MOBILE */
 @media (max-width: 600px) {
-    .market-item-grid { gap: 6px; }
-    .market-item-card { gap: 6px; min-height: 54px; padding: 7px; }
-    .market-item-card .market-icon { font-size: 18px; }
-    .market-item-copy { gap: 2px 5px; }
-    .market-item-card h3 { font-size: clamp(12px, 3vw, 15px); }
-    .market-item-card .market-price { font-size: clamp(12px, 2.8vw, 14px); }
+    .market-item-grid {
+        gap: 5px;
+    }
+
+    .market-item-card {
+        grid-template-columns: 26px minmax(0, 1fr)auto;
+        column-gap: 7px;
+        min-height: 40px;
+        padding: 4px;
+    }
+
+    .market-item-card .market-icon {
+        font-size: 20px;
+    }
+
+
+    .market-item-owned-count {
+        font-size: 9px;
+        padding: 3px 5px;
+    }
+
     .market-item-card .market-buy-button {
-        min-width: 42px;
-        max-width: 40%;
-        min-height: 30px;
-        padding: 4px 6px;
-        font-size: clamp(9px, 2.6vw, 12px);
+        min-width: 40px;
+        min-height: 24px;
+        padding: 3px 5px;
+        font-size: 8px;
+    }
+}
+@media (max-width: 600px) {
+    .market-item-grid {
+        gap: 7px;
+    }
+
+    .market-item-card {
+        grid-template-columns: 20px minmax(0, 1fr) auto;
+        column-gap: 8px;
+        min-height: 82px;
+        padding: 10px;
+    }
+
+    .market-item-card .market-icon {
+        font-size: 28px;
+    }
+
+    .market-item-card h3 {
+        font-size: 16px;
+    }
+
+    .market-item-card .market-price {
+        font-size: 13px;
+    }
+
+    .market-item-owned-count {
+        font-size: 11px;
+        padding: 3px 5px;
+    }
+
+    .market-item-card .market-buy-button {
+        min-width: 12px;
+        padding: 6px 38x;
+        font-size: 5px;
     }
 }
 
@@ -3473,8 +3551,8 @@ body:has(#topPanel[data-panel="market"]:not([hidden])) {
     overflow-y: auto;
     padding: 26px;
     border-radius: 22px;
-    background: #f4f0df;
-    color: #344b3c;
+    background: var(--panel-bg);
+    color: var(--text-color);
     box-shadow: 0 25px 80px rgba(0,0,0,.3);
 }
 
@@ -4129,9 +4207,9 @@ body[data-theme="burgundy"] .city-close-btn {
     position: relative;
     isolation: isolate;
     display: block;
-    width: min(96vw, 1600px, calc(92vh * 1.777));
+    width: min(98vw, 1800px, calc(97vh * 1.777));
     height: auto;
-    max-height: 92vh;
+    max-height: 97vh;
     aspect-ratio: 1672 / 941;
     flex: none;
     padding: 0;
@@ -4307,7 +4385,7 @@ body[data-theme="burgundy"] .city-close-btn {
 .city-window.city-frame-window {
     position: relative !important;
     flex: none !important;
-    width: min(100vw, calc(200vh * 1672 / 941)) !important;
+    width: min(115vw, calc(300vh * 1672 / 941)) !important;
     aspect-ratio: 1672 / 941 !important;
     height: auto !important;
     max-width: none !important;
@@ -4444,9 +4522,8 @@ body[data-theme="burgundy"] .city-close-btn {
 
 .city-task-inventory {
     display: flex;
-    flex-wrap: wrap;
-    gap: 4px 10px;
-    margin: 7px 0;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .city-task-inventory span { font-size: 11px; }
@@ -4477,6 +4554,104 @@ body[data-theme="burgundy"] .city-close-btn {
 .city-decoration-picker small { display: block; margin: 4px 0; }
 .city-market-hint { display: block; margin: 5px 0; }
 
+.city-active-task {
+    padding: 8px;
+    margin-top: 7px;
+    border: 2px solid #a87536;
+    border-radius: 9px;
+    background: rgba(255, 248, 224, .65);
+}
+
+.city-active-task #cityTaskRequirements {
+    display: none;
+}
+
+.city-requirements-title {
+    margin: 5px 0 7px !important;
+    font-size: 14px;
+    font-weight: 800;
+    color: #49321d;
+}
+
+.city-task-requirement {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 30px;
+    margin: 4px 0;
+    padding: 4px 7px;
+    border: 1px solid #c99b48;
+    border-radius: 6px;
+    background: #fff4cf;
+    color: #49321d !important;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.city-task-requirement span {
+    color: #49321d !important;
+
+}
+
+.city-task-requirement strong {
+    margin-left: auto;
+    color: #49321d !important;
+}
+
+.city-task-requirement input {
+    flex-shrink: 0;
+}
+
+.city-task-requirement.has-stock {
+    border-color: #819c58;
+}
+
+.city-task-requirement.needs-stock {
+    border-color: #c58b62;
+}
+
+.city-task-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-top: 9px;
+}
+
+.city-task-footer .city-market-hint {
+    margin: 0;
+    font-size: 10px;
+}
+.city-completed-section {
+    display: block;
+    clear: both;
+    position: relative;
+    margin-top: 12px;
+    padding-top: 9px;
+    border-top: 2px solid #b78a51;
+}
+
+.city-completed-section h4 {
+    display: block;
+    position: static;
+    margin: 0 0 6px;
+    color: #49321d;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.city-completed-list {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.city-completed-item {
+    margin: 4px 0;
+    color: #42652e;
+    font-size: 12px;
+    font-weight: 700;
+}
 .city-rebuild-markers,
 .city-decoration-world {
     position: absolute;
@@ -4858,10 +5033,19 @@ body[data-theme="burgundy"] .city-close-btn {
 }
 
 #marketMusicGrid .market-item-copy h3 {
-    font-size: 18px;
-    white-space: nowrap;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    font-size: 15px;
+    line-height: 1.3;
+    white-space: normal;
     overflow: hidden;
-    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow-wrap: anywhere;
+    text-overflow: unset;
 }
 
 #marketMusicGrid .market-price {
@@ -5047,8 +5231,8 @@ body[data-theme="burgundy"] .city-close-btn {
     opacity: 0.65;
     padding: 18px 8px;
     font-size: 0.9rem;
+    color: var(--text-muted);
 }
-
 .owned-music-row {
     display: flex;
     align-items: center;
@@ -5091,7 +5275,7 @@ body[data-theme="burgundy"] .city-close-btn {
 
 #marketMusicGrid .market-item-copy {
     display: flex;
-    flex: 1;
+    flex: 1 1 auto;
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
@@ -5271,27 +5455,28 @@ body[data-theme="burgundy"] .city-close-btn {
 
 /* Song titles */
 #marketMusicGrid .market-item-copy h3 {
-    font-size: 15px;
+    font-size: 19px;
     font-weight: 700;
-    line-height: 1.35;
+    line-height: 1.4;
 }
 
 /* Artist names */
 #marketMusicGrid .market-item-copy small {
-    font-size: 11px;
-    opacity: 0.8;
+    font-size: 14px;
+    opacity: 1.3;
 }
 
 /* Track prices */
 #marketMusicGrid .market-price {
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 700;
 }
 
 /* Preview, Wishlist and Buy buttons */
 #marketMusicGrid .market-music-actions button {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
+    padding: 8px 10px;
 }
 
 /* Market heading */
@@ -5327,8 +5512,8 @@ body[data-theme="burgundy"] .city-close-btn {
 .ambient-panel {
     padding: 14px;
     border-radius: 20px;
-    background: linear-gradient(145deg, rgba(43, 27, 61, .96), rgba(24, 16, 39, .98));
-    border-color: rgba(195, 126, 210, .45);
+    background: var(--panel-bg);
+    border-color: var(--panel-border);
     box-sizing: border-box;
 }
 
@@ -5347,8 +5532,8 @@ body[data-theme="burgundy"] .city-close-btn {
 
 .ambient-headphone,
 .ambient-equalizer {
-    color: #e39bd0;
-    text-shadow: 0 0 12px rgba(227, 155, 208, .3);
+    color: var(--theme-accent);
+    text-shadow: none;
 }
 
 .ambient-equalizer {
@@ -5358,6 +5543,7 @@ body[data-theme="burgundy"] .city-close-btn {
 
 /* NOW PLAYING */
 
+
 .now-playing {
     display: grid;
     grid-template-columns: 58px minmax(0, 1fr) auto;
@@ -5365,20 +5551,23 @@ body[data-theme="burgundy"] .city-close-btn {
     gap: 11px;
     padding: 12px;
     border-radius: 17px;
-    background: rgba(139, 91, 150, .13);
-    border-color: rgba(195, 126, 210, .4);
+    background: var(--card-bg);
+    border: 1px solid var(--panel-border);
     box-sizing: border-box;
 }
+
+
 
 .sound-art {
     width: 58px;
     height: 58px;
     flex: none;
     border-radius: 13px;
-    background: rgba(190, 125, 190, .15);
-    border-color: rgba(218, 148, 210, .65);
+    background: var(--card-selected);
+    border: 1px solid var(--panel-border);
     font-size: 28px;
 }
+
 
 .playing-info {
     min-width: 0;
@@ -5390,11 +5579,13 @@ body[data-theme="burgundy"] .city-close-btn {
     margin-bottom: 3px;
 }
 
+
 .playing-info p {
     font-size: 11px;
     margin-bottom: 7px;
-    color: #d2b8df;
+    color: var(--text-muted);
 }
+
 
 .playing-badge {
     padding: 4px 8px;
@@ -5425,19 +5616,24 @@ body[data-theme="burgundy"] .city-close-btn {
     line-height: 1;
 }
 
+
 .pause-button {
-    background: #df91c5;
-    color: #301b39;
-    border: 1px solid #df91c5;
+    background: var(--theme-accent);
+    color: #ffffff;
+    border: 1px solid var(--theme-accent);
 }
+
+
 
 .stop-button {
     background: transparent;
-    color: #e9b2db;
-    border: 1px solid #bd83b8;
+    color: var(--theme-accent);
+    border: 1px solid var(--theme-accent);
 }
 
+
 /* VOLUME */
+
 
 .volume-row {
     display: flex;
@@ -5445,10 +5641,11 @@ body[data-theme="burgundy"] .city-close-btn {
     gap: 10px;
     margin: 11px 0 17px;
     padding: 10px 12px;
-    border: 1px solid rgba(195, 126, 210, .35);
+    border: 1px solid var(--panel-border);
     border-radius: 14px;
-    background: rgba(139, 91, 150, .10);
+    background: var(--card-bg);
 }
+
 
 .volume-icon {
     font-size: 17px;
@@ -5457,7 +5654,7 @@ body[data-theme="burgundy"] .city-close-btn {
 .volume-row input {
     flex: 1;
     min-width: 0;
-    accent-color: #df91c5;
+    accent-color: var(--theme-accent);
 }
 
 #volumeValue {
@@ -5529,9 +5726,9 @@ body[data-theme="burgundy"] .city-close-btn {
     padding: 8px 4px;
     gap: 7px;
     border-radius: 13px;
-    background: rgba(139, 91, 150, .13);
-    border-color: rgba(195, 126, 210, .4);
-    color: #f6eafa;
+    background: var(--card-bg);
+    border-color: var(--panel-border);
+    color: var(--text-color);
 }
 
 .sound-card-icon {
@@ -5544,9 +5741,9 @@ body[data-theme="burgundy"] .city-close-btn {
 }
 
 .sound-card.active {
-    background: rgba(223, 145, 197, .2);
-    border-color: #df91c5;
-    box-shadow: 0 0 12px rgba(223, 145, 197, .15);
+    background: var(--card-selected);
+    border-color: var(--theme-accent);
+    box-shadow: 0 0 0 1px var(--theme-accent);
 }
 
 /* PURCHASED MUSIC */
@@ -5560,9 +5757,9 @@ body[data-theme="burgundy"] .city-close-btn {
 
 .owned-music-row {
     padding: 10px;
-    border: 1px solid rgba(195, 126, 210, .35);
+    border: 1px solid var(--panel-border);
     border-radius: 12px;
-    background: rgba(139, 91, 150, .12);
+    background: var(--card-bg);
 }
 
 .music-library-empty {
@@ -5574,10 +5771,9 @@ body[data-theme="burgundy"] .city-close-btn {
 
 .sound-scroll-hint {
     margin-top: 9px;
-    color: #c9acd8;
+    color: var(--text-muted);
     font-size: 10px;
 }
-
 
 /* =========================================
    DISTRACKING — CLEAN MUSIC PANEL LAYOUT
@@ -5714,7 +5910,7 @@ body[data-theme="burgundy"] .city-close-btn {
     }
 
     .timer-panel {
-        left: -175px !important;
+        left: -210px !important;
     }
 }
 
@@ -5769,10 +5965,10 @@ body[data-theme="burgundy"] .city-close-btn {
 .ambient-panel {
     background: linear-gradient(
         145deg,
-        var(--card-bg, #21142f),
-        var(--panel-bg, #160e23)
+        var(--card-bg),
+        var(--panel-bg)
     );
-    border: 1px solid var(--panel-border, #68417d);
+    border: 1px solid var(--panel-border);
     border-radius: 20px;
     box-shadow: 0 12px 35px rgba(0, 0, 0, .22);
 }
@@ -6034,17 +6230,16 @@ body[data-theme="burgundy"] .city-close-btn {
     padding: 8px 10px;
     box-sizing: border-box;
 
-    background: #2b193b;
-    border: 1px solid #754493;
+    background: var(--card-bg);
+    border: 1px solid var(--panel-border);
     border-radius: 12px;
     text-align: left;
 }
 
 .ambient-panel .sound-card.active {
-    background: #352047;
-    border-color: #bd65e9;
+    background: var(--card-selected, var(--card-bg));
+    border-color: var(--theme-accent);
 }
-
 .ambient-panel .sound-card-icon {
     font-size: 23px;
     flex-shrink: 0;
@@ -6059,7 +6254,7 @@ body[data-theme="burgundy"] .city-close-btn {
 }
 
 .ambient-panel .sound-card-name {
-    color: #fff;
+    color: var(--text-color) !important;
     font-size: 12px;
     font-weight: 700;
     text-align: left !important;
@@ -6067,8 +6262,9 @@ body[data-theme="burgundy"] .city-close-btn {
     align-self: auto !important;
     flex-shrink: 0 !important;
 }
+
 .ambient-panel .sound-card-description {
-    color: #b9a9c5;
+    color: var(--text-muted) !important;
     font-size: 9px;
 }
 
@@ -6090,21 +6286,21 @@ body[data-theme="burgundy"] .city-close-btn {
 }
 
 .ambient-panel .sound-play-btn {
-    border: none;
-    background: #bd55ed;
-    color: #25132f;
+    border: 1px solid var(--theme-accent);
+    background: var(--theme-accent);
+    color: var(--button-text, #ffffff);
 }
 
 .ambient-panel .sound-favorite-btn {
-    background: #382344;
-    border: 1px solid #754493;
-    color: #d7c5e3;
+    background: var(--card-bg);
+    border: 1px solid var(--panel-border);
+    color: var(--text-color);
     font-size: 17px;
 }
 
 .ambient-panel .sound-favorite-btn.active {
-    color: #f1c75b;
-    border-color: #f1c75b;
+    color: var(--favorite-color);
+    border-color: var(--favorite-color);
 }
 
 
@@ -6130,14 +6326,13 @@ body[data-theme="burgundy"] .city-close-btn {
     box-sizing: border-box !important;
 
     scrollbar-width: thin;
-    scrollbar-color: #bd65e9 #241630;
+    scrollbar-color: var(--theme-accent) var(--card-bg);
 }
 
 /* Satın alınan müzikleri aynı listenin içine yerleştir */
 .ambient-panel #myMusicList .owned-music-list {
     display: contents !important;
 }
-
 /* Ücretsiz ve satın alınan müzik kartları */
 .ambient-panel #myMusicList .sound-grid > .sound-card,
 .ambient-panel #myMusicList .sound-grid > .owned-music-list > .owned-music-row {
@@ -6157,24 +6352,23 @@ body[data-theme="burgundy"] .city-close-btn {
     gap: 10px !important;
     box-sizing: border-box !important;
 
-    background: #2b193b !important;
-    border: 1px solid #754493 !important;
+    background: var(--card-bg) !important;
+    border: 1px solid var(--panel-border) !important;
     border-radius: 12px !important;
 }
 
 /* Hover */
 .ambient-panel #myMusicList .sound-card:hover,
 .ambient-panel #myMusicList .owned-music-row:hover {
-    background: #352047 !important;
-    border-color: #bd65e9 !important;
+    background: var(--card-hover) !important;
+    border-color: var(--theme-accent) !important;
 }
 
-/* Çalan ücretsiz sesin kartı */
+/* Aktif müzik */
 .ambient-panel #myMusicList .sound-card.active {
-    background: #2b193b !important;
-    border-color: #bd65e9 !important;
+    background: var(--card-selected) !important;
+    border-color: var(--theme-accent) !important;
 }
-
 /* Ücretsiz ses ikonları */
 .ambient-panel #myMusicList .sound-card-icon {
     display: flex !important;
@@ -6221,8 +6415,7 @@ body[data-theme="burgundy"] .city-close-btn {
 /* Açıklama ve sanatçı */
 .ambient-panel #myMusicList .sound-card-description,
 .ambient-panel #myMusicList .owned-music-info small {
-    color: #b9a9c5 !important;
-
+    color: var(--text-muted) !important;
     font-size: 11px !important;
     line-height: 1.3 !important;
 
@@ -6260,23 +6453,23 @@ body[data-theme="burgundy"] .city-close-btn {
     flex-shrink: 0 !important;
 }
 
-/* Play */
+/* Play buttons */
 .ambient-panel #myMusicList .sound-play-btn,
-.ambient-panel #myMusicList .owned-music-actions button:first-child {
-    background: #bd55ed !important;
-    border: 1px solid #bd55ed !important;
-    color: #25132f !important;
+.ambient-panel #myMusicList .owned-music-actions button:first-child,
+.ambient-panel #favoritesList .owned-music-actions .sound-play-btn {
+    background: var(--theme-accent) !important;
+    border: 1px solid var(--theme-accent) !important;
+    color: var(--button-text, #ffffff) !important;
 }
 
-/* Favori */
-
+/* Favorite buttons */
 .ambient-panel #myMusicList .sound-favorite-btn,
 .ambient-panel #myMusicList .owned-music-actions .music-favorite-button,
 .ambient-panel #favoritesList .sound-favorite-btn,
 .ambient-panel #favoritesList .owned-music-actions .music-favorite-button {
-    background: #382344 !important;
-    border: 1px solid #754493 !important;
-    color: #e8d8f2 !important;
+    background: var(--card-bg) !important;
+    border: 1px solid var(--panel-border) !important;
+    color: var(--text-color) !important;
 }
 
 /* Aktif favori — kırmızı kalp */
@@ -6551,26 +6744,27 @@ body[data-theme="burgundy"] .city-close-btn {
 
 /* MUSIC TABS — MATCH MARKET TABS */
 
+/* MUSIC TABS — THEME COLORS */
+
 .ambient-panel .music-library-tabs {
-    background: #2b193b !important;
-    border: 1px solid #754493 !important;
+    background: var(--card-bg) !important;
+    border: 1px solid var(--panel-border) !important;
     border-radius: 10px !important;
     padding: 3px !important;
     gap: 5px !important;
-
 }
 
 .ambient-panel .music-library-tab {
-    background: #382344 !important;
-    color: #e8d8f2 !important;
+    background: var(--card-bg) !important;
+    color: var(--text-color) !important;
     border: none !important;
     border-radius: 8px !important;
     transition: background 0.2s ease !important;
 }
 
 .ambient-panel .music-library-tab.active {
-    background: #d98af5 !important;
-    color: #281333 !important;
+    background: var(--theme-accent) !important;
+    color: #ffffff !important;
     border: none !important;
 }
 
@@ -6597,9 +6791,9 @@ body[data-theme="burgundy"] .city-close-btn {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    background: #bd55ed !important;
-    border: 1px solid #bd55ed !important;
-    color: #25132f !important;
+    background: var(--theme-accent) !important;
+    border: 1px solid var(--theme-accent) !important;
+    color: var(--button-text, #ffffff) !important;
     flex-shrink: 0 !important;
 }
 
@@ -6667,4 +6861,2357 @@ body[data-theme="burgundy"] .city-close-btn {
         height: 220px !important;
         max-height: 220px !important;
     }
+}
+
+/* BILLIARD LOUNGE */
+body[data-theme="billiard-lounge"] {
+    --panel-bg: rgba(20, 13, 15, 0.97);
+    --panel-border: #754047;
+
+    --card-bg: rgba(48, 25, 29, 0.96);
+    --card-hover: rgba(68, 31, 37, 0.98);
+    --card-selected: rgba(130, 47, 53, 0.42);
+
+    --theme-accent: #B94F4B;
+    --text-color: #F3E5DC;
+    --text-muted: #C6A9A0;
+
+    --theme-card-bg: rgba(35, 20, 23, 0.97);
+    --theme-card-border: #754047;
+    --theme-card-accent: #C45C55;
+    --theme-card-text: #F3E5DC;
+    --theme-card-muted: #C6A9A0;
+}
+/* CAMPING IN THE FOREST */
+body[data-theme="camping-in-the-forest"] {
+    --panel-bg: rgba(16, 27, 19, 0.97);
+    --panel-border: #71804C;
+
+    --card-bg: rgba(41, 61, 42, 0.88);
+    --card-hover: rgba(64, 84, 58, 0.95);
+    --card-selected: rgba(113, 128, 76, 0.45);
+
+    --theme-accent: #C17A38;
+    --text-color: #F1E8D2;
+    --text-muted: #C1B99E;
+
+    --theme-card-bg: rgba(27, 43, 29, 0.95);
+    --theme-card-border: #71804C;
+    --theme-card-accent: #C17A38;
+    --theme-card-text: #F1E8D2;
+    --theme-card-muted: #C1B99E;
+}
+
+
+/* CLEAR TERRAIN */
+body[data-theme="clear-terrain"] {
+    --panel-bg: rgba(16, 35, 44, 0.97);
+    --panel-border: #54A9C1;
+
+    --card-bg: rgba(24, 56, 69, 0.90);
+    --card-hover: rgba(36, 83, 101, 0.95);
+    --card-selected: rgba(50, 124, 145, 0.55);
+
+    --theme-accent: #54A9C1;
+    --text-color: #F0F5E9;
+    --text-muted: #B8CDD0;
+
+    --theme-card-bg: rgba(16, 35, 44, 0.95);
+    --theme-card-border: #54A9C1;
+    --theme-card-accent: #91B94F;
+    --theme-card-text: #F0F5E9;
+    --theme-card-muted: #B8CDD0;
+}
+
+
+/* COZY ROOM */
+body[data-theme="cozy-room"] {
+    --panel-bg: rgba(33, 25, 35, 0.97);
+    --panel-border: #A85C70;
+
+    --card-bg: rgba(48, 35, 49, 0.90);
+    --card-hover: rgba(73, 48, 68, 0.95);
+    --card-selected: rgba(104, 66, 84, 0.85);
+
+    --theme-accent: #D98282;
+    --text-color: #F5DFD5;
+    --text-muted: #C9AEB7;
+
+    --theme-card-bg: rgba(33, 25, 35, 0.95);
+    --theme-card-border: #A85C70;
+    --theme-card-accent: #EBAA91;
+    --theme-card-text: #F5DFD5;
+    --theme-card-muted: #C9AEB7;
+}
+
+
+/* DAWN SAILBOAT */
+body[data-theme="dawn-sailboat"] {
+    --panel-bg: rgba(21, 31, 43, 0.97);
+    --panel-border: #71899D;
+
+    --card-bg: rgba(32, 47, 64, 0.90);
+    --card-hover: rgba(48, 67, 87, 0.95);
+    --card-selected: rgba(70, 93, 114, 0.85);
+
+    --theme-accent: #D58F83;
+    --text-color: #F0E8E1;
+    --text-muted: #B5C0CA;
+
+    --theme-card-bg: rgba(21, 31, 43, 0.95);
+    --theme-card-border: #71899D;
+    --theme-card-accent: #D58F83;
+    --theme-card-text: #F0E8E1;
+    --theme-card-muted: #B5C0CA;
+}
+
+
+
+/* DEATH FLOWER */
+body[data-theme="death-flower"] {
+    --panel-bg: rgba(8, 11, 25, 0.97);
+    --panel-border: #397BFF;
+
+    --card-bg: rgba(16, 21, 45, 0.92);
+    --card-hover: rgba(23, 31, 73, 0.96);
+    --card-selected: rgba(32, 45, 120, 0.85);
+
+    --theme-accent: #397BFF;
+    --text-color: #E5E9FF;
+    --text-muted: #9DA9D6;
+
+    --theme-card-bg: rgba(8, 11, 25, 0.95);
+    --theme-card-border: #397BFF;
+    --theme-card-accent: #8B75E8;
+    --theme-card-text: #E5E9FF;
+    --theme-card-muted: #9DA9D6;
+}
+
+
+/* FAITHFUL LOVE */
+body[data-theme="faithful-love"] {
+    --panel-bg: rgba(34, 34, 29, 0.97);
+    --panel-border: #A69A78;
+
+    --card-bg: rgba(65, 62, 51, 0.94);
+    --card-hover: rgba(83, 77, 61, 0.97);
+    --card-selected: rgba(166, 154, 120, 0.45);
+
+    --theme-accent: #C6A96F;
+    --text-color: #F5EBDD;
+    --text-muted: #D0C4AC;
+
+    --theme-card-bg: rgba(42, 40, 34, 0.96);
+    --theme-card-border: #A69A78;
+    --theme-card-accent: #C6A96F;
+    --theme-card-text: #F5EBDD;
+    --theme-card-muted: #D0C4AC;
+}
+
+
+/* HOWL'S MOVING CASTLE - SAGE GARDEN */
+body[data-theme="howls-castle"] {
+    --panel-bg: rgba(242, 240, 218, 0.97);
+    --panel-border: #A9B28A;
+
+    --card-bg: rgba(218, 227, 195, 0.97);
+    --card-hover: rgba(203, 216, 177, 0.98);
+    --card-selected: rgba(177, 198, 148, 0.97);
+
+    --theme-accent: #B9824F;
+    --text-color: #414B36;
+    --text-muted: #788064;
+
+    --theme-card-bg: rgba(242, 240, 218, 0.97);
+    --theme-card-border: #A9B28A;
+    --theme-card-accent: #B9824F;
+    --theme-card-text: #414B36;
+    --theme-card-muted: #788064;
+}
+
+
+
+/* INFINITE VALLEY */
+body[data-theme="infinite-valley"] {
+    --panel-bg: rgba(16, 31, 27, 0.97);
+    --panel-border: #71836A;
+
+    --card-bg: rgba(24, 48, 42, 0.92);
+    --card-hover: rgba(36, 66, 57, 0.96);
+    --card-selected: rgba(52, 87, 74, 0.85);
+
+    --theme-accent: #D9A052;
+    --text-color: #F1E5C8;
+    --text-muted: #B9B9A1;
+
+    --theme-card-bg: rgba(16, 31, 27, 0.95);
+    --theme-card-border: #71836A;
+    --theme-card-accent: #D9A052;
+    --theme-card-text: #F1E5C8;
+    --theme-card-muted: #B9B9A1;
+}
+
+
+/* IRON MAN */
+body[data-theme="iron-man"] {
+    --panel-bg: rgba(21, 22, 25, 0.97);
+    --panel-border: #8E2932;
+
+    --card-bg: rgba(34, 35, 41, 0.93);
+    --card-hover: rgba(52, 52, 58, 0.97);
+    --card-selected: rgba(81, 64, 71, 0.90);
+
+    --theme-accent: #C83D35;
+    --text-color: #DCEBFA;
+    --text-muted: #AAA9AD;
+
+    --theme-card-bg: rgba(21, 22, 25, 0.95);
+    --theme-card-border: #8E2932;
+    --theme-card-accent: #D99A45;
+    --theme-card-text: #DCEBFA;
+    --theme-card-muted: #AAA9AD;
+}
+
+
+/* GOLDEN HOUR */
+body[data-theme="golden-hour"] {
+    --panel-bg: rgba(245, 240, 223, 0.97);
+    --panel-border: #B8AD7B;
+
+    --card-bg: rgba(228, 230, 205, 0.97);
+    --card-hover: rgba(214, 222, 190, 0.98);
+    --card-selected: rgba(190, 202, 151, 0.95);
+
+    --theme-accent: #C49A43;
+    --text-color: #414632;
+    --text-muted: #777B60;
+
+    --theme-card-bg: rgba(245, 240, 223, 0.97);
+    --theme-card-border: #B8AD7B;
+    --theme-card-accent: #D2A94F;
+    --theme-card-text: #414632;
+    --theme-card-muted: #777B60;
+}
+
+
+
+/* JAPAN STREETS */
+body[data-theme="japan-streets"] {
+    --panel-bg: rgba(25, 23, 37, 0.97);
+    --panel-border: #A85F83;
+
+    --card-bg: rgba(39, 34, 56, 0.92);
+    --card-hover: rgba(57, 48, 77, 0.96);
+    --card-selected: rgba(89, 64, 94, 0.88);
+
+    --theme-accent: #D987AC;
+    --text-color: #F4E6E9;
+    --text-muted: #C2AFC3;
+
+    --theme-card-bg: rgba(25, 23, 37, 0.95);
+    --theme-card-border: #A85F83;
+    --theme-card-accent: #E5A66F;
+    --theme-card-text: #F4E6E9;
+    --theme-card-muted: #C2AFC3;
+}
+
+
+/* JINX & EKKO */
+body[data-theme="jinx-ekko"] {
+    --panel-bg: rgba(16, 27, 32, 0.97);
+    --panel-border: #397F91;
+
+    --card-bg: rgba(25, 42, 50, 0.92);
+    --card-hover: rgba(36, 60, 70, 0.96);
+    --card-selected: rgba(49, 85, 99, 0.88);
+
+    --theme-accent: #36B9C5;
+    --text-color: #E2E9E5;
+    --text-muted: #A9BCC0;
+
+    --theme-card-bg: rgba(16, 27, 32, 0.95);
+    --theme-card-border: #397F91;
+    --theme-card-accent: #B17B55;
+    --theme-card-text: #E2E9E5;
+    --theme-card-muted: #A9BCC0;
+}
+
+
+/* JOKER */
+body[data-theme="joker"] {
+    --panel-bg: rgba(8, 8, 18, 0.97);
+    --panel-border: #653A80;
+
+    --card-bg: rgba(18, 19, 34, 0.93);
+    --card-hover: rgba(29, 32, 53, 0.97);
+    --card-selected: rgba(48, 38, 66, 0.90);
+
+    --theme-accent: #A64EC4;
+    --text-color: #E8EAF5;
+    --text-muted: #A5A5BC;
+
+    --theme-card-bg: rgba(8, 8, 18, 0.95);
+    --theme-card-border: #653A80;
+    --theme-card-accent: #789BB8;
+    --theme-card-text: #E8EAF5;
+    --theme-card-muted: #A5A5BC;
+}
+
+
+/* LAKE OF THE ALPS */
+body[data-theme="lake-alps"] {
+    --panel-bg: rgba(20, 37, 43, 0.97);
+    --panel-border: #579EAA;
+
+    --card-bg: rgba(29, 57, 66, 0.92);
+    --card-hover: rgba(40, 83, 97, 0.96);
+    --card-selected: rgba(54, 119, 137, 0.85);
+
+    --theme-accent: #579EAA;
+    --text-color: #F0E8D9;
+    --text-muted: #B5C7C3;
+
+    --theme-card-bg: rgba(20, 37, 43, 0.95);
+    --theme-card-border: #579EAA;
+    --theme-card-accent: #C18A62;
+    --theme-card-text: #F0E8D9;
+    --theme-card-muted: #B5C7C3;
+}
+
+
+/* LAVENDER VILLA */
+body[data-theme="lavender-villa"] {
+    --panel-bg: rgba(33, 24, 44, 0.97);
+    --panel-border: #91669A;
+
+    --card-bg: rgba(51, 33, 63, 0.95);
+    --card-hover: #493052;
+    --card-selected: #67436F;
+
+    --theme-accent: #B98AB8;
+    --text-color: #F5EAF0;
+    --text-muted: #C5AFC9;
+
+    --theme-card-bg: #33213F;
+    --theme-card-border: #91669A;
+    --theme-card-accent: #DDA1B0;
+    --theme-card-text: #F5EAF0;
+    --theme-card-muted: #C5AFC9;
+}
+
+
+/* MCQUEEN - SPEED RUSH */
+body[data-theme="mcqueen"] {
+    --panel-bg: rgba(16, 24, 32, 0.97);
+    --panel-border: #D8322F;
+
+    --card-bg: rgba(32, 43, 53, 0.95);
+    --card-hover: #51202A;
+    --card-selected: #672B32;
+
+    --theme-accent: #D8322F;
+    --text-color: #F5F0E9;
+    --text-muted: #AAB8C2;
+
+    --theme-card-bg: #202B35;
+    --theme-card-border: #D8322F;
+    --theme-card-accent: #F36B25;
+    --theme-card-text: #F5F0E9;
+    --theme-card-muted: #AAB8C2;
+}
+
+
+/* METRO TUNNEL - NEON TRANSIT */
+body[data-theme="metro-tunnel"] {
+    --panel-bg: rgba(16, 11, 24, 0.97);
+    --panel-border: #A82C91;
+
+    --card-bg: rgba(33, 19, 41, 0.95);
+    --card-hover: #351B3D;
+    --card-selected: #54234F;
+
+    --theme-accent: #E34DBB;
+    --text-color: #F5EAF5;
+    --text-muted: #BCA9C3;
+
+    --theme-card-bg: #211329;
+    --theme-card-border: #A82C91;
+    --theme-card-accent: #B7F542;
+    --theme-card-text: #F5EAF5;
+    --theme-card-muted: #BCA9C3;
+}
+
+
+/* NORTHERN LIGHTS - AURORA VOYAGE */
+body[data-theme="northern-lights"] {
+    --panel-bg: rgba(7, 25, 27, 0.97);
+    --panel-border: #36866A;
+
+    --card-bg: rgba(16, 43, 45, 0.95);
+    --card-hover: #183D3D;
+    --card-selected: #245B50;
+
+    --theme-accent: #80C99A;
+    --text-color: #E6F0E9;
+    --text-muted: #A9C5B8;
+
+    --theme-card-bg: #102B2D;
+    --theme-card-border: #36866A;
+    --theme-card-accent: #B9E7A5;
+    --theme-card-text: #E6F0E9;
+    --theme-card-muted: #A9C5B8;
+}
+
+
+/* ON THE LAKE - GOLDEN HORIZON */
+body[data-theme="on-the-lake"] {
+    --panel-bg: rgba(23, 22, 20, 0.97);
+    --panel-border: #93603B;
+
+    --card-bg: rgba(40, 34, 30, 0.95);
+    --card-hover: #403329;
+    --card-selected: #624733;
+
+    --theme-accent: #C17B43;
+    --text-color: #F2E9DC;
+    --text-muted: #BDA994;
+
+    --theme-card-bg: #28221E;
+    --theme-card-border: #93603B;
+    --theme-card-accent: #E6A45F;
+    --theme-card-text: #F2E9DC;
+    --theme-card-muted: #BDA994;
+}
+
+
+/* ON THE LAKE - GOLDEN HORIZON */
+body[data-theme="on-the-lake"] {
+    --panel-bg: rgba(23, 22, 20, 0.97);
+    --panel-border: #93603B;
+
+    --card-bg: rgba(40, 34, 30, 0.95);
+    --card-hover: #403329;
+    --card-selected: #624733;
+
+    --theme-accent: #C17B43;
+    --text-color: #F2E9DC;
+    --text-muted: #BDA994;
+
+    --theme-card-bg: #28221E;
+    --theme-card-border: #93603B;
+    --theme-card-accent: #E6A45F;
+    --theme-card-text: #F2E9DC;
+    --theme-card-muted: #BDA994;
+}
+
+
+/* ON THE LAKE - GOLDEN HORIZON */
+body[data-theme="on-the-lake"] {
+    --panel-bg: rgba(23, 22, 20, 0.97);
+    --panel-border: #93603B;
+
+    --card-bg: rgba(40, 34, 30, 0.95);
+    --card-hover: #403329;
+    --card-selected: #624733;
+
+    --theme-accent: #C17B43;
+    --text-color: #F2E9DC;
+    --text-muted: #BDA994;
+
+    --theme-card-bg: #28221E;
+    --theme-card-border: #93603B;
+    --theme-card-accent: #E6A45F;
+    --theme-card-text: #F2E9DC;
+    --theme-card-muted: #BDA994;
+}
+
+
+/* PURPLE DREAM - CELESTIAL SHORE */
+body[data-theme="purple-dream"] {
+    --panel-bg: rgba(25, 20, 50, 0.97);
+    --panel-border: #624B91;
+
+    --card-bg: rgba(40, 32, 74, 0.95);
+    --card-hover: #40316B;
+    --card-selected: #624B91;
+
+    --theme-accent: #B795D0;
+    --text-color: #F5EDFF;
+    --text-muted: #B8A9D0;
+
+    --theme-card-bg: #191432;
+    --theme-card-border: #624B91;
+    --theme-card-accent: #E9B4D6;
+    --theme-card-text: #F5EDFF;
+    --theme-card-muted: #B8A9D0;
+}
+
+
+/* ROMAN EMPIRE - GOLDEN ANTIQUITY */
+body[data-theme="roman-ruins"] {
+    --panel-bg: rgba(53, 37, 28, 0.97);
+    --panel-border: #93613D;
+
+    --card-bg: rgba(73, 51, 39, 0.95);
+    --card-hover: #674532;
+    --card-selected: #93613D;
+
+    --theme-accent: #D9A76B;
+    --text-color: #FFF3DF;
+    --text-muted: #C5A98A;
+
+    --theme-card-bg: #35251C;
+    --theme-card-border: #93613D;
+    --theme-card-accent: #F0D5A6;
+    --theme-card-text: #FFF3DF;
+    --theme-card-muted: #C5A98A;
+}
+
+
+/* COASTAL ESCAPE - TROPICAL SUNSET */
+body[data-theme="seaside-vista"] {
+    --panel-bg: rgba(34, 44, 75, 0.97);
+    --panel-border: #49647E;
+
+    --card-bg: rgba(48, 69, 99, 0.95);
+    --card-hover: #49647E;
+    --card-selected: #B34E62;
+
+    --theme-accent: #F29A83;
+    --text-color: #FFF0E8;
+    --text-muted: #B8C1D3;
+
+    --theme-card-bg: #222C4B;
+    --theme-card-border: #49647E;
+    --theme-card-accent: #FFD0A0;
+    --theme-card-text: #FFF0E8;
+    --theme-card-muted: #B8C1D3;
+}
+
+
+/* COASTAL ESCAPE - TROPICAL SUNSET */
+body[data-theme="coastal-escape"] {
+    --panel-bg: rgba(34, 44, 75, 0.97);
+    --panel-border: #49647E;
+
+    --card-bg: rgba(48, 69, 99, 0.95);
+    --card-hover: #49647E;
+    --card-selected: #B34E62;
+
+    --theme-accent: #F29A83;
+    --text-color: #FFF0E8;
+    --text-muted: #B8C1D3;
+
+    --theme-card-bg: #222C4B;
+    --theme-card-border: #49647E;
+    --theme-card-accent: #FFD0A0;
+    --theme-card-text: #FFF0E8;
+    --theme-card-muted: #B8C1D3;
+}
+
+/* SIMON GHOST RILEY */
+body[data-theme="ghost"] {
+    --panel-bg: rgba(13, 19, 34, 0.97);
+    --panel-border: #31587A;
+    --card-bg: rgba(18, 48, 73, 0.96);
+    --card-hover: #1D4261;
+    --card-selected: #31587A;
+    --theme-accent: #48749A;
+    --text-color: #E4EDF5;
+    --text-muted: #A8BDCE;
+
+    --theme-card-bg: #0D1322;
+    --theme-card-border: #31587A;
+    --theme-card-accent: #72A0C5;
+    --theme-card-text: #E4EDF5;
+    --theme-card-muted: #A8BDCE;
+}
+
+/* WEB OF SHADOWS - CRIMSON VENOM */
+body[data-theme="spiderman"] {
+    --panel-bg: rgba(16, 11, 16, 0.97);
+    --panel-border: #641326;
+
+    --card-bg: rgba(28, 16, 24, 0.95);
+    --card-hover: #30121F;
+    --card-selected: #641326;
+
+    --theme-accent: #D62E4B;
+    --text-color: #F5EDF0;
+    --text-muted: #B9A1AA;
+
+    --theme-card-bg: #100B10;
+    --theme-card-border: #641326;
+    --theme-card-accent: #F06A7C;
+    --theme-card-text: #F5EDF0;
+    --theme-card-muted: #B9A1AA;
+}
+
+
+/* ALPINE SERENITY - GOLDEN HORIZON */
+body[data-theme="sunset-alps"] {
+    --panel-bg: rgba(34, 43, 56, 0.97);
+    --panel-border: #68765D;
+
+    --card-bg: rgba(48, 60, 72, 0.95);
+    --card-hover: #48564F;
+    --card-selected: #68765D;
+
+    --theme-accent: #D69A64;
+    --text-color: #F5F0E8;
+    --text-muted: #B8B9AC;
+
+    --theme-card-bg: #222B38;
+    --theme-card-border: #68765D;
+    --theme-card-accent: #F1C995;
+    --theme-card-text: #F5F0E8;
+    --theme-card-muted: #B8B9AC;
+}
+
+
+/* ANCESTRAL NIGHT - SAVANNAH DREAMS */
+body[data-theme="ancestral-night"] {
+    --panel-bg: rgba(28, 27, 26, 0.97);
+    --panel-border: #514638;
+
+    --card-bg: rgba(41, 37, 34, 0.96);
+    --card-hover: #39332B;
+    --card-selected: #514638;
+
+    --theme-accent: #A88A65;
+    --text-color: #F0E8DC;
+    --text-muted: #A99C8B;
+
+    --theme-card-bg: #1C1B1A;
+    --theme-card-border: #514638;
+    --theme-card-accent: #D5B58A;
+    --theme-card-text: #F0E8DC;
+    --theme-card-muted: #A99C8B;
+}
+
+
+
+/* TULIP TWILIGHT */
+body[data-theme="tulip-twilight"] {
+    --panel-bg: #1B2044;
+    --panel-border: #40346F;
+
+    --card-bg: #292B59;
+    --card-hover: #40346F;
+    --card-selected: #754A91;
+
+    --theme-accent: #E77A91;
+    --text-color: #F7EAF4;
+    --text-muted: #B9A8CD;
+
+    --theme-card-bg: #1B2044;
+    --theme-card-border: #40346F;
+    --theme-card-accent: #E77A91;
+    --theme-card-text: #F7EAF4;
+    --theme-card-muted: #B9A8CD;
+}
+
+
+/* ECLIPSE - YIN & YANG */
+body[data-theme="ying-yang"] {
+    --panel-bg: #1B1B1C;
+    --panel-border: #45413B;
+
+    --card-bg: #292827;
+    --card-hover: #45413B;
+    --card-selected: #746B5E;
+
+    --theme-accent: #B5A58D;
+    --text-color: #F5EBDD;
+    --text-muted: #A99E90;
+
+    --theme-card-bg: #1B1B1C;
+    --theme-card-border: #45413B;
+    --theme-card-accent: #E5D5B9;
+    --theme-card-text: #F5EBDD;
+    --theme-card-muted: #A99E90;
+}
+
+
+
+/* THE PLACE WHERE I WAS BORN */
+body[data-theme="place-born"] {
+    --panel-bg: rgba(27, 25, 27, 0.97);
+    --panel-border: #80634F;
+
+    --card-bg: rgba(53, 44, 43, 0.94);
+    --card-hover: rgba(72, 57, 52, 0.97);
+    --card-selected: rgba(120, 82, 61, 0.85);
+
+    --theme-accent: #C18B5C;
+    --text-color: #F1E6D9;
+    --text-muted: #BDA99A;
+
+    --theme-card-bg: rgba(37, 33, 34, 0.97);
+    --theme-card-border: #80634F;
+    --theme-card-accent: #C18B5C;
+    --theme-card-text: #F1E6D9;
+    --theme-card-muted: #BDA99A;
+}
+
+/* SHELBY NOIR */
+body[data-theme="thomas-shelby"] {
+    --panel-bg: #131416;
+    --panel-border: #3A3E43;
+
+    --card-bg: #1D1F22;
+    --card-hover: #2A2D31;
+    --card-selected: #3A3E43;
+
+    --theme-accent: #8A8F96;
+    --text-color: #D8D7D2;
+    --text-muted: #8B9097;
+
+    /* Shelby skin tones */
+    --skin-shadow: #76665F;
+    --skin-tone: #A58D80;
+    --skin-highlight: #C5AA99;
+
+    --theme-card-bg: #131416;
+    --theme-card-border: #3A3E43;
+    --theme-card-accent: #8A8F96;
+    --theme-card-text: #D8D7D2;
+    --theme-card-muted: #8B9097;
+}
+
+body[data-theme="iron-man"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Iron Man.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+
+/* =====================================================
+   IRON MAN - GENEL ARAYÜZ RENKLERİ (düzeltme)
+   Sorun: genel kurallar --forest-* değişkenlerini kullanıyor,
+   iron-man bu değişkenleri hiç ezmediği için yeşil kalıyordu.
+===================================================== */
+body[data-theme="iron-man"] {
+    --forest-bg: #15161a;
+    --forest-card: rgba(21, 22, 25, 0.94);
+    --forest-card-light: rgba(34, 35, 41, 0.93);
+    --forest-accent: #C83D35;
+    --forest-accent-dark: #4a2226;
+    --forest-text: #DCEBFA;
+    --forest-muted: #AAA9AD;
+    --forest-border: rgba(142, 41, 50, 0.55);
+
+    background-color: #15161a;
+    color: #DCEBFA;
+}
+
+/* Sabit (hardcoded) yeşil kalan yerler */
+body[data-theme="iron-man"] .navbar {
+    background: rgba(21, 22, 25, 0.88);
+    border-bottom: 1px solid #8E2932;
+}
+
+body[data-theme="iron-man"] .city-building,
+body[data-theme="iron-man"] .city-close-btn {
+    background: #2a2b31;
+    color: #DCEBFA;
+}
+
+body[data-theme="iron-man"] .timer::before {
+    background: #15161a;
+}
+
+body[data-theme="iron-man"] .theme-picker {
+    background: rgba(21, 22, 25, 0.85);
+    border-color: rgba(142, 41, 50, 0.5);
+}
+
+body[data-theme="iron-man"] .theme-picker select {
+    background: #222329;
+    color: #DCEBFA;
+}
+
+/* Kırmızı zemin üzerinde koyu yeşil yazı okunmuyordu */
+body[data-theme="iron-man"] .start,
+body[data-theme="iron-man"] .invite,
+body[data-theme="iron-man"] .market-item button,
+body[data-theme="iron-man"] .modal-continue,
+body[data-theme="iron-man"] .timer-modes .selected,
+body[data-theme="iron-man"] .music.active,
+body[data-theme="iron-man"] [data-mode].selected {
+    background: #C83D35;
+    border-color: #C83D35;
+    color: #fff;
+}
+
+body[data-theme="iron-man"] .reset {
+    color: #D99A45;
+    border-color: #D99A45;
+}
+
+body[data-theme="iron-man"] .city-resource-bar > div,
+body[data-theme="iron-man"] .city-status-grid > div {
+    background: #222329;
+    color: #DCEBFA;
+    border-color: rgba(142, 41, 50, 0.5);
+}
+
+
+body[data-theme="jinx-ekko"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Jinx & Ekko .jpeg")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="billiard-lounge"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Billiard Lounge.png")
+        center center / cover fixed no-repeat;
+}
+
+
+body[data-theme="camping-in-the-forest"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Camping in the Forest.png")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="clear-terrain"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Clear Terrain.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+
+body[data-theme="death-flower"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Death Flower.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="cozy-room"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Cozy Room.png")
+        center center / cover fixed no-repeat;
+}
+
+
+body[data-theme="faithful-love"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Faithful Love.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="dawn-sailboat"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Dawn Sailboat.png")
+        center center / cover fixed no-repeat;
+}
+
+
+body[data-theme="howls-castle"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Howl's Moving Castle.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+
+
+body[data-theme="joker"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Joker.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="infinite-valley"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Infinite Valley.png")
+        center center / cover fixed no-repeat;
+}
+
+
+body[data-theme="lake-alps"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Lake of the Alps.png")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="japan-streets"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Japan Streets.png")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="golden-hour"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Golden Hour.png")
+        center center / cover fixed no-repeat;
+}
+
+
+body[data-theme="mcqueen"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/McQueen.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="lavender-villa"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Lavender Villa.png")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="northern-lights"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Northern Lights.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="metro-tunnel"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Metro Tunnel.png")
+        center center / cover fixed no-repeat;
+}
+
+
+body[data-theme="on-the-lake"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/On the Lake.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="roman-ruins"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Roman Ruins.png")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="optimus"] {
+    --panel-bg: rgba(7, 18, 34, 0.97);
+    --panel-border: #405C78;
+
+    --card-bg: rgba(7, 18, 34, 0.97);
+    --card-hover: rgba(31, 57, 83, 0.98);
+    --card-selected: rgba(62, 62, 83, 0.95);
+
+    --theme-accent: #702D3D;
+    --text-color: #E8F0F6;
+    --text-muted: #A9BDCE;
+    --button-text: #071522;
+    --favorite-color: #D34859;
+
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Optimus.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+/* OPTIMUS — BLUE NEON + CONTROLLED RED */
+
+body[data-theme="optimus"] .card,
+body[data-theme="optimus"] #topPanel {
+    border-color: #005EB8 !important;
+    box-shadow:
+        0 0 8px rgba(0, 94, 184, 0.55),
+        0 0 20px rgba(0, 94, 184, 0.25) !important;
+}
+
+/* Timer */
+body[data-theme="optimus"] .timer {
+    color: #702D3D !important;
+}
+
+/* Favorite heart */
+body[data-theme="optimus"] .favorite-btn,
+body[data-theme="optimus"] .heart-btn {
+    color: #702D3D !important;
+}
+
+/* Buttons */
+body[data-theme="optimus"] .player-button,
+body[data-theme="optimus"] .market-buy-button,
+body[data-theme="optimus"] .market-item button {
+    background: #005EB8 !important;
+    border-color: #005EB8 !important;
+    color: #FFFFFF !important;
+}
+
+/* Active music tab */
+body[data-theme="optimus"] .music-tab.active {
+    background: #005EB8 !important;
+    color: #FFFFFF !important;
+}
+
+/* Scrollbar */
+body[data-theme="optimus"] ::-webkit-scrollbar-thumb {
+    background: #005EB8 !important;
+}
+
+/* OPTIMUS — TIMER */
+
+body[data-theme="optimus"] .timer::before {
+    background: conic-gradient(
+        #005EB8 calc(var(--progress) * 1%),
+        transparent 0
+    ) !important;
+}
+
+body[data-theme="optimus"] #timer {
+    color: #005EB8 !important;
+}
+
+
+/* SUNSET OF THE ALPS */
+body[data-theme="sunset-alps"] {
+    --panel-bg: rgba(35, 38, 48, 0.97);
+    --panel-border: #A47769;
+
+    --card-bg: rgba(58, 59, 70, 0.95);
+    --card-hover: rgba(78, 67, 76, 0.97);
+    --card-selected: rgba(145, 91, 78, 0.85);
+
+    --theme-accent: #E29A6D;
+    --text-color: #F5E8DC;
+    --text-muted: #C9B5A9;
+
+    --theme-card-bg: rgba(39, 42, 53, 0.97);
+    --theme-card-border: #A47769;
+    --theme-card-accent: #E29A6D;
+    --theme-card-text: #F5E8DC;
+    --theme-card-muted: #C9B5A9;
+}
+
+
+body[data-theme="sunset-alps"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Sunset of the Alps.png")
+        center center / cover fixed no-repeat;
+}
+
+
+/* PORSCHE — CHERRY BLOSSOM PINK */
+body[data-theme="porsche"] {
+    --panel-bg: rgba(29, 23, 31, 0.97);
+    --panel-border: #A95673;
+
+    --card-bg: rgba(55, 39, 57, 0.95);
+    --card-hover: rgba(78, 49, 73, 0.97);
+    --card-selected: rgba(169, 86, 115, 0.65);
+
+    --theme-accent: #D47791;
+    --text-color: #F5E8EC;
+    --text-muted: #D0B2C0;
+
+    --theme-card-bg: rgba(38, 29, 41, 0.97);
+    --theme-card-border: #A95673;
+    --theme-card-accent: #E58FA8;
+    --theme-card-text: #F5E8EC;
+    --theme-card-muted: #D0B2C0;
+}
+
+
+body[data-theme="porsche"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Porsche.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="purple-dream"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Purple Dream.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+
+body[data-theme="seaside-vista"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Seaside Vista.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="spiderman"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Spiderman.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+
+body[data-theme="place-born"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/The Place Where I was Born.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="thomas-shelby"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Thomas Shelby.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+
+body[data-theme="tulip-twilight"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Tulip Twilight.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+body[data-theme="ying-yang"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Ying & Yang.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+
+body[data-theme="ghost"] {
+    background:
+        linear-gradient(
+            rgba(5, 10, 25, 0.20),
+            rgba(5, 10, 25, 0.35)
+        ),
+        url("backgrounds/Simon 'Ghost' Riley.jpeg")
+        center center / cover fixed no-repeat;
+}
+
+/* MY CITY - DYNAMIC THEME COLORS */
+body[data-theme] .card:has(.city-preview-button) {
+    background: var(--panel-bg) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--panel-border) !important;
+}
+
+body[data-theme] .card:has(.city-preview-button) .island-preview-card {
+    background: var(--card-bg) !important;
+    border-color: var(--panel-border) !important;
+    color: var(--text-color) !important;
+}
+
+body[data-theme] .card:has(.city-preview-button) .island-section-title,
+body[data-theme] .card:has(.city-preview-button) .city-preview-label {
+    color: var(--text-color) !important;
+}
+
+/* AMBIENT PANEL - GLOWING FRAME */
+.ambient-panel {
+    border: 1px solid var(--theme-accent) !important;
+    box-shadow:
+        0 0 7px var(--theme-accent),
+        0 0 18px color-mix(in srgb, var(--theme-accent) 55%, transparent),
+        0 0 35px color-mix(in srgb, var(--theme-accent) 25%, transparent);
+}
+
+/* MY CITY - THEME GLOW */
+body[data-theme] .card:has(.city-preview-button) {
+    border: 1px solid var(--theme-accent) !important;
+    box-shadow:
+        0 0 7px var(--theme-accent),
+        0 0 18px color-mix(in srgb, var(--theme-accent) 55%, transparent),
+        0 0 35px color-mix(in srgb, var(--theme-accent) 25%, transparent) !important;
+}
+
+/* SUBTLE TRANSPARENT NAVBAR */
+body[data-theme] .navbar {
+    background: color-mix(
+        in srgb,
+        var(--panel-bg) 28%,
+        transparent
+    ) !important;
+
+    border-bottom: 1px solid color-mix(
+        in srgb,
+        var(--panel-border) 35%,
+        transparent
+    ) !important;
+
+    box-shadow: none !important;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+/* NAVBAR - CENTERED SLOGAN */
+.navbar {
+    position: relative;
+    min-height: 54px;
+    padding: 6px 2.3% !important;
+}
+
+.tagline {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    margin: 0;
+    color: var(--text-color);
+    font-family: Georgia, serif;
+    font-size: 15px;
+    font-weight: 600;
+    font-style: italic;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    opacity: 0.95;
+}
+
+@media (max-width: 700px) {
+    .tagline {
+        display: none;
+    }
+}
+
+/* BRAND VALUES - CLEAN & SYMMETRICAL */
+.brand-values {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: #E1E7F0;
+    white-space: nowrap;
+}
+
+.brand-dot {
+    width: 4px;
+    height: 4px;
+    flex: 0 0 4px;
+    border-radius: 50%;
+    background: var(--theme-accent);
+    opacity: 0.9;
+}
+
+.brand-values {
+    align-self: center;
+    transform: translateY(-4px);
+}
+
+/* BRAND ALIGNMENT */
+.brand-top {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.brand-values {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    gap: 10px;
+    transform: translateY(3px);
+}
+
+.brand-dot {
+    width: 4px;
+    height: 4px;
+    flex: 0 0 4px;
+    border-radius: 50%;
+    background: var(--theme-accent, #00E5C3) !important;
+    color: var(--theme-accent, #00E5C3) !important;
+}
+/* =================================
+   THEME-BASED POMODORO TIMER COLORS
+================================= */
+
+/* DARK THEMES */
+body[data-theme="woods"],
+body[data-theme="neon"],
+body[data-theme="burgundy"],
+body[data-theme="billiard-lounge"],
+body[data-theme="camping-in-the-forest"],
+body[data-theme="death-flower"],
+body[data-theme="iron-man"],
+body[data-theme="jinx-ekko"],
+body[data-theme="joker"],
+body[data-theme="metro-tunnel"],
+body[data-theme="northern-lights"],
+body[data-theme="optimus"],
+body[data-theme="purple-dream"],
+body[data-theme="ghost"],
+body[data-theme="spiderman"],
+body[data-theme="thomas-shelby"],
+body[data-theme="ying-yang"] {
+    --timer-inner-bg: var(--panel-bg);
+}
+
+/* LIGHT THEMES */
+body[data-theme]:not([data-theme="woods"]):not([data-theme="neon"]):not([data-theme="burgundy"]):not([data-theme="billiard-lounge"]):not([data-theme="camping-in-the-forest"]):not([data-theme="death-flower"]):not([data-theme="iron-man"]):not([data-theme="jinx-ekko"]):not([data-theme="joker"]):not([data-theme="metro-tunnel"]):not([data-theme="northern-lights"]):not([data-theme="optimus"]):not([data-theme="purple-dream"]):not([data-theme="ghost"]):not([data-theme="spiderman"]):not([data-theme="thomas-shelby"]):not([data-theme="ying-yang"]) {
+  --timer-inner-bg: var(--panel-bg);
+}
+/* POMODORO TIMER */
+body[data-theme] .timer {
+    position: relative;
+    isolation: isolate;
+    border-radius: 50%;
+    background: var(--timer-inner-bg) !important;
+    color: var(--theme-accent) !important;
+}
+
+/* ONLY THE OUTER RING */
+body[data-theme] .timer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+        var(--theme-accent) calc(var(--progress) * 1%),
+        transparent 0
+    );
+    -webkit-mask: radial-gradient(
+    circle closest-side,
+    transparent calc(100% - 9px),
+    black calc(100% - 9px)
+);
+mask: radial-gradient(
+    circle closest-side,
+    transparent calc(100% - 9px),
+    black calc(100% - 9px)
+);
+    z-index: 0;
+}
+
+/* TIMER NUMBERS */
+body[data-theme] #timer {
+    position: relative;
+    z-index: 1;
+    color: var(--theme-accent) !important;
+}
+
+
+/* HOWL'S MOVING CASTLE - MARKET READABILITY */
+body[data-theme="howls-castle"] #topPanel[data-panel="market"] {
+    color: #414B36;
+}
+
+/* Category headings */
+body[data-theme="howls-castle"] .market-product-section > h3 {
+    color: #46543A !important;
+    font-weight: 700;
+}
+
+/* Product names */
+body[data-theme="howls-castle"] .market-card h3 {
+    color: #414B36 !important;
+}
+
+/* Product descriptions and prices */
+body[data-theme="howls-castle"] .market-card p,
+body[data-theme="howls-castle"] .market-price {
+    color: #665D48 !important;
+}
+
+/* Category descriptions */
+body[data-theme="howls-castle"] .market-category-note {
+    color: #756B54 !important;
+}
+
+/* Owned item count */
+body[data-theme="howls-castle"] .market-owned-count {
+    color: #65764A !important;
+}
+
+/* Buy buttons */
+body[data-theme="howls-castle"] .market-buy-button {
+    background: #B9824F !important;
+    color: #FFFFFF !important;
+}
+
+
+/* HOWL'S MOVING CASTLE - TO DO READABILITY */
+body[data-theme="howls-castle"] {
+    --quest-text: #414B36;
+    --quest-muted: #737D5B;
+    --quest-bg: #E9EBD7;
+    --quest-card: #DCE5C8;
+    --quest-input: #F7F3E5;
+    --quest-border: #A9B58B;
+    --quest-accent: #9BAF75;
+    --quest-button-text: #263522;
+}
+
+/* To-do panel heading */
+body[data-theme="howls-castle"] #topPanel h2,
+body[data-theme="howls-castle"] #topPanel h3 {
+    color: #414B36;
+}
+
+/* Labels and helper text */
+body[data-theme="howls-castle"] .todo-form label,
+body[data-theme="howls-castle"] .todo-item small,
+body[data-theme="howls-castle"] .quest-progress-info {
+    color: #737D5B !important;
+}
+
+/* Task names */
+body[data-theme="howls-castle"] .todo-task-text {
+    color: #414B36 !important;
+}
+
+/* Task category and reward */
+body[data-theme="howls-castle"] .quest-category {
+    color: #414B36 !important;
+    background: #E9EBD7 !important;
+}
+body[data-theme="howls-castle"] .quest-reward {
+    color: #FFFFFF !important;
+    background: #9BAF75 !important;
+}
+
+
+/* THEMES TAB - SCROLL INSIDE THE THEMES SECTION */
+#topPanel[data-panel="market"] .top-panel-content {
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+#topPanel[data-panel="market"] .market-category-panel[data-market-panel="themes"]:not([hidden]) {
+    display: block !important;
+    flex: 1 1 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--theme-accent) transparent;
+}
+
+#topPanel[data-panel="market"] .market-category-panel[data-market-panel="themes"]::-webkit-scrollbar {
+    width: 7px;
+}
+
+#topPanel[data-panel="market"] .market-category-panel[data-market-panel="themes"]::-webkit-scrollbar-thumb {
+    background: var(--theme-accent);
+    border-radius: 10px;
+}
+
+
+/* ===== SHARED TOP PANEL SCROLL SYSTEM ===== */
+
+/* Sayfa arka planının kaymasını engelle */
+body:has(#topPanel:not([hidden])) {
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
+/* Bütün panellerin ortak dış çerçevesi */
+#topPanel:not([hidden]) {
+    position: fixed;
+    top: 78px;
+    right: 24px;
+
+    width: min(780px, calc(100vw - 48px));
+    height: min(800px, calc(150dvh - 102px));
+    min-height: 420px;
+    max-height: calc(150dvh - 102px);
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Başlık sabit kalır */
+#topPanel .top-panel-header {
+    flex: 0 0 auto;
+}
+
+/* Market dışındaki panellerin içerikleri kayar */
+#topPanel:not([data-panel="market"]) .top-panel-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--theme-accent) transparent;
+}
+
+/* Market'in kendi kategori sistemi korunur */
+#topPanel[data-panel="market"] .top-panel-content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+#topPanel[data-panel="market"] .market-category-tabs {
+    flex: 0 0 auto;
+}
+
+#topPanel[data-panel="market"] .market-category-panel {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar */
+#topPanel .top-panel-content::-webkit-scrollbar,
+#topPanel .market-category-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+#topPanel .top-panel-content::-webkit-scrollbar-thumb,
+#topPanel .market-category-panel::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: var(--theme-accent);
+}
+
+
+/* WISHLIST - ACTIVE THEME COLORS */
+
+#marketWishlistGrid .market-item-card {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--panel-border) !important;
+    color: var(--text-color) !important;
+}
+
+#marketWishlistGrid .market-item-copy h3,
+#marketWishlistGrid .market-item-copy small,
+#marketWishlistGrid .market-price {
+    color: var(--text-color) !important;
+}
+
+#marketWishlistGrid .market-music-actions button {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--panel-border) !important;
+    color: var(--text-color) !important;
+}
+
+#marketWishlistGrid .market-music-actions button:hover {
+    background: var(--card-selected) !important;
+    border-color: var(--theme-accent) !important;
+}
+
+
+/* ===== TODO - UNIVERSAL THEME SUPPORT ===== */
+
+/* Use the active theme palette when quest colors are not defined */
+body {
+    --quest-bg: var(--panel-bg, #17291f);
+    --quest-card: var(--card-bg, #20382a);
+    --quest-input: var(--panel-bg, #112219);
+    --quest-border: var(--panel-border, #58765f);
+    --quest-accent: var(--theme-accent, #a5c99a);
+    --quest-text: var(--text-color, #edf5e9);
+    --quest-muted: var(--text-muted, #b4cbb3);
+    --quest-button-text: var(--button-text, #17291f);
+}
+
+/* Keep task cards readable inside the side panel */
+#topPanel .todo-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px;
+}
+/* Prevent task content from overflowing */
+#topPanel .todo-item {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+#topPanel .todo-task-text {
+    overflow-wrap: anywhere;
+}
+
+
+/* GOLDEN HOUR — MARKET ITEMS READABILITY FIX */
+
+body[data-theme="golden-hour"] [data-market-panel="items"] {
+    color: #414632 !important;
+}
+
+/* Category headings */
+body[data-theme="golden-hour"] .market-product-section > h3 {
+    color: #69734D !important;
+    font-weight: 750 !important;
+}
+
+/* Product cards */
+body[data-theme="golden-hour"] [data-market-panel="items"] .market-card {
+    background: rgba(228, 230, 205, 0.97) !important;
+    border-color: #B8AD7B !important;
+    color: #414632 !important;
+}
+
+/* Product names */
+body[data-theme="golden-hour"] [data-market-panel="items"] .market-card h3,
+body[data-theme="golden-hour"] [data-market-panel="items"] .market-card strong {
+    color: #414632 !important;
+}
+
+/* Prices and descriptions */
+body[data-theme="golden-hour"] [data-market-panel="items"] .market-card p,
+body[data-theme="golden-hour"] [data-market-panel="items"] .market-price {
+    color: #777B60 !important;
+}
+
+/* Owned item count */
+body[data-theme="golden-hour"] .market-owned-count {
+    color: #78804F !important;
+}
+
+/* Buy buttons */
+body[data-theme="golden-hour"] [data-market-panel="items"] .market-buy-button {
+    background: #C49A43 !important;
+    border-color: #B58B38 !important;
+    color: #292B20 !important;
+    font-weight: 700 !important;
+}
+
+body[data-theme="golden-hour"] [data-market-panel="items"] .market-buy-button:hover {
+    background: #D9B65F !important;
+}
+
+/* Market section headings and descriptions */
+body[data-theme="golden-hour"] #topPanel[data-panel="market"] .market-category-note {
+    color: #777B60 !important;
+    opacity: 1 !important;
+}
+
+
+/* ===== ALL PANELS - THEME GLOW ===== */
+body[data-theme]:not([data-theme="optimus"]) #topPanel:not([hidden]) {
+    border: 1px solid var(--theme-accent) !important;
+    box-shadow:
+        0 0 7px var(--theme-accent),
+        0 0 18px color-mix(in srgb, var(--theme-accent) 55%, transparent),
+        0 0 35px color-mix(in srgb, var(--theme-accent) 25%, transparent) !important;
+}
+
+/* GREEN VALLEY - FARM FOG */
+.city-map-world .city-fog-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: fill;
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
+
+
+/* =================================
+   GREEN VALLEY - TASK PANEL
+================================= */
+
+/* Tasks button */
+.city-task-toggle {
+    position: absolute;
+    top: 12%;
+    left: 2%;
+    bottom: auto;
+    z-index: 50;
+
+    padding: 9px 18px;
+    border: 2px solid #c99a48;
+    border-radius: 10px;
+
+    background: linear-gradient(#79502b, #422817);
+    color: #ffe6a8;
+
+    font: bold 16px Georgia, serif;
+    cursor: pointer;
+
+    box-shadow: 0 4px 10px rgba(0,0,0,.4);
+}
+
+.city-task-toggle:hover {
+    filter: brightness(1.15);
+}
+
+/* Parchment task panel */
+.city-frame-window .city-rebuild-panel {
+    position: absolute;
+    top: calc(12% + 43px);
+    left: 2%;
+    bottom: auto;
+    z-index: 49;
+
+    display: block;
+    box-sizing: border-box;
+
+    width: 400px; /*OOOOOOOOOOOOOO*/
+    max-width: 36%;
+    max-height: 70%;
+    min-height: 460px;
+    height: auto;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 18px 14px 15px;
+
+    background: linear-gradient(135deg, #fff0c9, #e8c58b);
+    color: #49321d;
+
+    border: 4px solid #8a5428;
+    border-radius: 13px;
+
+    box-shadow:
+        inset 0 0 0 2px #d6a75e,
+        0 7px 18px rgba(0,0,0,.4);
+}
+
+/* Close X */
+.city-frame-window .city-task-close {
+    position: static;
+    top: 7px;
+    right: 7px;
+    z-index: 60;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 25px;
+    height: 25px;
+    min-width: 25px;
+    padding: 0;
+
+    border: 1px solid #9b642f;
+    border-radius: 50%;
+
+    background: #704323;
+    color: #fff0c9;
+
+    font-size: 19px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.city-frame-window .city-task-close:hover {
+    background: #a45c31;
+}
+
+/* Panel content */
+.city-frame-window .city-rebuild-panel {
+    font-family: Georgia, serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #382414;
+    padding: 18px 12px 15px;
+}
+
+.city-frame-window .city-rebuild-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.city-frame-window .city-rebuild-panel h3 {
+    margin: 2px 0 2px;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #29401d;
+}
+
+.city-task-number {
+    display: block;
+    margin-bottom: 1px;
+    line-height: 1.2;
+    color:  #70451f;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.city-frame-window .city-rebuild-panel {
+    font-family: Arial, sans-serif;
+}
+
+.city-frame-window .city-rebuild-panel p {
+    color: #49321d;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.city-frame-window .city-rebuild-panel small {
+    color: #49321d;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.city-frame-window .city-task-inventory {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.city-frame-window .city-task-button {
+    width: auto;
+    min-width: 90px;
+    margin: 0;
+    padding: 7px 13px;
+    flex-shrink: 0;
+}
+/* Hidden states */
+.city-task-toggle[hidden],
+.city-rebuild-panel[hidden] {
+    display: none !important;
+}
+
+/* COMPACT TASK BUTTON */
+.city-frame-window .city-task-toggle {
+    top: 12% !important;
+    left: 2% !important;
+
+    padding: 5px 10px !important;
+
+    font-size: 12px !important;
+    line-height: 1.2;
+
+    border-width: 1px !important;
+    border-radius: 8px !important;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .35);
+}
+
+/* TASK BUTTON */
+.city-frame-window .city-task-toggle {
+    left: 6% !important;
+    top: 12% !important;
+}
+
+/* TASK PANEL */
+.city-frame-window .city-rebuild-panel {
+    left: 6% !important;
+    top: calc(12% + 30px) !important;
+    bottom: auto !important;
+
+}
+
+/* FIX: Requirements title placement */
+.city-frame-window .city-active-task {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+}
+
+.city-frame-window .city-active-task .city-requirements-title {
+    display: block !important;
+    position: static !important;
+    float: none !important;
+    transform: none !important;
+    order: 0 !important;
+    margin: 8px 0 6px !important;
+    color: #49321d !important;
+}
+
+/* GREEN VALLEY HEADER */
+.city-frame-window .city-rebuild-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0 3px 7px;
+    border-bottom: 1px solid rgba(138, 84, 40, .3);
+}
+
+.city-frame-window .city-rebuild-heading strong {
+    color: #382414;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.2;
+    white-space: nowrap;
+
+}
+
+.city-frame-window .city-rebuild-heading small {
+    flex-shrink: 0;
+    border-radius: 6px;
+    background: #8a5428;
+    color: #fff2d5;
+    font-weight: 800;
+    line-height: 1.2;
+    white-space: nowrap;
+    font-size: 10px;
+    padding: 4px 6px;
+}
+
+/* TASK PROGRESS */
+.city-frame-window .city-completed-tasks {
+    display: inline-block;
+    margin-top: 7px;
+    padding: 4px 8px;
+    border-radius: 5px;
+    background: rgba(138, 84, 40, .12);
+    color: #49321d;
+    font-size: 12px;
+    font-weight: 800;
+    opacity: 1;
+}
+
+.city-frame-window .city-rebuild-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 25px;
+    align-items: center;
+    gap: 7px;
+}
+
+.city-frame-window .city-rebuild-heading .city-task-close {
+    position: static !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    min-width: 25px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #9b642f;
+    border-radius: 50%;
+    background: #704323;
+    color: #fff0c9;
+    font-size: 19px;
+    line-height: 1;
+    cursor: pointer;
+     flex-shrink: 0;
+}
+
+#cityRebuildStage {
+    display: none !important;
+}
+
+.city-frame-window .city-task-close {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    left: auto !important;
+    z-index: 70;
+}
+
+.city-frame-window .city-rebuild-heading .city-task-close {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    left: auto !important;
+    margin: 0 !important;
+    z-index: 100;
+}
+
+.city-frame-window .city-rebuild-heading {
+    padding-right: 35px !important;
+}
+
+/* Green Valley başlığı */
+.city-frame-window .city-rebuild-heading strong {
+    font-size: 15px !important;
+    font-weight: 800;
+    color: #382414;
+}
+
+/* Requirements başlığı */
+.city-frame-window .city-requirements-title {
+    margin: 2px 0 7px !important;
+    padding: 0;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+}
+
+/* Gereksinim kutuları */
+.city-frame-window .city-task-requirement {
+    min-height: 36px;
+    padding: 6px 9px;
+    font-size: 14px !important;
+}
+
+/* Malzeme isimleri ve miktarlar */
+.city-frame-window .city-task-requirement span,
+.city-frame-window .city-task-requirement strong {
+    font-size: 13px !important;
+    font-weight: 800;
+    color: #382414 !important;
+}
+
+/* Görev numarası */
+.city-frame-window .city-task-number {
+    font-size: 12px;
+    font-weight: 800;
+}
+
+/* REQUIREMENTS - CLEAN & READABLE */
+.city-frame-window .city-task-requirement {
+    display: flex;
+    align-items: center;
+    min-height: 43px !important;
+    padding: 9px 12px !important;
+    margin: 6px 0 !important;
+    gap: 10px;
+    border-radius: 8px;
+    font-family: "Segoe UI", sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #382414 !important;
+}
+
+.city-frame-window .city-task-requirement span,
+.city-frame-window .city-task-requirement strong {
+    font-family: "Segoe UI", sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 750 !important;
+    color: #382414 !important;
+}
+
+.city-frame-window .city-task-requirement input {
+    width: 17px !important;
+    height: 17px !important;
+    flex-shrink: 0;
+}
+
+.city-frame-window .city-requirements-title {
+    font-family: "Segoe UI", sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: #382414 !important;
+}
+
+/* FIX: SHOW LONG MUSIC TITLES */
+#marketMusicGrid .market-item-card {
+    align-items: center;
+}
+
+#marketMusicGrid .market-item-copy {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+#marketMusicGrid .market-item-copy h3 {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    display: block !important;
+    overflow-wrap: break-word;
+    word-break: normal;
+    line-height: 1.3;
+}
+
+#marketMusicGrid .market-music-actions {
+    flex-shrink: 0;
+}
+
+#marketMusicGrid .market-music-actions [data-toggle-wishlist] {
+    min-width: 36px;
+    width: 36px;
+    padding: 0;
+    font-size: 20px;
+    line-height: 1;
+}
+
+/* Wishlist star states */
+#marketMusicGrid [data-toggle-wishlist] {
+    font-size: 21px;
+    color: var(--text-muted);
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+#marketMusicGrid [data-toggle-wishlist][data-wishlisted="true"] {
+    color: #FFD54A !important;
+    border-color: #FFD54A;
+    background: rgba(255, 213, 74, 0.12);
+}
+
+#marketMusicGrid [data-toggle-wishlist][data-wishlisted="true"]:hover {
+    color: #FFE680 !important;
+    transform: scale(1.1);
+}
+
+/* Wishlist tab - yellow favorite stars */
+#marketWishlistGrid .market-music-actions button[data-remove-wishlist] {
+    color: #FFD54A !important;
+    border-color: #FFD54A !important;
+    background: rgba(255, 213, 74, 0.15) !important;
+    font-size: 21px;
+}
+
+/* ===== LEFT PANELS — FONT SIZE ONLY ===== */
+
+/* MY CITY */
+.left-panel .card:has(.city-preview-button) .card-heading h3 {
+    font-size: 20px !important;
+}
+
+.left-panel .card:has(.city-preview-button) .card-heading span {
+    font-size: 16px !important;
+}
+
+.left-panel .city-preview-label {
+    font-size: 18px !important;
+}
+
+.left-panel .card:has(.city-preview-button) > p {
+    font-size:18px !important;
+}
+
+.left-panel .island-section-title {
+    font-size: 18px !important;
+}
+
+.left-panel .island-preview-card span {
+    font-size: 17px !important;
+}
+
+.left-panel .island-preview-card small {
+    font-size: 15px !important;
+}
+
+
+/* MUSIC & AMBIENCE */
+.ambient-panel .ambient-heading h2 {
+    font-size: 20px !important;
+}
+
+.ambient-panel .playing-info h3 {
+    font-size: 18px !important;
+}
+
+.ambient-panel .playing-info p {
+    font-size: 16px !important;
+}
+
+.ambient-panel .playing-badge {
+    font-size: 15px !important;
+}
+
+.ambient-panel .sound-picker-heading h3 {
+    font-size: 20px !important;
+}
+
+.ambient-panel .sound-picker-heading span {
+    font-size: 16px !important;
+}
+
+.ambient-panel .music-library-tab {
+    font-size: 17px !important;
+}
+
+.ambient-panel .sound-card-name {
+    font-size: 17px !important;
+}
+
+.ambient-panel #myMusicList .sound-card-name,
+.ambient-panel #favoritesList .sound-card-name {
+    font-size: 18px !important;
+}
+
+.ambient-panel .owned-music-info strong {
+    font-size: 18px !important;
+}
+
+.ambient-panel .sound-scroll-hint,
+.ambient-panel .music-library-empty {
+    font-size: 16px !important;
+}
+
+.ambient-panel #volumeValue {
+    font-size: 16px !important;
+}
+
+/* MARKET BUY & OWNED — SMALLER */
+.market-item-card .market-buy-button {
+    min-width: 65px;
+    min-height: 30px;
+    padding: 4px 8px;
+    font-size: 14px;
+}
+
+.market-item-owned-count {
+    padding: 3px 6px;
+    font-size: 14px;
+}
+
+/* MATERIAL NAMES POSITION */
+.market-item-card .market-item-copy h3 {
+    transform: translate(4px, 10px);
+}
+
+/* MATERIAL NAME & PRICE FIX */
+.market-item-card .market-item-copy {
+    width: 100%;
+    min-width: 0;
+}
+
+.market-item-card .market-item-copy h3 {
+    transform: translate(4px, 8px);
+}
+
+.market-item-card .market-item-copy .market-price {
+    width: 100%;
+    margin-top: 6px;
+    text-align: center;
+    transform: translateY(4px);
+}
+.market-item-card .market-item-copy .market-price {
+    width: 100%;
+    margin-top: 6px;
+    text-align: center;
+    transform: translateY(4px);
+}
+
+/* FAVORITES — FULL THEME COLOR SUPPORT */
+
+.ambient-panel #favoritesList .sound-card,
+.ambient-panel #favoritesList .owned-music-row {
+    background: var(--card-bg) !important;
+    border-color: var(--panel-border) !important;
+    color: var(--text-color) !important;
+}
+
+.ambient-panel #favoritesList .sound-card:hover,
+.ambient-panel #favoritesList .owned-music-row:hover {
+    background: var(--card-selected, var(--card-bg)) !important;
+    border-color: var(--theme-accent) !important;
+}
+
+/* Favorites scrollbar */
+.ambient-panel #favoritesList .favorites-scroll-list {
+    scrollbar-color: var(--theme-accent) var(--card-bg) !important;
+}
+
+/* SAKURA COAST — MATCH MY CITY TO MUSIC PANEL */
+body[data-theme="sakura-coast"] .card:has(.city-preview-button) {
+    background: linear-gradient(
+        145deg,
+        #f8e9f1,
+        #e9e4f7
+    ) !important;
+
+    color: #393c59 !important;
 }

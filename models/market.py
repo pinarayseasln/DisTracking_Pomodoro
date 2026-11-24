@@ -1,5 +1,5 @@
 from database.db import get_db
-
+from models.dev_mode import DEV_MODE
 
 MARKET_ITEMS = {
     "wood": {
@@ -28,6 +28,23 @@ MARKET_ITEMS = {
         "description": "A permanent tool for clearing debris.", "cost": 60,
         "unique": True,
     },
+    "scythe": {
+       "name": "Scythe",
+       "group": "Construction tools",
+       "icon": "🌾",
+       "description": "A tool for clearing weeds.",
+       "cost": 60,
+       "unique": True,
+    },
+    "scissors": {
+        "name": "Scissors",
+        "group": "Construction tools",
+        "icon": "✂️",
+        "description": "A tool for cutting overgrown plants.",
+        "cost": 45,
+        "unique": True,
+    },
+
     "stone": {
         "name": "Stone", "group": "Raw materials", "icon": "🪨",
         "description": "A building material for future projects.", "cost": 20,
@@ -128,14 +145,15 @@ def buy_market_item(item_id, user_data_id=1):
         if item.get("unique") and existing and existing["quantity"] > 0:
             conn.rollback()
             return {"success": False, "message": "You already own this tool."}, 400
-        if user["points"] < item["cost"]:
+        if not DEV_MODE and user["points"] < item["cost"]:
             conn.rollback()
             return {"success": False, "message": "You don't have enough points."}, 400
 
-        conn.execute(
+        if not DEV_MODE:
+            conn.execute(
             "UPDATE user_data SET points = points - ? WHERE id = ?",
             (item["cost"], user_data_id),
-        )
+         )
         conn.execute(
             """INSERT INTO user_inventory (user_data_id, item_id, quantity)
                VALUES (?, ?, 1)

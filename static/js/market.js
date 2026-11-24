@@ -131,6 +131,45 @@ const THEME_PRODUCTS = [
     { id: "neon", name: "Neon Afterglow", image: "neon-afterglow.png" },
     { id: "sakura-coast", name: "Sakura Coast", image: "sakura-coast.png" },
     { id: "burgundy", name: "Burgundy Royale", image: "burgundy-royale.png" },
+
+
+
+    { id: "howls-castle", name: "Howl's Moving Castle", image: "Howl's Moving Castle.jpeg" },
+    { id: "infinite-valley", name: "Infinite Valley", image: "Infinite Valley.png" },
+    { id: "iron-man", name: "Iron Man", image: "Iron Man.jpeg" },
+    { id: "jinx-ekko", name: "Jinx & Ekko", image: "Jinx & Ekko .jpeg" },
+    { id: "joker", name: "Joker", image: "Joker.jpeg" },
+    { id: "lake-alps", name: "Lake of the Alps", image: "Lake of the Alps.png" },
+    { id: "lavender-villa", name: "Lavender Villa", image: "Lavender Villa.png" },
+    { id: "mcqueen", name: "McQueen", image: "McQueen.jpeg" },
+    { id: "metro-tunnel", name: "Metro Tunnel", image: "Metro Tunnel.png" },
+    { id: "northern-lights", name: "Northern Lights", image: "northern lights.jpeg" },
+    { id: "on-the-lake", name: "On the Lake", image: "On the Lake.jpeg" },
+    { id: "optimus", name: "Optimus", image: "Optimus.jpeg" },
+    { id: "porsche", name: "Porsche", image: "Porsche.jpeg" },
+    { id: "purple-dream", name: "Purple Dream", image: "Purple Dream.jpeg" },
+    { id: "roman-ruins", name: "Roman Ruins", image: "Roman Ruins.png" },
+
+    { id: "seaside-vista", name: "Seaside Vista", image: "Seaside Vista.jpeg" },
+    { id: "ghost", name: "Simon 'Ghost' Riley", image: "Simon 'Ghost' Riley.jpeg" },
+    { id: "spiderman", name: "Spiderman", image: "Spiderman.jpeg" },
+    { id: "sunset-alps", name: "Sunset of the Alps", image: "Sunset of the Alps.png" },
+    { id: "place-born", name: "The Place Where I was Born", image: "The Place Where I was Born.jpeg" },
+    { id: "thomas-shelby", name: "Thomas Shelby", image: "Thomas Shelby.jpeg" },
+    { id: "tulip-twilight", name: "Tulip Twilight", image: "Tulip Twilight.jpeg" },
+   { id: "golden-hour", name: "Golden Hour", image: "Golden Hour.png" },
+    { id: "faithful-love", name: "Faithful Love", image: "Faithful Love.jpeg" },
+    { id: "death-flower", name: "Death Flower", image: "Death Flower.jpeg" },
+   { id: "dawn-sailboat", name: "Dawn Sailboat", image: "Dawn Sailboat.png" },
+
+    { id: "cozy-room", name: "Cozy Room", image: "Cozy Room.png" },
+    { id: "clear-terrain", name: "Clear Terrain", image: "Clear Terrain.jpeg" },
+   { id: "camping-in-the-forest", name: "Camping in the Forest", image: "Camping in the forest.png" },
+    { id: "billiard-lounge", name: "Billiard Lounge", image: "Billiard Lounge.png" },
+    { id: "japan-streets", name: "Japan Streets", image: "Japan Streets.png" },
+    { id: "ying-yang", name: "Ying & Yang", image: "Ying & Yang.jpeg" },
+
+
 ];
 
 function isCurrentMarketRequest(requestSequence) {
@@ -171,7 +210,7 @@ function renderMaterialCards(items) {
                                 data-market-owned="${item.unique && item.quantity > 0 ? "true" : "false"}"
                                 data-market-unlocked="${item.unlocked !== false ? "true" : "false"}"
                                 ${item.unlocked === false || (item.unique && item.quantity > 0) ? "disabled" : ""}>
-                                ${item.unlocked === false ? "Unlock after Shelter" : item.unique && item.quantity > 0 ? "Owned ✓" : item.quantity > 0 ? "Buy another" : "Buy"}
+                                ${item.unlocked === false ? "Unlock after Shelter" : item.unique && item.quantity > 0 ? "Owned ✓" : item.quantity > 0 ? "Buy" : "Buy"}
                             </button>
                         </article>
                     `).join("")}
@@ -191,7 +230,7 @@ function renderMarket(catalog) {
             <button type="button" class="market-category-tab active" role="tab" aria-selected="true" data-market-category="items">Items</button>
             <button type="button" class="market-category-tab" role="tab" aria-selected="false" data-market-category="music">Music</button>
             <button type="button" class="market-category-tab" role="tab" aria-selected="false" data-market-category="themes">Themes</button>
-            <button type="button" class="market-category-tab" role="tab" aria-selected="false" data-market-category="wishlist">Wishlist </button>
+            <button type="button" class="market-category-tab" role="tab" aria-selected="false" data-market-category="wishlist">★Wishlist</button>
         </div>
 
         <section class="market-category-panel" role="tabpanel" data-market-panel="items">
@@ -514,9 +553,11 @@ async function loadMarketMusic() {
 
             const wishlistButton = document.createElement("button");
             wishlistButton.type = "button";
-            wishlistButton.textContent = wishlist.has(track.id)
-                ? "★ Wishlisted"
-                : "☆  Wishlist";
+            wishlistButton.textContent = wishlist.has(track.id) ? "★" : "☆";
+            wishlistButton.setAttribute("aria-label",
+            wishlist.has(track.id) ? "Remove from wishlist" : "Add to wishlist"
+            );
+            wishlistButton.title = wishlistButton.getAttribute("aria-label");
             wishlistButton.dataset.toggleWishlist = track.id;
             wishlistButton.dataset.wishlisted = String(wishlist.has(track.id));
             actions.appendChild(wishlistButton);
@@ -605,7 +646,7 @@ async function loadMarketWishlist() {
 
             const removeButton = document.createElement("button");
             removeButton.type = "button";
-            removeButton.textContent = "★ Wishlisted";
+            removeButton.textContent = "★";
             removeButton.dataset.removeWishlist = track.id;
 
             actions.appendChild(removeButton);
@@ -796,49 +837,83 @@ if (resetButton && event.currentTarget.contains(resetButton)) {
         return;
     }
 
-    const wishlistButton = event.target.closest("[data-toggle-wishlist]");
-    if (wishlistButton && event.currentTarget.contains(wishlistButton)) {
-        wishlistButton.disabled = true;
+const wishlistButton = event.target.closest("[data-toggle-wishlist]");
 
-        try {
-            const response = await fetch("/api/music/wishlist/toggle", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    track_id: wishlistButton.dataset.toggleWishlist
-                })
-            });
+if (wishlistButton && event.currentTarget.contains(wishlistButton)) {
+    const trackId = wishlistButton.dataset.toggleWishlist;
+    const wasWishlisted = wishlistButton.dataset.wishlisted === "true";
+    const newState = !wasWishlisted;
 
-            const result = await response.json();
-            if (!response.ok || !result.success) {
-                throw new Error(result.message || "Wishlist update failed.");
-            }
-
-            const isWishlisted = result.is_wishlisted;
-            wishlistButton.dataset.wishlisted = String(isWishlisted);
-            wishlistButton.textContent = isWishlisted ? "★ Wishlisted" : "♡ Wishlist";
-
-        } catch (error) {
-            console.error(error);
-            document.getElementById("marketMusicMessage").textContent = error.message;
-        } finally {
-            wishlistButton.disabled = false;
-        }
-        return;
-    }
-
-const removeWishlistButton = event.target.closest("[data-remove-wishlist]");
-
-if (removeWishlistButton && event.currentTarget.contains(removeWishlistButton)) {
-    removeWishlistButton.disabled = true;
+    // Anında görsel güncelleme
+    wishlistButton.dataset.wishlisted = String(newState);
+    wishlistButton.textContent = newState ? "★" : "☆";
+    wishlistButton.style.color = newState ? "#FFD54A" : "";
 
     try {
         const response = await fetch("/api/music/wishlist/toggle", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                track_id: removeWishlistButton.dataset.removeWishlist
-            })
+            body: JSON.stringify({ track_id: trackId })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Wishlist update failed.");
+        }
+
+        await loadMarketWishlist();
+
+    } catch (error) {
+        // Hata olursa eski haline dön
+        wishlistButton.dataset.wishlisted = String(wasWishlisted);
+        wishlistButton.textContent = wasWishlisted ? "★" : "☆";
+        wishlistButton.style.color = wasWishlisted ? "#FFD54A" : "";
+
+        console.error(error);
+    }
+
+    return;
+}
+
+
+
+const removeWishlistButton = event.target.closest("[data-remove-wishlist]");
+
+if (removeWishlistButton && event.currentTarget.contains(removeWishlistButton)) {
+    event.stopPropagation();
+    const trackId = removeWishlistButton.dataset.removeWishlist;
+    const card = removeWishlistButton.closest(".market-item-card");
+
+    // Arayüzü anında güncelle
+    removeWishlistButton.disabled = true;
+    card?.remove();
+
+    // Music listesindeki yıldızı da anında güncelle
+    const musicButton = Array.from(
+        topPanelContent.querySelectorAll("[data-toggle-wishlist]")
+    ).find(button => button.dataset.toggleWishlist === trackId);
+
+    if (musicButton) {
+        musicButton.dataset.wishlisted = "false";
+        musicButton.textContent = "☆";
+        musicButton.style.color = "";
+        musicButton.setAttribute("aria-label", "Add to wishlist");
+        musicButton.title = "Add to wishlist";
+    }
+
+    // Liste boşaldıysa mesaj göster
+    const wishlistGrid = document.getElementById("marketWishlistGrid");
+
+    if (wishlistGrid && !wishlistGrid.querySelector(".market-item-card")) {
+        wishlistGrid.textContent = "Your wishlist is empty.";
+    }
+
+    try {
+        const response = await fetch("/api/music/wishlist/toggle", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ track_id: trackId })
         });
 
         const result = await response.json();
@@ -847,15 +922,19 @@ if (removeWishlistButton && event.currentTarget.contains(removeWishlistButton)) 
             throw new Error(result.message || "Could not remove track.");
         }
 
-        await loadMarketWishlist();
-
     } catch (error) {
         console.error("Wishlist removal error:", error);
-        removeWishlistButton.disabled = false;
+
+        // Sunucu işlemi başarısızsa gerçek durumu yeniden yükle
+        await Promise.all([
+            loadMarketWishlist(),
+            loadMarketMusic()
+        ]);
     }
 
     return;
 }
+
 
     const musicBuyButton = event.target.closest("[data-buy-music]");
     if (musicBuyButton && event.currentTarget.contains(musicBuyButton)) {

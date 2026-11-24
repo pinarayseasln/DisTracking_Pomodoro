@@ -6,11 +6,15 @@ GREEN_VALLEY_ID = "green-valley"
 
 REBUILD_STAGES = (
     {
-        "task_id": "clear-weeds",
-        "name": "Clear Weeds",
-        "requirements": {"weed": 10},
-        "tools": {"weed_tool": 1},
+    "task_id": "clear-weeds",
+    "name": "Clear Weeds",
+    "requirements": {},
+    "tools": {
+        "shovel": 1,
+        "scythe": 1,
+        "scissors": 1,
     },
+},
     {
         "task_id": "remove-debris",
         "name": "Remove Debris",

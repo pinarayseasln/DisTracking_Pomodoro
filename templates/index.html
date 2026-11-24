@@ -19,9 +19,9 @@
         <div class="brand-values">
             <span class="brand-dot"></span>
             <span>FOCUS</span>
-            <i>·</i>
+            <span class="brand-dot"></span>
             <span>BUILD</span>
-            <i>·</i>
+            <span class="brand-dot"></span>
             <span>GROW</span>
         </div>
     </div>
@@ -103,9 +103,7 @@
             draggable="false"
         >
     </div>
-    <span class="city-preview-label">
-        Explore your city <span>↗</span>
-    </span>
+
 </button>
 
 
@@ -422,42 +420,144 @@
 <!-- CITY WINDOW -->
 <div class="city-overlay" id="cityOverlay" hidden>
     <section class="city-window city-frame-window" aria-label="City view">
+
         <div class="city-main-scene" id="cityMapViewport">
+
             <div class="city-map-world" id="cityMapWorld">
+
                 <img
                     src="{{ url_for('static', filename='city/green_valley.png') }}"
                     alt="Green Valley"
                     draggable="false"
                 >
-                <div class="city-rebuild-markers" aria-hidden="true">
-                    <span class="city-map-marker city-weed-marker" data-city-marker="weeds">🌿</span>
-                    <span class="city-map-marker city-debris-marker" data-city-marker="debris">🪨</span>
-                    <span class="city-map-marker city-shelter-marker" data-city-marker="shelter">🏠</span>
-                </div>
-                <div class="city-decoration-world" id="cityDecorationWorld" aria-label="City decorations"></div>
+
+                <img
+                    src="{{ url_for('static', filename='city/green_valley_fog_farm.png') }}"
+                    class="city-fog-layer"
+                    alt=""
+                    draggable="false"
+                >
+
+                <div
+                    class="city-decoration-world"
+                    id="cityDecorationWorld"
+                    aria-label="City decorations"
+                ></div>
+
             </div>
-            <section class="city-rebuild-panel city-interactive" id="cityRebuildPanel" aria-live="polite" hidden>
+
+            <!-- TASK TOGGLE BUTTON -->
+            <button
+                type="button"
+                class="city-task-toggle city-interactive"
+                id="cityTaskToggle"
+                aria-expanded="false"
+                aria-controls="cityRebuildPanel"
+                hidden
+            >
+                📜 Tasks
+            </button>
+
+            <!-- TASK PANEL -->
+            <section
+                class="city-rebuild-panel city-interactive"
+                id="cityRebuildPanel"
+                aria-live="polite"
+                hidden
+            >
+
+
+
                 <div class="city-rebuild-heading">
                     <strong>Green Valley Restoration</strong>
                     <small id="cityRebuildStage">Loading</small>
+
+                     <!-- CLOSE BUTTON -->
+                    <button
+                        type="button"
+                        class="city-task-close"
+                        id="cityTaskClose"
+                        aria-label="Close tasks"
+                    >×</button>
+
                 </div>
-                <small class="city-completed-tasks" id="cityCompletedTasks">0/3 tasks complete</small>
-                <h3 id="cityTaskTitle">Loading city progress…</h3>
-                <p id="cityTaskRequirements"></p>
-                <div class="city-task-inventory" id="cityTaskInventory"></div>
-                <small class="city-market-hint">Buy missing items in Market, then return here.</small>
-                <button type="button" class="city-task-button" id="completeCityStage" disabled>Complete stage</button>
-                <p class="city-rebuild-message" id="cityRebuildMessage" role="status"></p>
-                <div class="city-decoration-picker" id="cityDecorationPicker" hidden>
-                    <label for="cityDecorationChoice">Place a decoration</label>
+
+                <small
+                    class="city-completed-tasks"
+                    id="cityCompletedTasks"
+                >0/3 tasks complete</small>
+
+
+               <!-- ACTIVE TASK CARD -->
+            <div class="city-active-task">
+
+                <small class="city-task-number" id="cityTaskNumber">
+                01
+                </small>
+
+                <h3 id="cityTaskTitle">Clear the Weeds</h3>
+
+                 <p class="city-requirements-title">Requirements</p>
+
+                 <p id="cityTaskRequirements" hidden></p>
+
+                 <div
+                class="city-task-inventory"
+                id="cityTaskInventory"
+                ></div>
+
+                <div class="city-task-footer">
+                   <small class="city-market-hint">
+                       Buy missing items in Market.
+                    </small>
+
+                    <button
+                        type="button"
+                        class="city-task-button"
+                        id="completeCityStage"
+                        disabled>
+                       Complete
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- COMPLETED TASKS -->
+            <div class="city-completed-section">
+
+             <div class="city-completed-list" id="cityCompletedList"></div>
+             </div>
+
+            <p
+             class="city-rebuild-message"
+             id="cityRebuildMessage"
+             role="status"
+             ></p>
+
+                <section
+                    class="city-decoration-picker"
+                    id="cityDecorationPicker"
+                    hidden
+                >
+                    <label for="cityDecorationChoice">
+                        Place a decoration
+                    </label>
+
                     <select id="cityDecorationChoice">
                         <option value="">Choose owned decoration</option>
                     </select>
+
                     <small>Choose an empty marked spot on the map.</small>
-                </div>
+                </section>
+
             </section>
+
+            <!-- MAP DRAG HINT -->
+            <div class="map-drag-hint">
+                Drag to explore
+            </div>
+
         </div>
-        <div class="map-drag-hint">Drag to explore</div>
 
         <img
             class="city-frame-art"
@@ -468,7 +568,13 @@
             draggable="false"
         >
 
-        <h2 class="city-island-name" id="cityIslandName">Green Valley</h2>
+        <h2 class="city-island-name" id="cityIslandName">
+            Green Valley
+        </h2>
+
+
+
+
 
         <div class="city-stat-overlay" aria-label="City status">
             <div class="city-stat-item" data-stat="happiness">

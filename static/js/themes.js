@@ -3,7 +3,26 @@
 function applySiteTheme(theme) {
     document.body.dataset.theme = theme;
 
-    const darkThemes = ["woods", "neon", "burgundy"];
+const darkThemes = [
+    "woods",
+    "neon",
+    "burgundy",
+    "billiard-lounge",
+    "camping-in-the-forest",
+    "death-flower",
+    "iron-man",
+    "jinx-ekko",
+    "joker",
+    "metro-tunnel",
+    "northern-lights",
+    "optimus",
+    "purple-dream",
+    "ghost",
+    "spiderman",
+    "thomas-shelby",
+    "ying-yang"
+];
+
 
     document.body.dataset.cityMode =
         darkThemes.includes(theme) ? "dark" : "light";

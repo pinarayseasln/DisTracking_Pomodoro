@@ -1,4 +1,4 @@
-
+from models.dev_mode import DEV_MODE
 from database.db import get_db
 
 
@@ -57,7 +57,7 @@ def buy_building(building_type):
             "SELECT points FROM user_data WHERE id = 1"
         ).fetchone()
 
-        if user is None or user["points"] < item["cost"]:
+        if user is None or (not DEV_MODE and user["points"] < item["cost"]):
             return {
                 "success": False,
                 "message": "You don't have enough points."
@@ -74,10 +74,12 @@ def buy_building(building_type):
                 "message": "You already own this building."
             }, 400
 
-        conn.execute(
-            "UPDATE user_data SET points = points - ? WHERE id = 1",
-            (item["cost"],)
-        )
+
+        if not DEV_MODE:
+           conn.execute(
+              "UPDATE user_data SET points = points - ? WHERE id = 1",
+              (item["cost"],)
+             )
 
         conn.execute(
             """
